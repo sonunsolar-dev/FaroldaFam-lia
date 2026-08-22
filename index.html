@@ -442,7 +442,7 @@
   var defaultState = {
     c1name:"", c1phone:"", c2name:"", c2phone:"",
     codeword:"socorro", extramsg:"", log:[],
-    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false, followMeOn:true, activated:false
+    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false, followMeOn:true, activated:false, activationType:null, activatedAt:null
   };
   var state = loadState();
 
@@ -492,22 +492,57 @@
     pocketModeBtn:document.getElementById('pocketModeBtn')
   };
 
-  function isValidActivationCode(code){
-    var m = /^FAROL-(\d{6})$/.exec((code||'').trim().toUpperCase());
-    if(!m) return false;
-    var digits = m[1].split('').map(Number);
+  var TRIAL_DAYS = 30;
+  function checksumOk(digitsStr){
+    var digits = digitsStr.split('').map(Number);
     var checksum = digits.slice(0,5).reduce(function(a,b){return a+b;},0) % 10;
     return checksum === digits[5];
   }
+  function getActivationType(code){
+    var c = (code||'').trim().toUpperCase();
+    var mFull = /^FAROL-(\d{6})$/.exec(c);
+    if(mFull && checksumOk(mFull[1])) return 'full';
+    var mTrial = /^FAROLT-(\d{6})$/.exec(c);
+    if(mTrial && checksumOk(mTrial[1])) return 'trial';
+    return null;
+  }
+  function isTrialExpired(){
+    if(state.activationType!=='trial' || !state.activatedAt) return false;
+    var elapsedDays = (Date.now()-state.activatedAt)/(1000*60*60*24);
+    return elapsedDays >= TRIAL_DAYS;
+  }
   function applyActivationVisibility(){
+    var justExpired = false;
+    if(state.activated && isTrialExpired()){
+      state.activated=false; state.activationType=null; state.activatedAt=null;
+      saveState();
+      justExpired = true;
+    }
     var premiumCards = document.querySelectorAll('.premium');
     premiumCards.forEach(function(c){ c.style.display = state.activated ? '' : 'none'; });
     el.activationCard.style.display = state.activated ? 'none' : 'block';
-    el.activatedBadge.style.display = state.activated ? 'block' : 'none';
+    if(state.activated){
+      el.activatedBadge.style.display = 'block';
+      if(state.activationType==='trial'){
+        var daysLeft = Math.max(0, Math.ceil(TRIAL_DAYS - (Date.now()-state.activatedAt)/(1000*60*60*24)));
+        el.activatedBadge.textContent = '✓ Período de teste ativo — '+daysLeft+' dia(s) restante(s)';
+      } else {
+        el.activatedBadge.textContent = '✓ Recursos completos ativados';
+      }
+    } else {
+      el.activatedBadge.style.display = 'none';
+      if(justExpired){
+        el.activationHint.textContent = "Seu período de teste acabou. Adquira o código definitivo para continuar.";
+      }
+    }
   }
   el.activateBtn.addEventListener('click', function(){
-    if(isValidActivationCode(el.activationInput.value)){
-      state.activated = true; saveState();
+    var type = getActivationType(el.activationInput.value);
+    if(type){
+      state.activated=true;
+      state.activationType=type;
+      state.activatedAt=Date.now();
+      saveState();
       applyActivationVisibility();
       el.activationHint.textContent = "";
     } else {
@@ -515,6 +550,9 @@
     }
   });
   applyActivationVisibility();
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) applyActivationVisibility();
+  });
 
   function fillForm(){
     el.c1name.value=state.c1name; el.c1phone.value=state.c1phone;
