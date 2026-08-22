@@ -172,6 +172,8 @@
   .log-item .tag{font-size:10px; text-transform:uppercase; letter-spacing:.06em; font-weight:700; padding:2px 7px; border-radius:6px; background:var(--paper); color:var(--ink-soft);}
   .log-empty{font-size:13px; color:var(--ink-soft); padding:6px 0;}
 
+  #darkScreen{position:fixed; inset:0; background:#000; z-index:200; display:none;}
+
   footer{max-width:520px; margin:26px auto 0; padding:0 20px; font-size:12px; color:var(--ink-soft); line-height:1.6;}
   footer .em{color:var(--ink); font-weight:700;}
   footer .numbers{margin-top:6px;}
@@ -315,6 +317,14 @@
         <p class="hint" id="shakeNote" style="margin-top:8px;"></p>
       </section>
 
+      <!-- TELA ESCURA -->
+      <section class="card">
+        <h2>Tela escura (parece desligada)</h2>
+        <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque e segure na tela preta por 3 segundos.</p>
+        <button class="btn btn-primary" id="darkScreenBtn" style="margin-top:12px;">Ativar tela escura agora</button>
+        <p class="hint" style="margin-top:10px;"><b>Importante:</b> se alguém apertar o botão físico de ligar/desligar do celular, o sistema bloqueia de verdade e a escuta para — esse recurso só engana quem apenas olha a tela, não quem manuseia o aparelho. No iPhone, a tela cheia é mais limitada; a barra de horário pode continuar visível.</p>
+      </section>
+
       <!-- HISTÓRICO -->
       <section class="card">
         <h2>Histórico</h2>
@@ -344,6 +354,9 @@
     </div>
     <button class="btn btn-ghost" id="cancelBtn">Cancelar</button>
   </div>
+
+  <!-- TELA ESCURA FALSA -->
+  <div id="darkScreen"></div>
 
   <!-- PAINEL DE ENVIO -->
   <div class="send-panel" id="sendPanel">
@@ -396,7 +409,8 @@
     shakeToggle:document.getElementById('shakeToggle'), motionPermBtn:document.getElementById('motionPermBtn'),
     shakeNote:document.getElementById('shakeNote'),
     overlayAlertContent:document.getElementById('overlayAlertContent'), overlayNeutralContent:document.getElementById('overlayNeutralContent'),
-    neutralBar:document.getElementById('neutralBar')
+    neutralBar:document.getElementById('neutralBar'),
+    darkScreen:document.getElementById('darkScreen'), darkScreenBtn:document.getElementById('darkScreenBtn')
   };
 
   function fillForm(){
@@ -677,6 +691,32 @@
   if(state.shakeOn && !needsIOSPermission && typeof window.DeviceMotionEvent!=='undefined'){
     window.addEventListener('devicemotion', handleMotion);
   }
+
+  /* ---------------- tela escura falsa ---------------- */
+  var darkWakeLock=null;
+  function activateDarkScreen(){
+    el.darkScreen.style.display='block';
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').then(function(wl){ darkWakeLock=wl; }).catch(function(){});
+    }
+    var root=document.documentElement;
+    var req = root.requestFullscreen || root.webkitRequestFullscreen;
+    if(req){ req.call(root).catch(function(){}); }
+  }
+  function deactivateDarkScreen(){
+    el.darkScreen.style.display='none';
+    var exitFs = document.exitFullscreen || document.webkitExitFullscreen;
+    if(exitFs && (document.fullscreenElement || document.webkitFullscreenElement)){ exitFs.call(document).catch(function(){}); }
+    if(darkWakeLock){ darkWakeLock.release().catch(function(){}); darkWakeLock=null; }
+  }
+  el.darkScreenBtn.addEventListener('click', activateDarkScreen);
+  var pressTimer=null;
+  function armExit(){ pressTimer=setTimeout(deactivateDarkScreen, 3000); }
+  function disarmExit(){ clearTimeout(pressTimer); }
+  el.darkScreen.addEventListener('touchstart', armExit);
+  el.darkScreen.addEventListener('touchend', disarmExit);
+  el.darkScreen.addEventListener('mousedown', armExit);
+  el.darkScreen.addEventListener('mouseup', disarmExit);
 
 })();
 </script>
