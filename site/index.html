@@ -66,8 +66,13 @@
   .faq summary{cursor:pointer; font-weight:600; font-size:15px;}
   .faq p{font-size:14px; color:var(--ink-soft); margin:10px 0 0;}
 
-  footer{padding:40px 0; text-align:center; font-size:13px; color:var(--ink-soft);}
-  footer .numbers{margin-top:10px; font-weight:600; color:var(--ink);}
+  footer{padding:40px 0 50px; text-align:center; font-size:13px; color:var(--ink-soft);}
+  .official-box{background:var(--ink); border-radius:var(--radius); padding:28px 24px; margin:0 auto 20px; max-width:640px;}
+  .official-box p.label{color:#CFE3E0; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; margin:0 0 12px;}
+  .official-box .nums{display:flex; flex-wrap:wrap; justify-content:center; gap:14px 26px;}
+  .official-box .num-item{color:#fff; text-align:left;}
+  .official-box .num-item .n{font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; line-height:1;}
+  .official-box .num-item .d{font-size:12px; color:#CFE3E0; margin-top:2px;}
 </style>
 </head>
 <body>
@@ -90,6 +95,13 @@
   <h1 class="display">Segurança e bem-estar para quem você ama, sem complicação.</h1>
   <p class="lead">Um jeito simples e discreto de cuidar de quem precisa de atenção extra em casa — idosos, pessoas com deficiência, ou momentos familiares mais delicados que pedem uma rede de apoio por perto.</p>
   <a href="#teste" class="btn btn-primary">Testar grátis por 30 dias</a>
+</section>
+
+<section style="max-width:900px; margin:0 auto 10px; padding:0 24px;">
+  <div style="background:rgba(225,84,62,0.07); border:1.5px solid rgba(225,84,62,0.35); border-radius:var(--radius); padding:22px 26px; text-align:center;">
+    <p style="margin:0; font-size:15px; color:var(--ink); font-weight:600;">O Farol funciona como um botão de ajuda imediata — um complemento de segurança.</p>
+    <p style="margin:8px 0 0; font-size:14px; color:var(--ink-soft);">Ele não substitui atendimento oficial. Em casos mais sérios, acione sempre os canais oficiais indicados no rodapé desta página.</p>
+  </div>
 </section>
 
 <section class="alt">
@@ -173,13 +185,20 @@
 
 <footer>
   <div class="wrap">
-    <p>Em situação de risco imediato, procure ajuda oficial: <span class="numbers">190 (Polícia) · 180 (Violência contra a mulher) · 100 (Direitos Humanos)</span></p>
-    <p style="margin-top:14px;">© Farol. Ferramenta de apoio — não substitui atendimento policial ou institucional em emergências.</p>
+    <div class="official-box">
+      <p class="label">Em situação de risco imediato, acione um canal oficial</p>
+      <div class="nums">
+        <div class="num-item"><div class="n">190</div><div class="d">Polícia</div></div>
+        <div class="num-item"><div class="n">180</div><div class="d">Violência contra a mulher</div></div>
+        <div class="num-item"><div class="n">100</div><div class="d">Direitos Humanos</div></div>
+      </div>
+    </div>
+    <p>© Farol. Ferramenta de apoio — não substitui atendimento policial ou institucional em emergências.</p>
   </div>
 </footer>
 
 <script>
-  var SELLER_WHATSAPP = "5547997220734"; // <-- SUBSTITUA pelo seu número com DDI+DDD, ex.: 5547999999999
+  var SELLER_WHATSAPP = "55SEUNUMEROAQUI"; // <-- SUBSTITUA pelo seu número com DDI+DDD, ex.: 5547999999999
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
 
   document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
