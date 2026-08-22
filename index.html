@@ -274,6 +274,20 @@
         <p class="hint">Se esquecer o código, toque 5 vezes seguidas no título "Notas" para revelar o app mesmo assim.</p>
       </section>
 
+      <!-- NOTIFICAÇÃO AUTOMÁTICA (NTFY) -->
+      <section class="card">
+        <h2>Notificação automática (sem toque)</h2>
+        <p class="hint">Além do WhatsApp, o Farol pode avisar a família instantaneamente, sem precisar confirmar nada — usando o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid). É só a família instalar o app e "assinar" o mesmo código de canal abaixo.</p>
+        <label for="ntfyTopicInput">Código do canal (como uma senha, não deixe óbvio)</label>
+        <input type="text" id="ntfyTopicInput" placeholder="Ex.: farol-8f3k2x9q">
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <button class="btn btn-ghost" id="genTopicBtn">Gerar código aleatório</button>
+          <button class="btn btn-primary" id="saveTopicBtn">Salvar canal</button>
+        </div>
+        <p class="hint" id="topicSaveHint" style="margin-top:8px;"></p>
+        <p class="hint" style="margin-top:10px;">Na família: abrir o app ntfy → tocar em "+" ou "Subscribe" → colar exatamente o mesmo código → pronto, já recebe os alertas na hora.</p>
+      </section>
+
       <!-- BOTÃO DE PÂNICO -->
       <section class="card">
         <h2>Alerta manual</h2>
@@ -388,7 +402,7 @@
   var defaultState = {
     c1name:"", c1phone:"", c2name:"", c2phone:"",
     codeword:"socorro", extramsg:"", log:[],
-    disguiseOn:false, pin:"", shakeOn:false
+    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:""
   };
   var state = loadState();
 
@@ -420,6 +434,8 @@
     disguiseScreen:document.getElementById('disguiseScreen'), realApp:document.getElementById('realApp'),
     disguiseToggle:document.getElementById('disguiseToggle'), pinInput:document.getElementById('pinInput'),
     savePinBtn:document.getElementById('savePinBtn'), pinSaveHint:document.getElementById('pinSaveHint'),
+    ntfyTopicInput:document.getElementById('ntfyTopicInput'), genTopicBtn:document.getElementById('genTopicBtn'),
+    saveTopicBtn:document.getElementById('saveTopicBtn'), topicSaveHint:document.getElementById('topicSaveHint'),
     unlockInput:document.getElementById('unlockInput'), fakeTitle:document.getElementById('fakeTitle'),
     hideBtn:document.getElementById('hideBtn'),
     shakeToggle:document.getElementById('shakeToggle'), motionPermBtn:document.getElementById('motionPermBtn'),
@@ -437,6 +453,7 @@
     el.codeword.value=state.codeword; el.extramsg.value=state.extramsg;
     el.disguiseToggle.checked=state.disguiseOn; el.pinInput.value=state.pin;
     el.shakeToggle.checked=state.shakeOn;
+    el.ntfyTopicInput.value=state.ntfyTopic;
     renderLog();
   }
   fillForm();
@@ -461,6 +478,29 @@
   function setStatus(mode, text){
     el.statusDot.className = 'dot ' + mode;
     el.statusText.textContent = text;
+  }
+
+  el.genTopicBtn.addEventListener('click', function(){
+    var rand = Math.random().toString(36).substring(2,10) + Math.random().toString(36).substring(2,6);
+    el.ntfyTopicInput.value = 'farol-'+rand;
+  });
+  el.saveTopicBtn.addEventListener('click', function(){
+    state.ntfyTopic = el.ntfyTopicInput.value.trim().replace(/\s+/g,'-');
+    saveState();
+    el.topicSaveHint.textContent = state.ntfyTopic ? "Canal salvo. Peça pra família assinar exatamente: "+state.ntfyTopic : "Canal removido.";
+    setTimeout(function(){ el.topicSaveHint.textContent=""; }, 5000);
+  });
+  function sendNtfy(kind, loc){
+    if(!state.ntfyTopic) return;
+    var title = kind==='test' ? 'FAROL TESTE' : 'FAROL';
+    var body = loc ? ('https://maps.google.com/?q='+loc.lat+','+loc.lng) : 'Localizacao indisponivel';
+    fetch('https://ntfy.sh/'+encodeURIComponent(state.ntfyTopic), {
+      method:'POST',
+      headers:{ 'Title': title, 'Priority': kind==='test' ? 'default' : 'urgent', 'Tags': 'rotating_light' },
+      body: body
+    }).then(function(){
+      addLog(kind, 'ntfy (automático)');
+    }).catch(function(){ /* falha silenciosa — o WhatsApp continua como respaldo manual */ });
   }
 
   function withLocation(cb){
@@ -570,9 +610,9 @@
   function startCountdown(kind){
     deactivateDarkScreen();
     var contacts=getContacts();
-    if(contacts.length===0){
+    if(contacts.length===0 && !state.ntfyTopic){
       showReal();
-      alert("Configure ao menos um contato com WhatsApp antes de acionar o alerta.");
+      alert("Configure ao menos um contato com WhatsApp ou um canal ntfy antes de acionar o alerta.");
       return;
     }
     var neutral = state.disguiseOn;
@@ -592,7 +632,7 @@
         clearInterval(countTimer); countTimer=null;
         el.countOverlay.classList.remove('show');
         showReal();
-        withLocation(function(loc){ openSendPanel(kind, loc); });
+        withLocation(function(loc){ sendNtfy(kind, loc); openSendPanel(kind, loc); });
       } else {
         el.countNumber.textContent=countValue;
       }
@@ -608,8 +648,8 @@
   el.beaconBtn.addEventListener('click', function(){ startCountdown('botao'); });
   el.testBtn.addEventListener('click', function(){
     var contacts=getContacts();
-    if(contacts.length===0){ alert("Configure ao menos um contato com WhatsApp antes de testar."); return; }
-    withLocation(function(loc){ openSendPanel('test', loc); });
+    if(contacts.length===0 && !state.ntfyTopic){ alert("Configure ao menos um contato com WhatsApp ou um canal ntfy antes de testar."); return; }
+    withLocation(function(loc){ sendNtfy('test', loc); openSendPanel('test', loc); });
   });
 
   /* ---------------- escuta por palavra-código ---------------- */
