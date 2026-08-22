@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual de uso — Farol</title>
+<style>
+  :root{
+    --ink:#10262B; --ink-soft:#3C5257;
+    --paper:#F4F7F6; --paper-card:#FFFFFF;
+    --teal:#0E6E66; --teal-deep:#0A4A45; --teal-light:rgba(14,110,102,.08);
+    --coral:#E1543E; --coral-deep:#B93F2E; --coral-light:rgba(225,84,62,.08);
+    --amber:#C98A2C; --line:#E1E9E6; --radius-lg:20px; --radius-md:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; line-height:1.65;}
+  .display{font-family:'Space Grotesk','Inter',sans-serif;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 22px;}
+
+  header{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); padding-top:env(safe-area-inset-top);}
+  header .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand span{font-weight:700; font-size:19px;}
+  header a.back{font-size:13px; font-weight:600; color:var(--ink-soft); text-decoration:none;}
+
+  .hero{padding:46px 0 30px; text-align:center;}
+  .hero h1{font-size:clamp(26px,5vw,36px); margin:0 0 10px; letter-spacing:-0.02em;}
+  .hero p{color:var(--ink-soft); font-size:15px; max-width:520px; margin:0 auto;}
+
+  .toc{background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius-lg); padding:20px 24px; margin:0 auto 40px;}
+  .toc p.label{font-size:12px; text-transform:uppercase; letter-spacing:.07em; font-weight:700; color:var(--ink-soft); margin:0 0 12px;}
+  .toc ol{margin:0; padding-left:20px; columns:2; column-gap:24px; font-size:14px;}
+  .toc li{margin-bottom:8px; break-inside:avoid;}
+  .toc a{color:var(--ink); text-decoration:none; font-weight:500;}
+  .toc a:hover{color:var(--teal);}
+  @media (max-width:560px){ .toc ol{columns:1;} }
+
+  section{padding:34px 0; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:22px; margin:0 0 6px; letter-spacing:-0.01em; display:flex; align-items:center; gap:10px;}
+  h2 .tag{background:var(--teal); color:#fff; font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:700; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  h3{font-size:16px; margin:24px 0 6px; color:var(--ink);}
+  p{font-size:15px; color:var(--ink-soft); margin:0 0 12px;}
+  ul, ol.plain{font-size:15px; color:var(--ink-soft); padding-left:22px; margin:0 0 12px;}
+  li{margin-bottom:6px;}
+  code{background:var(--teal-light); color:var(--teal-deep); padding:2px 7px; border-radius:6px; font-size:13.5px; font-family:'SFMono-Regular',Menlo,monospace;}
+  strong{color:var(--ink);}
+
+  .featgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0;}
+  @media (max-width:560px){ .featgrid{grid-template-columns:1fr;} }
+  .feat{background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius-md); padding:16px 18px;}
+  .feat h4{margin:0 0 6px; font-size:14.5px; color:var(--ink);}
+  .feat p{margin:0; font-size:13.5px;}
+
+  .stepnum{counter-reset:s;}
+  .sitem{display:flex; gap:14px; margin-bottom:16px;}
+  .sitem .n{counter-increment:s; width:28px; height:28px; border-radius:50%; background:var(--teal); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;}
+  .sitem .n::before{content:counter(s);}
+  .sitem .c{margin:0; font-size:14.5px; color:var(--ink-soft);}
+  .sitem .c b{color:var(--ink);}
+
+  .warn{background:var(--coral-light); border:1.5px solid rgba(225,84,62,.3); border-radius:var(--radius-md); padding:14px 18px; font-size:14px; color:var(--ink); margin:14px 0;}
+  .warn b{color:var(--coral-deep);}
+  .tip{background:var(--teal-light); border:1.5px solid rgba(14,110,102,.25); border-radius:var(--radius-md); padding:14px 18px; font-size:14px; color:var(--ink); margin:14px 0;}
+  .tip b{color:var(--teal-deep);}
+
+  details.faqitem{background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius-md); padding:15px 18px; margin-bottom:10px;}
+  details.faqitem summary{cursor:pointer; font-weight:600; font-size:14.5px; color:var(--ink);}
+  details.faqitem p{margin:10px 0 0; font-size:14px;}
+
+  .official-box{background:var(--ink); border-radius:var(--radius-lg); padding:26px 22px; margin:16px 0; text-align:center;}
+  .official-box p.label{color:#CFE3E0; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin:0 0 14px;}
+  .official-box .nums{display:flex; flex-wrap:wrap; justify-content:center; gap:16px 26px;}
+  .official-box .num-item{color:#fff; text-align:center;}
+  .official-box .num-item .n{font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; line-height:1;}
+  .official-box .num-item .d{font-size:11px; color:#CFE3E0; margin-top:3px;}
+
+  footer{padding:40px 0 calc(40px + env(safe-area-inset-bottom)); text-align:center; font-size:13px; color:var(--ink-soft);}
+  .back-top{display:inline-block; margin-top:8px; font-size:12px; color:var(--teal); text-decoration:none; font-weight:600;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" stroke="#0E6E66" stroke-width="2" opacity="0.55"/><circle cx="20" cy="20" r="11" stroke="#0E6E66" stroke-width="2" opacity="0.85"/><circle cx="20" cy="20" r="4.5" fill="#E1543E"/></svg>
+      <span class="display">Manual do Farol</span>
+    </div>
+    <a class="back" href="index.html">← Voltar ao site</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1 class="display">Manual completo de instalação e uso</h1>
+    <p>Este guia cobre a instalação no Android e no iPhone, e explica cada função do Farol em detalhe. Leia com calma na primeira configuração — depois de pronto, o dia a dia é simples.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="toc">
+    <p class="label">Neste manual</p>
+    <ol>
+      <li><a href="#antes">Antes de instalar</a></li>
+      <li><a href="#android">Instalar no Android</a></li>
+      <li><a href="#ios">Instalar no iPhone</a></li>
+      <li><a href="#ativar">Ativar o aplicativo</a></li>
+      <li><a href="#config">Configuração inicial</a></li>
+      <li><a href="#acionar">Formas de acionar o alerta</a></li>
+      <li><a href="#disfarce">Disfarce da tela</a></li>
+      <li><a href="#escura">Tela escura</a></li>
+      <li><a href="#ntfy">Notificação automática</a></li>
+      <li><a href="#followme">Acompanhamento contínuo</a></li>
+      <li><a href="#celular">Ajustes recomendados do celular</a></li>
+      <li><a href="#emergencia">Em caso de emergência real</a></li>
+      <li><a href="#faq">Solução de problemas</a></li>
+    </ol>
+  </div>
+</div>
+
+<section id="antes">
+  <div class="wrap">
+    <h2><span class="tag">1</span>Antes de instalar</h2>
+    <p>O Farol funciona direto pelo navegador do celular — não precisa de loja de aplicativos. Antes de começar, confira:</p>
+    <div class="featgrid">
+      <div class="feat"><h4>Android</h4><p>Use o <b>Google Chrome</b>. Todos os recursos funcionam, incluindo escuta por voz e gesto de agitar.</p></div>
+      <div class="feat"><h4>iPhone</h4><p>Use o <b>Safari</b>. A maioria dos recursos funciona; a escuta por voz não está disponível (limitação do sistema da Apple).</p></div>
+    </div>
+    <div class="tip"><b>Dica:</b> instale no celular de quem vai carregar o Farol consigo (a pessoa protegida), não no celular de quem só vai receber os alertas.</div>
+  </div>
+</section>
+
+<section id="android">
+  <div class="wrap">
+    <h2><span class="tag">2</span>Instalar no Android</h2>
+    <div class="stepnum">
+      <div class="sitem"><div class="n"></div><div class="c"><b>Abra o Chrome</b> e acesse o endereço do Farol que você recebeu.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Toque no menu <b>⋮</b> no canto superior direito.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Toque em <b>"Adicionar à tela inicial"</b> (ou "Instalar aplicativo", se aparecer essa opção).</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Confirme o nome sugerido e toque em <b>Adicionar</b>.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Um ícone com círculos em tom verde e um ponto laranja aparece na tela inicial. É por esse ícone que você deve abrir o Farol a partir de agora — não pelo navegador.</div></div>
+    </div>
+    <div class="warn"><b>Importante:</b> se o link foi recebido pelo WhatsApp, não use o botão de "adicionar à tela" de dentro do próprio WhatsApp. Toque em "Abrir no Chrome" primeiro, e só então adicione à tela inicial pelo Chrome de verdade.</div>
+  </div>
+</section>
+
+<section id="ios">
+  <div class="wrap">
+    <h2><span class="tag">3</span>Instalar no iPhone</h2>
+    <div class="stepnum">
+      <div class="sitem"><div class="n"></div><div class="c"><b>Abra o Safari</b> e acesse o endereço do Farol.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Toque no ícone de <b>compartilhar</b> (quadrado com seta para cima) na barra inferior.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Role a lista de opções e toque em <b>"Adicionar à Tela de Início"</b>.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Confirme o nome e toque em <b>Adicionar</b>, no canto superior direito.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">O ícone do Farol aparece na tela inicial. Abra sempre por ele, não pelo Safari.</div></div>
+    </div>
+    <div class="warn"><b>Limitações no iPhone:</b> a escuta por palavra-código não funciona (o sistema da Apple não permite), e a tela escura tem um efeito de tela cheia mais limitado que no Android. O botão manual e o gesto de agitar funcionam normalmente.</div>
+  </div>
+</section>
+
+<section id="ativar">
+  <div class="wrap">
+    <h2><span class="tag">4</span>Ativar o aplicativo</h2>
+    <p>Na primeira vez que abrir, o Farol pede um <b>código de ativação</b>. Existem dois tipos:</p>
+    <div class="featgrid">
+      <div class="feat"><h4>Código de teste</h4><p>Formato <code>FAROLT-XXXXXX</code>. Libera tudo por <b>30 dias</b>. Um selo no topo mostra quantos dias faltam.</p></div>
+      <div class="feat"><h4>Código definitivo</h4><p>Formato <code>FAROL-XXXXXX</code>. Libera tudo <b>permanentemente</b>, sem expirar.</p></div>
+    </div>
+    <p>Digite o código recebido no campo "Código de ativação" e toque em <b>Ativar</b>. Se quiser trocar de código depois (por exemplo, ao comprar o definitivo após o teste), toque em <b>"Trocar código de ativação"</b>, que aparece logo abaixo do selo verde — isso não apaga nenhuma configuração já feita.</p>
+  </div>
+</section>
+
+<section id="config">
+  <div class="wrap">
+    <h2><span class="tag">5</span>Configuração inicial</h2>
+
+    <h3>5.1 — WhatsApp (opcional)</h3>
+    <p>Cadastre o nome e o número de WhatsApp (com DDI e DDD, ex.: <code>5547999999999</code>) de até dois contatos de confiança. Esse canal é <b>desligado por padrão</b> e opcional.</p>
+    <div class="warn"><b>Atenção:</b> ativar o WhatsApp exige 2 toques na tela na hora do alerta (abrir a confirmação e tocar em enviar) — isso pode expor o celular num momento ruim. Prefira manter o ntfy (seção 9) como canal principal, e o WhatsApp só como reforço.</div>
+
+    <h3>5.2 — Palavra-código</h3>
+    <p>Defina uma palavra ou frase que, quando falada perto do celular (Android/Chrome), dispara o alerta. Pode colocar mais de uma opção separada por vírgula. Combine essa palavra com quem for usá-la — ela precisa ser natural de se dizer numa conversa comum.</p>
+
+    <h3>5.3 — Disfarce e código de desbloqueio</h3>
+    <p>Em "Disfarce da tela", digite um código (números ou palavra) e toque em <b>"Salvar código"</b>. A partir daí, o Farol sempre abre disfarçado de bloco de notas, e esse código é o que revela o app de verdade — digitado no campo "Pesquisar notas".</p>
+    <div class="tip"><b>Esqueceu o código?</b> Toque 5 vezes seguidas no título "Notas" para entrar mesmo assim.</div>
+
+    <h3>5.4 — Notificação automática (ntfy)</h3>
+    <p>Veja o passo a passo completo na seção 9 deste manual.</p>
+
+    <h3>5.5 — Modo bolso e agitar</h3>
+    <p>Em "Alerta ao agitar o celular", ative o interruptor (no iPhone, toque também em "Permitir sensor de movimento" quando pedido). Veja a seção 6 para as formas de disparo.</p>
+  </div>
+</section>
+
+<section id="acionar">
+  <div class="wrap">
+    <h2><span class="tag">6</span>Formas de acionar o alerta</h2>
+
+    <h3>Botão manual</h3>
+    <p>Toque no botão vermelho "SOCORRO". Uma contagem de 5 segundos aparece, com opção de cancelar caso tenha sido sem querer.</p>
+
+    <h3>Palavra-código (só Android)</h3>
+    <p>Ative "Escuta por palavra-código". O celular passa a ouvir enquanto o app estiver aberto (mesmo disfarçado) e a tela ligada. Ao detectar a palavra combinada, a mesma contagem de 5 segundos aparece.</p>
+    <div class="tip"><b>Sobre o bipe no Android:</b> o próprio sistema Android toca um bipe curto a cada reinício da escuta — não é falha do app. Deixe o celular no <b>modo silencioso ou volume de mídia em zero</b> para eliminar o som; o microfone continua funcionando normalmente.</div>
+
+    <h3>Agitar o celular</h3>
+    <p>Com o celular no bolso ou na mão, uma sacudida forte e deliberada (o sistema exige 3 movimentos bruscos em menos de 1,2 segundo) dispara o alerta — pensado para não confundir com o balanço normal de andar.</p>
+
+    <h3>Modo bolso (recomendado)</h3>
+    <p>Um único toque em <b>"Ativar modo bolso agora"</b> liga o gesto de agitar e escurece a tela ao mesmo tempo — o fluxo pensado para o dia a dia, com o celular guardado e fora de vista.</p>
+  </div>
+</section>
+
+<section id="disfarce">
+  <div class="wrap">
+    <h2><span class="tag">7</span>Disfarce da tela</h2>
+    <p>Quando ativado, o Farol abre parecendo um bloco de notas comum, com anotações genéricas. Para revelar o app de verdade, digite o código configurado (seção 5.3) no campo "Pesquisar notas" — o desbloqueio acontece assim que o código bate, sem precisar de Enter.</p>
+    <p>Dentro do app real, o botão <b>"Disfarçar"</b> no topo esconde tudo de novo manualmente, a qualquer momento.</p>
+  </div>
+</section>
+
+<section id="escura">
+  <div class="wrap">
+    <h2><span class="tag">8</span>Tela escura (parece desligada)</h2>
+    <p>Toque em <b>"Ativar tela escura agora"</b> (ou use o Modo bolso, que já inclui isso). A tela fica preta com um relógio real, imitando um celular bloqueado comum — enquanto isso, a escuta e o gesto de agitar continuam funcionando por trás.</p>
+    <p>Para sair, <b>toque e segure a tela preta por 3 segundos</b>.</p>
+    <div class="warn"><b>Limite importante:</b> isso só engana quem apenas olha a tela. Se alguém apertar o botão físico de ligar/desligar do celular, o sistema bloqueia de verdade e a escuta para — não existe contorno para isso.</div>
+  </div>
+</section>
+
+<section id="ntfy">
+  <div class="wrap">
+    <h2><span class="tag">9</span>Notificação automática (ntfy)</h2>
+    <p>Esse é o canal <b>principal e automático</b> — dispara sozinho, sem precisar de nenhum toque de confirmação.</p>
+    <div class="stepnum">
+      <div class="sitem"><div class="n"></div><div class="c">No Farol, em "Notificação automática", toque em <b>"Gerar código aleatório"</b> e depois em <b>"Salvar canal"</b>.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">A pessoa que vai <b>receber</b> os alertas instala o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid).</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Dentro do ntfy, toque em "+" ou "Subscribe" e cole <b>exatamente</b> o mesmo código gerado no Farol.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Ao adicionar, o ntfy pode perguntar sobre "entrega instantânea em modo de descanso" — deixe <b>ativado</b>, para não haver atraso quando o celular estiver parado.</div></div>
+      <div class="sitem"><div class="n"></div><div class="c">Teste com o botão "Enviar mensagem de teste" no Farol e confirme que a notificação chega.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="followme">
+  <div class="wrap">
+    <h2><span class="tag">10</span>Acompanhamento contínuo (Follow Me)</h2>
+    <p>Com essa opção ativada, depois de um alerta real (não no teste), o Farol reenvia a localização automaticamente a cada minuto, por até 10 minutos — silencioso, sem som alto repetido, sem mexer na tela. Pode ser interrompido a qualquer momento pelo botão "Parar acompanhamento agora".</p>
+  </div>
+</section>
+
+<section id="celular">
+  <div class="wrap">
+    <h2><span class="tag">11</span>Ajustes recomendados do celular</h2>
+    <p>Para tudo funcionar de forma confiável, ajuste uma vez nas configurações do próprio celular:</p>
+    <ul>
+      <li><b>Tempo de bloqueio automático:</b> aumente para o máximo disponível (Android: Ajustes > Tela; iPhone: Ajustes > Tela e Brilho > Bloqueio Automático > Nunca).</li>
+      <li><b>Economia de bateria:</b> desative para o Chrome/Safari, ou libere-o do gerenciador de bateria do fabricante (comum em Xiaomi, Samsung, Motorola).</li>
+      <li><b>Carregador:</b> mantenha o celular sempre carregando quando usar tela escura ou modo bolso por longos períodos.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="emergencia">
+  <div class="wrap">
+    <h2><span class="tag">12</span>Em caso de emergência real</h2>
+    <p>O Farol é um botão de ajuda imediata — um <b>complemento</b> de segurança. Ele não substitui atendimento oficial. Em situações de risco sério, acione sempre:</p>
+    <div class="official-box">
+      <p class="label">Canais oficiais</p>
+      <div class="nums">
+        <div class="num-item"><div class="n">190</div><div class="d">Polícia</div></div>
+        <div class="num-item"><div class="n">180</div><div class="d">Violência contra a mulher</div></div>
+        <div class="num-item"><div class="n">100</div><div class="d">Direitos Humanos</div></div>
+      </div>
+    </div>
+    <p>Em Santa Catarina, o app oficial <b>PMSC Cidadão</b> (Polícia Militar de SC) tem botão de pânico de violência doméstica ligado direto à central de despacho.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2><span class="tag">13</span>Solução de problemas comuns</h2>
+
+    <details class="faqitem"><summary>A escuta por voz não reage</summary><p>Confira se está usando o Chrome no Android (o iPhone não suporta essa função) e se a permissão de microfone foi aceita. O app precisa estar aberto e a tela ligada.</p></details>
+
+    <details class="faqitem"><summary>Ouço um bipe repetido enquanto a escuta está ativa</summary><p>É o Android tocando o som de "início de reconhecimento" a cada reinício automático da escuta — comportamento do sistema, não do app. Deixe o celular no silencioso ou o volume de mídia em zero; o microfone continua funcionando.</p></details>
+
+    <details class="faqitem"><summary>O agito dispara sozinho ao andar</summary><p>O sistema já exige 3 sacudidas fortes em menos de 1,2 segundo para disparar, o que deve evitar isso. Se persistir, verifique se está usando a versão mais recente do app.</p></details>
+
+    <details class="faqitem"><summary>Digitei o código do disfarce e não funciona</summary><p>Confirme que tocou em "Salvar código" depois de digitá-lo em Configuração — o código só é aplicado depois desse passo. Caso tenha esquecido, use os 5 toques no título "Notas".</p></details>
+
+    <details class="faqitem"><summary>A notificação do ntfy não chega</summary><p>Confirme que o código do canal está idêntico nos dois aparelhos (Farol e ntfy), e que a opção de entrega instantânea em modo de descanso está ativada no app ntfy.</p></details>
+
+    <details class="faqitem"><summary>A tela apaga sozinha durante o uso</summary><p>Revise os ajustes da seção 11 — tempo de bloqueio automático e economia de bateria são as causas mais comuns.</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© Farol. Ferramenta de apoio — não substitui atendimento policial ou institucional em emergências.</p>
+    <a class="back-top" href="#">↑ Voltar ao topo</a>
+  </div>
+</footer>
+
+</body>
+</html>
