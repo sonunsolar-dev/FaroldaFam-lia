@@ -567,6 +567,7 @@
     </div>
     <nav>
       <a href="#como-funciona">Como funciona</a>
+      <a href="#comprar">Comprar</a>
       <a href="#profissionais">Profissionais</a>
       <a href="#teste">Testar grátis</a>
     </nav>
@@ -667,6 +668,15 @@
   </div>
 </section>
 
+<section id="comprar">
+  <div class="wrap" style="text-align:center;">
+    <h2 class="display">Já testou e quer continuar?</h2>
+    <p style="color:var(--ink-soft); max-width:480px; margin:0 auto 24px; font-size:15px;">O acesso definitivo libera todos os recursos permanentemente, sem depender de renovação nem de novo código.</p>
+    <a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" style="margin:0 auto;">Comprar acesso definitivo</a>
+    <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Pagamento processado com segurança pela Kiwify (Pix, cartão ou boleto).</p>
+  </div>
+</section>
+
 <section class="alt" id="profissionais">
   <div class="wrap">
     <div class="pro-box">
@@ -698,14 +708,17 @@
       </div>
     </div>
     <p>© Farol. Ferramenta de apoio — não substitui atendimento policial ou institucional em emergências.</p>
+    <p style="margin-top:8px;"><a href="privacidade.html" style="color:var(--ink-soft);">Política de privacidade</a></p>
   </div>
 </footer>
 
 <script>
   var SELLER_WHATSAPP = "5547997220734";
+  var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/SEU-LINK-AQUI"; // <-- SUBSTITUA pelo link de checkout do seu produto na Kiwify
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
 
   document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
+  document.getElementById('comprarBtn').href = KIWIFY_CHECKOUT_URL;
 
   function gerarCodigoTeste(){
     var d = [];
