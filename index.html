@@ -303,6 +303,17 @@
         </div>
         <p class="hint" id="topicSaveHint" style="margin-top:8px;"></p>
         <p class="hint" style="margin-top:10px;">Na família: abrir o app ntfy → tocar em "+" ou "Subscribe" → colar exatamente o mesmo código → pronto, já recebe os alertas na hora.</p>
+        <div class="listen-row" style="margin-top:14px;">
+          <div>
+            <div style="font-weight:600; font-size:14px;">Acompanhamento contínuo (Follow Me) após o alerta</div>
+            <div class="hint" style="margin-top:2px;">Depois de um alerta real, envia a localização de novo a cada 1 minuto, por até 10 minutos — silencioso, sem som alto repetido, sem mexer na tela.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="followMeToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button class="btn btn-ghost" id="stopFollowBtn" style="margin-top:10px;">Parar acompanhamento agora</button>
       </section>
 
       <!-- BOTÃO DE PÂNICO -->
@@ -419,7 +430,7 @@
   var defaultState = {
     c1name:"", c1phone:"", c2name:"", c2phone:"",
     codeword:"socorro", extramsg:"", log:[],
-    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false
+    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false, followMeOn:true
   };
   var state = loadState();
 
@@ -454,6 +465,7 @@
     savePinBtn:document.getElementById('savePinBtn'), pinSaveHint:document.getElementById('pinSaveHint'),
     ntfyTopicInput:document.getElementById('ntfyTopicInput'), genTopicBtn:document.getElementById('genTopicBtn'),
     saveTopicBtn:document.getElementById('saveTopicBtn'), topicSaveHint:document.getElementById('topicSaveHint'),
+    followMeToggle:document.getElementById('followMeToggle'), stopFollowBtn:document.getElementById('stopFollowBtn'),
     unlockInput:document.getElementById('unlockInput'), fakeTitle:document.getElementById('fakeTitle'),
     hideBtn:document.getElementById('hideBtn'),
     shakeToggle:document.getElementById('shakeToggle'), motionPermBtn:document.getElementById('motionPermBtn'),
@@ -473,6 +485,7 @@
     el.disguiseToggle.checked=state.disguiseOn; el.pinInput.value=state.pin;
     el.shakeToggle.checked=state.shakeOn;
     el.ntfyTopicInput.value=state.ntfyTopic;
+    el.followMeToggle.checked=state.followMeOn;
     renderLog();
   }
   fillForm();
@@ -520,16 +533,40 @@
     var now = Date.now();
     if(now - lastNtfySend < 5000) return;
     lastNtfySend = now;
-    var title = kind==='test' ? 'FAROL TESTE' : 'FAROL';
+    var title = kind==='test' ? 'FAROL TESTE' : (kind==='tracking' ? 'FAROL (acompanhando)' : 'FAROL');
+    var priority = kind==='tracking' ? 'low' : (kind==='test' ? 'default' : 'urgent');
     var body = loc ? ('https://maps.google.com/?q='+loc.lat+','+loc.lng) : 'Localizacao indisponivel';
     fetch('https://ntfy.sh/'+encodeURIComponent(state.ntfyTopic), {
       method:'POST',
-      headers:{ 'Title': title, 'Priority': kind==='test' ? 'default' : 'urgent', 'Tags': 'rotating_light' },
+      headers:{ 'Title': title, 'Priority': priority, 'Tags': 'rotating_light' },
       body: body
     }).then(function(){
-      addLog(kind, 'ntfy (automático)');
+      addLog(kind, kind==='tracking' ? 'ntfy (localização)' : 'ntfy (automático)');
     }).catch(function(){ /* falha silenciosa — o WhatsApp continua como respaldo manual */ });
   }
+
+  var FOLLOWME_INTERVAL_MS=60000, FOLLOWME_MAX_TICKS=10;
+  var followMeTimer=null, followMeTicks=0;
+  function startFollowMe(){
+    if(!state.ntfyTopic || !state.followMeOn) return;
+    stopFollowMe();
+    followMeTicks=0;
+    followMeTimer=setInterval(function(){
+      followMeTicks++;
+      if(followMeTicks>FOLLOWME_MAX_TICKS){ stopFollowMe(); return; }
+      withLocation(function(loc){ sendNtfy('tracking', loc); });
+    }, FOLLOWME_INTERVAL_MS);
+  }
+  function stopFollowMe(){
+    if(followMeTimer){ clearInterval(followMeTimer); followMeTimer=null; }
+    followMeTicks=0;
+  }
+  el.followMeToggle.addEventListener('change', function(){
+    state.followMeOn = el.followMeToggle.checked;
+    saveState();
+    if(!state.followMeOn) stopFollowMe();
+  });
+  el.stopFollowBtn.addEventListener('click', stopFollowMe);
 
   function withLocation(cb){
     if(!navigator.geolocation){ cb(null); return; }
@@ -673,6 +710,7 @@
         el.countOverlay.classList.remove('show');
         withLocation(function(loc){
           sendNtfy(kind, loc);
+          if(kind!=='test'){ startFollowMe(); }
           if(whatsappReady){
             showReal();
             openSendPanel(kind, loc);
