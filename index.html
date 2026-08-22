@@ -235,6 +235,9 @@
         <p class="hint" id="activationHint" style="margin-top:8px;"></p>
       </section>
       <p class="hint" id="activatedBadge" style="display:none; margin:12px 20px 0; color:var(--teal-deep); font-weight:600;">✓ Recursos completos ativados</p>
+      <div style="padding:0 20px;">
+        <button class="btn btn-ghost" id="deactivateBtn" style="display:none; margin-top:6px;">Trocar código de ativação</button>
+      </div>
 
       <!-- CONFIGURAÇÃO -->
       <section class="card premium">
@@ -461,7 +464,7 @@
   var el = {
     activationCard:document.getElementById('activationCard'), activationInput:document.getElementById('activationInput'),
     activateBtn:document.getElementById('activateBtn'), activationHint:document.getElementById('activationHint'),
-    activatedBadge:document.getElementById('activatedBadge'),
+    activatedBadge:document.getElementById('activatedBadge'), deactivateBtn:document.getElementById('deactivateBtn'),
     c1name:document.getElementById('c1name'), c1phone:document.getElementById('c1phone'),
     c2name:document.getElementById('c2name'), c2phone:document.getElementById('c2phone'),
     codeword:document.getElementById('codeword'), extramsg:document.getElementById('extramsg'),
@@ -523,6 +526,7 @@
     el.activationCard.style.display = state.activated ? 'none' : 'block';
     if(state.activated){
       el.activatedBadge.style.display = 'block';
+      el.deactivateBtn.style.display = 'block';
       if(state.activationType==='trial'){
         var daysLeft = Math.max(0, Math.ceil(TRIAL_DAYS - (Date.now()-state.activatedAt)/(1000*60*60*24)));
         el.activatedBadge.textContent = '✓ Período de teste ativo — '+daysLeft+' dia(s) restante(s)';
@@ -531,11 +535,17 @@
       }
     } else {
       el.activatedBadge.style.display = 'none';
+      el.deactivateBtn.style.display = 'none';
       if(justExpired){
         el.activationHint.textContent = "Seu período de teste acabou. Adquira o código definitivo para continuar.";
       }
     }
   }
+  el.deactivateBtn.addEventListener('click', function(){
+    state.activated=false; state.activationType=null; state.activatedAt=null;
+    saveState();
+    applyActivationVisibility();
+  });
   el.activateBtn.addEventListener('click', function(){
     var type = getActivationType(el.activationInput.value);
     if(type){
