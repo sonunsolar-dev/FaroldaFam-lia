@@ -224,7 +224,7 @@
         <h2>WhatsApp (opcional, manual)</h2>
         <div class="listen-row">
           <div>
-            <div style="font-weight:600; font-size:14px;">Ativar WhatsApp como canal adicional (Não Recomendado)</div>
+            <div style="font-weight:600; font-size:14px;">Ativar WhatsApp como canal adicional (NÃO Recomendado)</div>
             <div class="hint" style="margin-top:4px; color:var(--coral-deep); font-weight:600;">Atenção: ativar isso exige 2 toques na tela (abrir a confirmação e tocar em "enviar") pra completar o envio — isso pode expor o celular bem na hora em que a pessoa deveria estar discreta. A notificação automática (ntfy) não depende de nenhum toque.</div>
           </div>
           <label class="switch">
@@ -507,8 +507,12 @@
     el.topicSaveHint.textContent = state.ntfyTopic ? "Canal salvo. Peça pra família assinar exatamente: "+state.ntfyTopic : "Canal removido.";
     setTimeout(function(){ el.topicSaveHint.textContent=""; }, 5000);
   });
+  var lastNtfySend=0;
   function sendNtfy(kind, loc){
     if(!state.ntfyTopic) return;
+    var now = Date.now();
+    if(now - lastNtfySend < 5000) return;
+    lastNtfySend = now;
     var title = kind==='test' ? 'FAROL TESTE' : 'FAROL';
     var body = loc ? ('https://maps.google.com/?q='+loc.lat+','+loc.lng) : 'Localizacao indisponivel';
     fetch('https://ntfy.sh/'+encodeURIComponent(state.ntfyTopic), {
@@ -624,11 +628,17 @@
 
   /* ---------------- contagem regressiva ---------------- */
   var countTimer=null, countValue=5;
+  var alertInProgress=false, lastAlertCompleted=0;
+  var ALERT_COOLDOWN_MS=15000;
   function startCountdown(kind){
+    var nowCheck = Date.now();
+    if(alertInProgress || (nowCheck - lastAlertCompleted) < ALERT_COOLDOWN_MS) return;
+    alertInProgress = true;
     deactivateDarkScreen();
     var contacts=getContacts();
     var whatsappReady = state.whatsappOn && contacts.length>0;
     if(!whatsappReady && !state.ntfyTopic){
+      alertInProgress = false;
       showReal();
       alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de acionar o alerta.");
       return;
@@ -658,6 +668,8 @@
             setStatus('ready','Sistema pronto');
             if(state.disguiseOn){ showDisguise(); } else { showReal(); }
           }
+          lastAlertCompleted = Date.now();
+          alertInProgress = false;
         });
       } else {
         el.countNumber.textContent=countValue;
@@ -667,6 +679,7 @@
   el.cancelBtn.addEventListener('click', function(){
     if(countTimer){ clearInterval(countTimer); countTimer=null; }
     el.countOverlay.classList.remove('show');
+    alertInProgress = false;
     if(state.disguiseOn) showDisguise();
     setStatus(el.listenToggle.checked?'listening':'ready', el.listenToggle.checked?'Escutando pela palavra-código':'Sistema pronto');
   });
