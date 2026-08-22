@@ -566,7 +566,7 @@
   }
   el.closeSendBtn.addEventListener('click', function(){
     el.sendPanel.classList.remove('show');
-    if(wasDarkBeforeAlert){ activateDarkScreen(); }
+    if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
     else if(state.disguiseOn){ showDisguise(); }
   });
 
@@ -641,7 +641,7 @@
     if(alertInProgress || (nowCheck - lastAlertCompleted) < ALERT_COOLDOWN_MS) return;
     alertInProgress = true;
     wasDarkBeforeAlert = darkScreenActive;
-    deactivateDarkScreen();
+    hideDarkOverlay();
     var contacts=getContacts();
     var whatsappReady = state.whatsappOn && contacts.length>0;
     if(!whatsappReady && !state.ntfyTopic){
@@ -673,7 +673,7 @@
             openSendPanel(kind, loc);
           } else {
             setStatus('ready','Sistema pronto');
-            if(wasDarkBeforeAlert){ activateDarkScreen(); }
+            if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
             else if(state.disguiseOn){ showDisguise(); }
             else { showReal(); }
           }
@@ -689,7 +689,7 @@
     if(countTimer){ clearInterval(countTimer); countTimer=null; }
     el.countOverlay.classList.remove('show');
     alertInProgress = false;
-    if(wasDarkBeforeAlert){ activateDarkScreen(); return; }
+    if(wasDarkBeforeAlert){ showDarkOverlayOnly(); return; }
     if(state.disguiseOn) showDisguise();
     setStatus(el.listenToggle.checked?'listening':'ready', el.listenToggle.checked?'Escutando pela palavra-código':'Sistema pronto');
   });
@@ -861,6 +861,17 @@
     var exitFs = document.exitFullscreen || document.webkitExitFullscreen;
     if(exitFs && (document.fullscreenElement || document.webkitFullscreenElement)){ exitFs.call(document).catch(function(){}); }
     if(darkWakeLock){ darkWakeLock.release().catch(function(){}); darkWakeLock=null; }
+  }
+  function hideDarkOverlay(){
+    darkScreenActive = false;
+    el.darkScreen.style.display='none';
+    if(darkClockTimer){ clearInterval(darkClockTimer); darkClockTimer=null; }
+  }
+  function showDarkOverlayOnly(){
+    darkScreenActive = true;
+    el.darkScreen.style.display='flex';
+    updateDarkClock();
+    darkClockTimer=setInterval(updateDarkClock, 1000);
   }
   el.darkScreenBtn.addEventListener('click', activateDarkScreen);
   el.pocketModeBtn.addEventListener('click', function(){
