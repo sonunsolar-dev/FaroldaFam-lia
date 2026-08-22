@@ -221,8 +221,18 @@
 
       <!-- CONFIGURAÇÃO -->
       <section class="card">
-        <h2>Contato de confiança</h2>
-        <label for="c1name">Nome</label>
+        <h2>WhatsApp (opcional, manual)</h2>
+        <div class="listen-row">
+          <div>
+            <div style="font-weight:600; font-size:14px;">Ativar WhatsApp como canal adicional</div>
+            <div class="hint" style="margin-top:4px; color:var(--coral-deep); font-weight:600;">Atenção: ativar isso exige 2 toques na tela (abrir a confirmação e tocar em "enviar") pra completar o envio — isso pode expor o celular bem na hora em que a pessoa deveria estar discreta. A notificação automática (ntfy) não depende de nenhum toque.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="whatsappToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <label for="c1name" style="margin-top:16px;">Nome</label>
         <input type="text" id="c1name" placeholder="Ex.: Marta (filha)">
         <label for="c1phone">WhatsApp (com DDI e DDD)</label>
         <input type="tel" id="c1phone" placeholder="Ex.: 5547999999999">
@@ -402,7 +412,7 @@
   var defaultState = {
     c1name:"", c1phone:"", c2name:"", c2phone:"",
     codeword:"socorro", extramsg:"", log:[],
-    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:""
+    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false
   };
   var state = loadState();
 
@@ -423,6 +433,7 @@
     c2name:document.getElementById('c2name'), c2phone:document.getElementById('c2phone'),
     codeword:document.getElementById('codeword'), extramsg:document.getElementById('extramsg'),
     saveBtn:document.getElementById('saveBtn'), saveHint:document.getElementById('saveHint'),
+    whatsappToggle:document.getElementById('whatsappToggle'),
     beaconBtn:document.getElementById('beaconBtn'), testBtn:document.getElementById('testBtn'),
     listenToggle:document.getElementById('listenToggle'), listeningBanner:document.getElementById('listeningBanner'),
     listenSupportNote:document.getElementById('listenSupportNote'),
@@ -451,6 +462,7 @@
     el.c1name.value=state.c1name; el.c1phone.value=state.c1phone;
     el.c2name.value=state.c2name; el.c2phone.value=state.c2phone;
     el.codeword.value=state.codeword; el.extramsg.value=state.extramsg;
+    el.whatsappToggle.checked=state.whatsappOn;
     el.disguiseToggle.checked=state.disguiseOn; el.pinInput.value=state.pin;
     el.shakeToggle.checked=state.shakeOn;
     el.ntfyTopicInput.value=state.ntfyTopic;
@@ -466,6 +478,11 @@
     saveState();
     el.saveHint.textContent="Configuração salva. ("+ (new Date()).toLocaleTimeString('pt-BR') +")";
     setTimeout(function(){ el.saveHint.textContent=""; }, 3500);
+  });
+
+  el.whatsappToggle.addEventListener('change', function(){
+    state.whatsappOn = el.whatsappToggle.checked;
+    saveState();
   });
 
   function getContacts(){
@@ -610,9 +627,10 @@
   function startCountdown(kind){
     deactivateDarkScreen();
     var contacts=getContacts();
-    if(contacts.length===0 && !state.ntfyTopic){
+    var whatsappReady = state.whatsappOn && contacts.length>0;
+    if(!whatsappReady && !state.ntfyTopic){
       showReal();
-      alert("Configure ao menos um contato com WhatsApp ou um canal ntfy antes de acionar o alerta.");
+      alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de acionar o alerta.");
       return;
     }
     var neutral = state.disguiseOn;
@@ -631,8 +649,16 @@
       if(countValue<=0){
         clearInterval(countTimer); countTimer=null;
         el.countOverlay.classList.remove('show');
-        showReal();
-        withLocation(function(loc){ sendNtfy(kind, loc); openSendPanel(kind, loc); });
+        withLocation(function(loc){
+          sendNtfy(kind, loc);
+          if(whatsappReady){
+            showReal();
+            openSendPanel(kind, loc);
+          } else {
+            setStatus('ready','Sistema pronto');
+            if(state.disguiseOn){ showDisguise(); } else { showReal(); }
+          }
+        });
       } else {
         el.countNumber.textContent=countValue;
       }
@@ -648,8 +674,12 @@
   el.beaconBtn.addEventListener('click', function(){ startCountdown('botao'); });
   el.testBtn.addEventListener('click', function(){
     var contacts=getContacts();
-    if(contacts.length===0 && !state.ntfyTopic){ alert("Configure ao menos um contato com WhatsApp ou um canal ntfy antes de testar."); return; }
-    withLocation(function(loc){ sendNtfy('test', loc); openSendPanel('test', loc); });
+    var whatsappReady = state.whatsappOn && contacts.length>0;
+    if(!whatsappReady && !state.ntfyTopic){ alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de testar."); return; }
+    withLocation(function(loc){
+      sendNtfy('test', loc);
+      if(whatsappReady){ openSendPanel('test', loc); }
+    });
   });
 
   /* ---------------- escuta por palavra-código ---------------- */
