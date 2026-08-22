@@ -288,6 +288,7 @@
         <input type="text" id="pinInput" placeholder="Ex.: 4 a 6 dígitos ou uma palavra" maxlength="12">
         <button class="btn btn-primary" id="savePinBtn" style="margin-top:10px;">Salvar código</button>
         <p class="hint" id="pinSaveHint" style="margin-top:6px;"></p>
+        <p class="hint">Ao salvar um código aqui, o app passa a exigir ele sempre que for aberto — mesmo com "Abrir sempre disfarçado" desligado. Isso ajuda a impedir que alguém que ache o link consiga configurar o Farol sem o código.</p>
         <p class="hint">Se esquecer o código, toque 5 vezes seguidas no título "Notas" para revelar o app mesmo assim.</p>
       </section>
 
@@ -609,7 +610,7 @@
   el.closeSendBtn.addEventListener('click', function(){
     el.sendPanel.classList.remove('show');
     if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
-    else if(state.disguiseOn){ showDisguise(); }
+    else if(shouldHide()){ showDisguise(); }
   });
 
   function addLog(kind, contactName){
@@ -631,6 +632,8 @@
   }
 
   /* ---------------- disfarce ---------------- */
+  function shouldHide(){ return !!(state.disguiseOn || state.pin); }
+
   function showDisguise(){
     el.disguiseScreen.style.display='block';
     el.realApp.style.display='none';
@@ -640,7 +643,7 @@
     el.disguiseScreen.style.display='none';
     el.realApp.style.display='block';
   }
-  if(state.disguiseOn) showDisguise(); else showReal();
+  if(shouldHide()) showDisguise(); else showReal();
 
   el.savePinBtn.addEventListener('click', function(){
     state.pin = el.pinInput.value.trim();
@@ -649,7 +652,7 @@
     setTimeout(function(){ el.pinSaveHint.textContent=""; }, 3500);
   });
 
-  el.hideBtn.addEventListener('click', function(){ if(el.disguiseToggle.checked || state.pin) showDisguise(); });
+  el.hideBtn.addEventListener('click', function(){ if(shouldHide()) showDisguise(); });
   el.disguiseToggle.addEventListener('change', function(){
     state.disguiseOn = el.disguiseToggle.checked; saveState();
   });
@@ -692,7 +695,7 @@
       alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de acionar o alerta.");
       return;
     }
-    var neutral = state.disguiseOn;
+    var neutral = shouldHide();
     el.overlayAlertContent.style.display = neutral ? 'none' : 'block';
     el.overlayNeutralContent.style.display = neutral ? 'block' : 'none';
     el.countOverlay.className = 'overlay show' + (neutral ? ' neutral' : '');
@@ -717,7 +720,7 @@
           } else {
             setStatus('ready','Sistema pronto');
             if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
-            else if(state.disguiseOn){ showDisguise(); }
+            else if(shouldHide()){ showDisguise(); }
             else { showReal(); }
           }
           lastAlertCompleted = Date.now();
@@ -733,7 +736,7 @@
     el.countOverlay.classList.remove('show');
     alertInProgress = false;
     if(wasDarkBeforeAlert){ showDarkOverlayOnly(); return; }
-    if(state.disguiseOn) showDisguise();
+    if(shouldHide()) showDisguise();
     setStatus(el.listenToggle.checked?'listening':'ready', el.listenToggle.checked?'Escutando pela palavra-código':'Sistema pronto');
   });
 
