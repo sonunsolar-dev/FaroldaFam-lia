@@ -269,6 +269,8 @@
         </div>
         <label for="pinInput">Código para revelar o app real</label>
         <input type="text" id="pinInput" placeholder="Ex.: 4 a 6 dígitos ou uma palavra" maxlength="12">
+        <button class="btn btn-primary" id="savePinBtn" style="margin-top:10px;">Salvar código</button>
+        <p class="hint" id="pinSaveHint" style="margin-top:6px;"></p>
         <p class="hint">Se esquecer o código, toque 5 vezes seguidas no título "Notas" para revelar o app mesmo assim.</p>
       </section>
 
@@ -417,6 +419,7 @@
     closeSendBtn:document.getElementById('closeSendBtn'), logList:document.getElementById('logList'),
     disguiseScreen:document.getElementById('disguiseScreen'), realApp:document.getElementById('realApp'),
     disguiseToggle:document.getElementById('disguiseToggle'), pinInput:document.getElementById('pinInput'),
+    savePinBtn:document.getElementById('savePinBtn'), pinSaveHint:document.getElementById('pinSaveHint'),
     unlockInput:document.getElementById('unlockInput'), fakeTitle:document.getElementById('fakeTitle'),
     hideBtn:document.getElementById('hideBtn'),
     shakeToggle:document.getElementById('shakeToggle'), motionPermBtn:document.getElementById('motionPermBtn'),
@@ -529,6 +532,13 @@
     el.realApp.style.display='block';
   }
   if(state.disguiseOn) showDisguise(); else showReal();
+
+  el.savePinBtn.addEventListener('click', function(){
+    state.pin = el.pinInput.value.trim();
+    saveState();
+    el.pinSaveHint.textContent = state.pin ? "Código salvo." : "Código apagado — o disfarce só poderá ser aberto pelos 5 toques no título.";
+    setTimeout(function(){ el.pinSaveHint.textContent=""; }, 3500);
+  });
 
   el.hideBtn.addEventListener('click', function(){ if(el.disguiseToggle.checked || state.pin) showDisguise(); });
   el.disguiseToggle.addEventListener('change', function(){
