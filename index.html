@@ -552,6 +552,7 @@
   /* ---------------- contagem regressiva ---------------- */
   var countTimer=null, countValue=5;
   function startCountdown(kind){
+    deactivateDarkScreen();
     var contacts=getContacts();
     if(contacts.length===0){
       showReal();
