@@ -7,6 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Farol">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Farol — Alerta Familiar</title>
 <style>
   :root{
@@ -226,7 +230,7 @@
         <h2>WhatsApp (opcional, manual)</h2>
         <div class="listen-row">
           <div>
-            <div style="font-weight:600; font-size:14px;">Ativar WhatsApp como canal adicional (NÃO Recomendado)</div>
+            <div style="font-weight:600; font-size:14px;">Ativar WhatsApp como canal adicional</div>
             <div class="hint" style="margin-top:4px; color:var(--coral-deep); font-weight:600;">Atenção: ativar isso exige 2 toques na tela (abrir a confirmação e tocar em "enviar") pra completar o envio — isso pode expor o celular bem na hora em que a pessoa deveria estar discreta. A notificação automática (ntfy) não depende de nenhum toque.</div>
           </div>
           <label class="switch">
@@ -264,6 +268,7 @@
         <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
         <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar modo bolso agora</button>
         <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque e segure nela por 3 segundos.</p>
+        <p class="hint" style="margin-top:10px; color:var(--coral-deep); font-weight:600;">Antes de usar: vá nas configurações do celular e desative o bloqueio automático de tela (ou deixe no tempo máximo) e a economia de bateria para o navegador. Sem isso, o sistema pode ignorar o travamento de tela do app e desligar mesmo assim.</p>
       </section>
 
       <!-- DISFARCE -->
@@ -756,7 +761,15 @@
     el.listeningBanner.classList.add('on');
     setStatus('listening','Escutando pela palavra-código');
     if('wakeLock' in navigator){
-      navigator.wakeLock.request('screen').then(function(wl){ wakeLock=wl; }).catch(function(){});
+      navigator.wakeLock.request('screen').then(function(wl){
+        wakeLock=wl;
+        wl.addEventListener('release', function(){
+          wakeLock=null;
+          if(listening && document.visibilityState==='visible'){
+            navigator.wakeLock.request('screen').then(function(wl2){ wakeLock=wl2; }).catch(function(){});
+          }
+        });
+      }).catch(function(){});
     }
   }
   function stopListening(){
@@ -771,6 +784,9 @@
   });
   document.addEventListener('visibilitychange', function(){
     if(document.hidden && wakeLock){ wakeLock.release().catch(function(){}); wakeLock=null; }
+    else if(!document.hidden && listening && 'wakeLock' in navigator && !wakeLock){
+      navigator.wakeLock.request('screen').then(function(wl){ wakeLock=wl; }).catch(function(){});
+    }
   });
 
   /* ---------------- agitar para alertar ---------------- */
@@ -848,7 +864,15 @@
     updateDarkClock();
     darkClockTimer=setInterval(updateDarkClock, 1000);
     if('wakeLock' in navigator){
-      navigator.wakeLock.request('screen').then(function(wl){ darkWakeLock=wl; }).catch(function(){});
+      navigator.wakeLock.request('screen').then(function(wl){
+        darkWakeLock=wl;
+        wl.addEventListener('release', function(){
+          darkWakeLock=null;
+          if(darkScreenActive && document.visibilityState==='visible'){
+            navigator.wakeLock.request('screen').then(function(wl2){ darkWakeLock=wl2; }).catch(function(){});
+          }
+        });
+      }).catch(function(){});
     }
     var root=document.documentElement;
     var req = root.requestFullscreen || root.webkitRequestFullscreen;
