@@ -535,6 +535,12 @@
     state.disguiseOn = el.disguiseToggle.checked; saveState();
   });
 
+  el.unlockInput.addEventListener('input', function(){
+    if(state.pin && el.unlockInput.value.trim()===state.pin){
+      showReal();
+      el.unlockInput.value='';
+    }
+  });
   el.unlockInput.addEventListener('keyup', function(e){
     if(e.key==='Enter'){
       if(state.pin && el.unlockInput.value.trim()===state.pin){ showReal(); }
@@ -666,15 +672,24 @@
 
   /* ---------------- agitar para alertar ---------------- */
   var lastShake=0;
-  var SHAKE_THRESHOLD=18;
+  var shakePeaks=[];
+  var SHAKE_DELTA_THRESHOLD=16;
+  var SHAKE_PEAKS_NEEDED=3;
+  var SHAKE_WINDOW_MS=1200;
   function handleMotion(e){
     var acc = e.accelerationIncludingGravity || e.acceleration;
     if(!acc || acc.x===null) return;
-    var total = Math.abs(acc.x||0)+Math.abs(acc.y||0)+Math.abs(acc.z||0);
-    var now=Date.now();
-    if(total>SHAKE_THRESHOLD && now-lastShake>4000 && !el.countOverlay.classList.contains('show')){
-      lastShake=now;
-      startCountdown('agitar');
+    var magnitude = Math.sqrt((acc.x||0)*(acc.x||0) + (acc.y||0)*(acc.y||0) + (acc.z||0)*(acc.z||0));
+    var delta = Math.abs(magnitude - 9.81);
+    var now = Date.now();
+    if(delta > SHAKE_DELTA_THRESHOLD){
+      shakePeaks.push(now);
+      shakePeaks = shakePeaks.filter(function(t){ return now - t <= SHAKE_WINDOW_MS; });
+      if(shakePeaks.length >= SHAKE_PEAKS_NEEDED && now-lastShake>4000 && !el.countOverlay.classList.contains('show')){
+        lastShake=now;
+        shakePeaks=[];
+        startCountdown('agitar');
+      }
     }
   }
   var needsIOSPermission = typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function';
