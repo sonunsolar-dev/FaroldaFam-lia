@@ -2,1042 +2,739 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0E6E66">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Farol">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Farol — Alerta Familiar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Farol — Segurança e bem-estar familiar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#10262B;
-    --ink-soft:#3C5257;
-    --paper:#F1F6F4;
-    --paper-card:#FFFFFF;
-    --teal:#0E6E66;
-    --teal-deep:#0A4A45;
-    --coral:#E1543E;
-    --coral-deep:#B93F2E;
-    --amber:#C98A2C;
-    --line:#DCE6E3;
-    --radius:18px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:48px;
-  }
-  .display{font-family:'Space Grotesk','Inter',sans-serif;}
-  .mono{font-family:'IBM Plex Mono','SFMono-Regular',Menlo,monospace;}
-
-  /* ---------- disguise screen (fake notes app) ---------- */
-  #disguiseScreen{
-    display:none; min-height:100vh; background:#FAFAF8; color:#222;
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);
-  }
-  .fake-header{
-    padding:22px 18px 14px; border-bottom:1px solid #E4E4E0;
-  }
-  .fake-header h1{margin:0; font-size:26px; font-weight:700; color:#222;}
-  .fake-header .count{font-size:13px; color:#888; margin-top:2px;}
-  .fake-search{
-    margin:14px 18px 6px; padding:10px 14px; background:#EFEFEC; border-radius:10px;
-    border:none; width:calc(100% - 36px); font-size:15px; color:#222;
-  }
-  .fake-note{
-    padding:16px 18px; border-bottom:1px solid #EEEEEA;
-  }
-  .fake-note .t{font-weight:600; font-size:15px; color:#222;}
-  .fake-note .p{font-size:13px; color:#999; margin-top:3px;}
-
-  /* ---------- status bar ---------- */
-  .statusbar{
-    position:sticky; top:0; z-index:20;
-    display:flex; align-items:center; gap:8px;
-    padding:10px 16px;
-    padding-top:calc(10px + env(safe-area-inset-top));
-    background:rgba(241,246,244,0.92);
-    backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--line);
-    font-size:13px;
-    font-weight:600;
-  }
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--ink-soft);flex-shrink:0;}
-  .dot.ready{background:var(--teal);}
-  .dot.listening{background:var(--teal); animation:blink 1.4s ease-in-out infinite;}
-  .dot.sending{background:var(--coral); animation:blink 0.6s ease-in-out infinite;}
-  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
-  .hidebtn{
-    margin-left:auto; background:none; border:1px solid var(--line); border-radius:8px;
-    padding:5px 10px; font-size:12px; font-weight:600; color:var(--ink-soft); cursor:pointer;
+  :root {
+    --ink: #10262B;
+    --ink-soft: #3C5257;
+    --paper: #F4F7F6;
+    --paper-card: #FFFFFF;
+    --teal: #0E6E66;
+    --teal-deep: #0A4A45;
+    --teal-light: rgba(14, 110, 102, 0.08);
+    --coral: #E1543E;
+    --coral-deep: #B93F2E;
+    --coral-light: rgba(225, 84, 62, 0.08);
+    --amber: #C98A2C;
+    --line: #E1E9E6;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --shadow-sm: 0 4px 12px rgba(16, 38, 43, 0.04);
+    --shadow-md: 0 12px 32px rgba(16, 38, 43, 0.08);
   }
 
-  /* ---------- header ---------- */
-  header{padding:28px 20px 8px; max-width:520px; margin:0 auto;}
-  .brandrow{display:flex; align-items:center; gap:12px;}
-  .brandmark{width:40px;height:40px;flex-shrink:0;}
-  header h1{font-size:28px; margin:0; letter-spacing:-0.02em; font-weight:600;}
-  header p.tag{margin:6px 0 0; color:var(--ink-soft); font-size:14px; line-height:1.5;}
-
-  main{max-width:520px; margin:0 auto; padding:0 20px;}
-
-  .card{background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius); padding:20px; margin-top:16px;}
-  .card h2{font-size:14px; text-transform:uppercase; letter-spacing:.08em; margin:0 0 14px; color:var(--ink-soft); font-weight:700;}
-  label{display:block; font-size:13px; font-weight:600; margin:14px 0 6px; color:var(--ink);}
-  label:first-of-type{margin-top:0;}
-  input[type=text], input[type=tel], input[type=password], textarea{
-    width:100%; border:1.5px solid var(--line); border-radius:10px;
-    padding:11px 12px; font-size:15px; font-family:inherit; color:var(--ink);
-    background:#FBFDFC;
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
-  input:focus, textarea:focus, button:focus-visible{
-    outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(14,110,102,0.15);
+
+  html {
+    scroll-behavior: smooth;
   }
-  textarea{resize:vertical; min-height:56px;}
-  .hint{font-size:12px; color:var(--ink-soft); margin-top:5px; line-height:1.4;}
 
-  .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    border:none; border-radius:12px; font-family:inherit; font-weight:700;
-    font-size:15px; padding:13px 18px; cursor:pointer; width:100%;
-    transition:transform .12s ease, opacity .15s ease;
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  .btn:active{transform:scale(0.97);}
-  .btn:disabled{opacity:.4; cursor:not-allowed;}
-  .btn-primary{background:var(--teal); color:#fff;}
-  .btn-primary:hover:not(:disabled){background:var(--teal-deep);}
-  .btn-ghost{background:transparent; color:var(--ink-soft); border:1.5px solid var(--line);}
-  .btn-whats{background:#128C4A; color:#fff;}
-  .btn-amber{background:var(--amber); color:#fff;}
 
-  /* ---------- beacon / SOS ---------- */
-  .beacon-wrap{display:flex; flex-direction:column; align-items:center; gap:14px; padding:30px 20px 10px;}
-  .beacon{position:relative; width:180px; height:180px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; background:none; padding:0;}
-  .ring{position:absolute; inset:0; border-radius:50%; border:1.5px solid rgba(225,84,62,0.35); animation:pulse 2.6s ease-out infinite;}
-  .ring.r2{animation-delay:.9s;}
-  .ring.r3{animation-delay:1.8s;}
-  @keyframes pulse{0%{transform:scale(.62); opacity:.8;}100%{transform:scale(1); opacity:0;}}
-  .beacon-core{
-    position:relative; z-index:2; width:120px; height:120px; border-radius:50%;
-    background:linear-gradient(160deg, var(--coral), var(--coral-deep));
-    color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    box-shadow:0 10px 24px rgba(225,84,62,0.35);
+  .display {
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
   }
-  .beacon-core .label{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px; letter-spacing:.02em;}
-  .beacon-core .sub{font-size:10px; opacity:.85; margin-top:2px; letter-spacing:.04em;}
-  .beacon-caption{font-size:13px; color:var(--ink-soft); text-align:center; max-width:280px; line-height:1.5;}
 
-  .listen-row{display:flex; align-items:center; justify-content:space-between; gap:12px;}
-  .switch{position:relative; width:46px; height:27px; flex-shrink:0;}
-  .switch input{opacity:0; width:0; height:0;}
-  .slider{position:absolute; inset:0; background:#CBD8D5; border-radius:20px; cursor:pointer; transition:.2s;}
-  .slider::before{content:''; position:absolute; width:21px; height:21px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.25);}
-  input:checked + .slider{background:var(--teal);}
-  input:checked + .slider::before{transform:translateX(19px);}
-
-  .listening-banner{display:none; align-items:center; gap:10px; margin-top:14px; padding:10px 12px; border-radius:10px; background:rgba(14,110,102,0.08); border:1px solid rgba(14,110,102,0.25); font-size:13px; color:var(--teal-deep); font-weight:600;}
-  .listening-banner.on{display:flex;}
-  .mic-pulse{width:9px; height:9px; border-radius:50%; background:var(--teal); flex-shrink:0; animation:blink 1.1s ease-in-out infinite;}
-
-  /* ---------- countdown overlay ---------- */
-  .overlay{position:fixed; inset:0; background:rgba(16,38,43,0.94); display:none; align-items:center; justify-content:center; flex-direction:column; z-index:100; color:#fff; padding:24px; padding-top:max(24px, env(safe-area-inset-top)); padding-bottom:max(24px, env(safe-area-inset-bottom)); text-align:center;}
-  .overlay.show{display:flex;}
-  .overlay .count{font-family:'Space Grotesk',sans-serif; font-size:88px; font-weight:700; line-height:1;}
-  .overlay p{max-width:280px; color:#CFE3E0; font-size:14px; margin:10px 0 28px;}
-  .overlay .btn-ghost{border-color:rgba(255,255,255,0.4); color:#fff; max-width:220px;}
-
-  /* disguised (neutral) countdown look */
-  .overlay.neutral{background:rgba(250,250,248,0.98); color:#222;}
-  .overlay.neutral p{color:#666;}
-  .overlay.neutral .btn-ghost{border-color:#ccc; color:#444;}
-  .spinner{
-    width:46px; height:46px; border-radius:50%; border:4px solid #E4E4E0; border-top-color:#888;
-    animation:spin 1s linear infinite; margin-bottom:6px;
+  .wrap {
+    width: 100%;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
-  @keyframes spin{to{transform:rotate(360deg);}}
-  .bar{width:200px; height:6px; border-radius:4px; background:#E4E4E0; overflow:hidden; margin-top:14px;}
-  .bar > div{height:100%; background:#9AA; width:0%; transition:width 1s linear;}
 
-  .send-panel{position:fixed; inset:0; background:rgba(16,38,43,0.94); display:none; align-items:center; justify-content:center; flex-direction:column; z-index:100; color:#fff; padding:28px; padding-top:max(28px, env(safe-area-inset-top)); padding-bottom:max(28px, env(safe-area-inset-bottom));}
-  .send-panel.show{display:flex;}
-  .send-panel h3{font-family:'Space Grotesk',sans-serif; font-size:20px; margin-bottom:4px;}
-  .send-panel p{color:#CFE3E0; font-size:13px; text-align:center; max-width:300px; margin:4px 0 22px;}
-  .send-panel .contacts{width:100%; max-width:320px; display:flex; flex-direction:column; gap:10px;}
+  /* Header / Navigation */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding-top: env(safe-area-inset-top);
+  }
 
-  .log-item{display:flex; justify-content:space-between; align-items:baseline; padding:9px 0; border-bottom:1px solid var(--line); font-size:13px;}
-  .log-item:last-child{border-bottom:none;}
-  .log-item .tag{font-size:10px; text-transform:uppercase; letter-spacing:.06em; font-weight:700; padding:2px 7px; border-radius:6px; background:var(--paper); color:var(--ink-soft);}
-  .log-empty{font-size:13px; color:var(--ink-soft); padding:6px 0;}
+  header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
 
-  #darkScreen{position:fixed; inset:0; background:#000; z-index:200; display:none; flex-direction:column; align-items:center; justify-content:center; padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
-  #darkClock{font-family:'Inter',sans-serif; font-weight:200; font-size:15vw; color:#DADADA; letter-spacing:1px; line-height:1;}
-  #darkDate{font-family:'Inter',sans-serif; font-size:4vw; color:#6E6E6E; margin-top:10px; text-transform:capitalize;}
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-  footer{max-width:520px; margin:26px auto 0; padding:0 20px; font-size:12px; color:var(--ink-soft); line-height:1.6;}
-  footer .em{color:var(--ink); font-weight:700;}
-  footer .numbers{margin-top:6px;}
+  .brand span {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  nav {
+    display: flex;
+    gap: 24px;
+  }
+
+  nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  nav a:hover {
+    color: var(--teal);
+  }
+
+  /* Hero Section */
+  .hero {
+    padding: clamp(40px, 8vw, 80px) 0 40px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 6vw, 52px);
+    line-height: 1.15;
+    margin: 0 auto 20px;
+    letter-spacing: -0.02em;
+    max-width: 820px;
+  }
+
+  .hero p.lead {
+    font-size: clamp(16px, 2.5vw, 19px);
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin: 0 auto 32px;
+  }
+
+  .hero-illus {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    margin: 40px auto 0;
+    display: block;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 16px;
+    padding: 16px 32px;
+    min-height: 52px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary {
+    background: var(--coral);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(225, 84, 62, 0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--coral-deep);
+    box-shadow: 0 6px 20px rgba(225, 84, 62, 0.4);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--line);
+    color: var(--ink);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+
+  /* Sections */
+  section {
+    padding: clamp(40px, 6vw, 70px) 0;
+  }
+
+  section.alt {
+    background: var(--paper-card);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  h2 {
+    font-size: clamp(24px, 4vw, 34px);
+    margin: 0 0 36px;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  /* Callout Box */
+  .alert-box {
+    background: var(--coral-light);
+    border: 1.5px solid rgba(225, 84, 62, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    text-align: center;
+  }
+
+  .alert-box p.main {
+    margin: 0;
+    font-size: 16px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .alert-box p.sub {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* Grid System */
+  .grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .card {
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .alt .card {
+    background: var(--paper);
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card h3 {
+    font-size: 18px;
+    margin: 16px 0 8px;
+  }
+
+  .card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--teal);
+    font-size: 18px;
+    font-weight: 700;
+    position: relative;
+  }
+
+  .icon::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(14, 110, 102, 0.2);
+  }
+
+  /* Process Steps */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    counter-reset: step;
+  }
+
+  .step {
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .step .num {
+    counter-increment: step;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .step .num::before {
+    content: counter(step);
+  }
+
+  .step .txt h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+
+  .step .txt p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* For Who Section */
+  ul.forwho {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  ul.forwho li {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  ul.forwho .ic {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Form & Interactive Box */
+  .trial-box {
+    background: var(--paper-card);
+    border: 2px solid var(--teal);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 5vw, 40px);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .trial-box input {
+    width: 100%;
+    max-width: 360px;
+    height: 52px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 0 16px;
+    font-size: 16px;
+    margin: 16px 0;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .trial-box input:focus {
+    border-color: var(--teal);
+  }
+
+  .code-result {
+    display: none;
+    margin-top: 24px;
+    padding: 20px;
+    background: var(--teal-light);
+    border-radius: var(--radius-md);
+  }
+
+  .code-result .code {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(22px, 5vw, 28px);
+    font-weight: 700;
+    color: var(--teal-deep);
+    letter-spacing: 1.5px;
+    margin: 10px 0;
+  }
+
+  /* Partner Box */
+  .pro-box {
+    background: linear-gradient(135deg, rgba(14, 110, 102, 0.08), rgba(225, 84, 62, 0.06));
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 6vw, 48px);
+    text-align: center;
+  }
+
+  /* FAQ Details */
+  .faq {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .faq details {
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+  }
+
+  .faq details[open] {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .faq summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq summary::after {
+    content: '+';
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--teal);
+  }
+
+  .faq details[open] summary::after {
+    content: '−';
+  }
+
+  .faq p {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 12px 0 0;
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  footer {
+    padding: 50px 0 calc(40px + env(safe-area-inset-bottom));
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .official-box {
+    background: var(--ink);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    margin: 0 auto 28px;
+    max-width: 680px;
+  }
+
+  .official-box p.label {
+    color: #CFE3E0;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin: 0 0 16px;
+  }
+
+  .official-box .nums {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 32px;
+  }
+
+  .official-box .num-item {
+    color: #fff;
+    text-align: center;
+  }
+
+  .official-box .num-item .n {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .official-box .num-item .d {
+    font-size: 12px;
+    color: #CFE3E0;
+    margin-top: 4px;
+  }
+
+  /* Responsividade para Celulares (Android e iPhone) */
+  @media (max-width: 820px) {
+    .grid3 {
+      grid-template-columns: 1fr;
+    }
+
+    .steps {
+      grid-template-columns: 1fr;
+    }
+
+    .step {
+      flex-direction: row;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .step .num {
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    ul.forwho {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    nav a:not(:last-child) {
+      display: none;
+    }
+    
+    .btn {
+      width: 100%;
+      max-width: none;
+    }
+
+    .trial-box input {
+      max-width: none;
+    }
+  }
 </style>
 </head>
 <body>
 
-  <!-- ================= TELA DISFARÇADA (bloco de notas falso) ================= -->
-  <div id="disguiseScreen">
-    <div class="fake-header">
-      <h1 id="fakeTitle">Notas</h1>
-      <div class="count">4 notas</div>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg width="32" height="32" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" stroke="#0E6E66" stroke-width="2" opacity="0.55"/><circle cx="20" cy="20" r="11" stroke="#0E6E66" stroke-width="2" opacity="0.85"/><circle cx="20" cy="20" r="4.5" fill="#E1543E"/></svg>
+      <span class="display">Farol</span>
     </div>
-    <input class="fake-search" id="unlockInput" type="text" placeholder="Pesquisar notas" autocomplete="off">
-    <div class="fake-note"><div class="t">Lista de compras</div><div class="p">leite, pão, café, fruta...</div></div>
-    <div class="fake-note"><div class="t">Consulta médica</div><div class="p">quinta-feira, 14h, levar exames</div></div>
-    <div class="fake-note"><div class="t">Lembrete</div><div class="p">pagar conta de luz até dia 10</div></div>
-    <div class="fake-note"><div class="t">Ideias</div><div class="p">reorganizar armário, ligar pro João</div></div>
+    <nav>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#comprar">Comprar</a>
+      <a href="#profissionais">Profissionais</a>
+      <a href="#teste">Testar grátis</a>
+    </nav>
   </div>
+</header>
 
-  <!-- ================= APP REAL ================= -->
-  <div id="realApp">
+<section class="hero">
+  <div class="wrap">
+    <h1 class="display">Segurança e bem-estar para quem você ama, sem complicação.</h1>
+    <p class="lead">Um jeito simples e discreto de cuidar de quem precisa de atenção extra em casa — idosos, pessoas com deficiência, ou momentos familiares mais delicados que pedem uma rede de apoio por perto.</p>
+    <a href="#teste" class="btn btn-primary">Testar grátis por 30 dias</a>
 
-    <div class="statusbar">
-      <span class="dot ready" id="statusDot"></span>
-      <span id="statusText">Sistema pronto</span>
-      <button class="hidebtn" id="hideBtn">Disfarçar</button>
+    <svg class="hero-illus" viewBox="0 0 340 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="170" cy="120" r="95" fill="#0E6E66" opacity="0.06"/>
+      <circle cx="170" cy="120" r="68" fill="#0E6E66" opacity="0.08"/>
+      <path d="M100 130 L170 75 L240 130 V190 H100 Z" fill="#FFFFFF" stroke="#0E6E66" stroke-width="3"/>
+      <rect x="150" y="150" width="40" height="40" fill="#0E6E66" opacity="0.15"/>
+      <rect x="115" y="140" width="22" height="22" rx="3" fill="#E1543E" opacity="0.85"/>
+      <circle cx="170" cy="60" r="10" fill="#E1543E"/>
+      <path d="M170 40 L170 20" stroke="#E1543E" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+      <path d="M148 48 L134 32" stroke="#E1543E" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+      <path d="M192 48 L206 32" stroke="#E1543E" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+    </svg>
+  </div>
+</section>
+
+<section style="padding: 0 0 20px;">
+  <div class="wrap">
+    <div class="alert-box">
+      <p class="main">O Farol funciona como um botão de ajuda imediata — um complemento de segurança.</p>
+      <p class="sub">Ele não substitui atendimento oficial. Em casos mais sérios, acione sempre os canais oficiais indicados no rodapé desta página.</p>
     </div>
+  </div>
+</section>
 
-    <header>
-      <div class="brandrow">
-        <svg class="brandmark" viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="19" stroke="#0E6E66" stroke-width="1.5"/>
-          <circle cx="20" cy="20" r="12" stroke="#0E6E66" stroke-width="1.5" opacity="0.55"/>
-          <circle cx="20" cy="20" r="5" fill="#E1543E"/>
-        </svg>
-        <h1 class="display">Farol</h1>
+<section class="alt">
+  <div class="wrap">
+    <h2 class="display">Como o Farol ajuda</h2>
+    <div class="grid3">
+      <div class="card">
+        <div class="icon">1</div>
+        <h3>Alerta rápido</h3>
+        <p>Um toque, uma palavra combinada ou um gesto simples já avisa quem você escolher, com a localização junto.</p>
       </div>
-      <p class="tag">Agite o celular no bolso pra pedir ajuda sem precisar olhar pra tela — ou use a palavra-código e o botão manual como alternativa.</p>
-    </header>
-
-    <main>
-
-      <!-- ATIVAÇÃO -->
-      <section class="card" id="activationCard">
-        <h2>Ativar recursos completos</h2>
-        <p class="hint">Todos os recursos do Farol — WhatsApp, botão de emergência, modo bolso, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
-        <label for="activationInput">Código de ativação</label>
-        <input type="text" id="activationInput" placeholder="Ex.: FAROL-123456">
-        <button class="btn btn-primary" id="activateBtn" style="margin-top:10px;">Ativar</button>
-        <p class="hint" id="activationHint" style="margin-top:8px;"></p>
-      </section>
-      <p class="hint" id="activatedBadge" style="display:none; margin:12px 20px 0; color:var(--teal-deep); font-weight:600;">✓ Recursos completos ativados</p>
-      <div style="padding:0 20px;">
-        <button class="btn btn-ghost" id="deactivateBtn" style="display:none; margin-top:6px;">Trocar código de ativação</button>
+      <div class="card">
+        <div class="icon">2</div>
+        <h3>Discreto</h3>
+        <p>Funciona sem chamar atenção — pensado para situações em que ligar um alarme visível não é uma opção.</p>
       </div>
-
-      <!-- CONFIGURAÇÃO -->
-      <section class="card premium">
-        <h2>WhatsApp (opcional, manual)</h2>
-        <div class="listen-row">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Ativar WhatsApp como canal adicional</div>
-            <div class="hint" style="margin-top:4px; color:var(--coral-deep); font-weight:600;">Atenção: ativar isso exige 2 toques na tela (abrir a confirmação e tocar em "enviar") pra completar o envio — isso pode expor o celular bem na hora em que a pessoa deveria estar discreta. A notificação automática (ntfy) não depende de nenhum toque.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="whatsappToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <label for="c1name" style="margin-top:16px;">Nome</label>
-        <input type="text" id="c1name" placeholder="Ex.: Marta (filha)">
-        <label for="c1phone">WhatsApp (com DDI e DDD)</label>
-        <input type="tel" id="c1phone" placeholder="Ex.: 5547999999999">
-        <p class="hint">Só números, começando com o código do país (55 para o Brasil).</p>
-
-        <label for="c2name">Segundo contato (opcional)</label>
-        <input type="text" id="c2name" placeholder="Ex.: João (vizinho)">
-        <label for="c2phone">WhatsApp do segundo contato</label>
-        <input type="tel" id="c2phone" placeholder="Ex.: 5547988888888">
-
-        <label for="codeword">Palavra ou frase-código</label>
-        <input type="text" id="codeword" placeholder="Ex.: girassol, preciso de ajuda">
-        <p class="hint">Pode colocar mais de uma opção separada por vírgula. Combine com a família — quem for dizer essa palavra precisa saber que ela existe.</p>
-
-        <label for="extramsg">Mensagem adicional (opcional)</label>
-        <textarea id="extramsg" placeholder="Ex.: Estou na casa da Vó Alice, rua tal, apto 12."></textarea>
-
-        <div style="margin-top:16px;">
-          <button class="btn btn-primary" id="saveBtn">Salvar configuração</button>
-        </div>
-        <p class="hint" id="saveHint"></p>
-      </section>
-
-      <!-- MODO BOLSO (RECOMENDADO) -->
-      <section class="card premium" style="border:2px solid var(--teal);">
-        <h2 style="color:var(--teal-deep);">Modo bolso — recomendado</h2>
-        <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
-        <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar modo bolso agora</button>
-        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque e segure nela por 3 segundos.</p>
-        <p class="hint" style="margin-top:10px; color:var(--coral-deep); font-weight:600;">Antes de usar: vá nas configurações do celular e desative o bloqueio automático de tela (ou deixe no tempo máximo) e a economia de bateria para o navegador. Sem isso, o sistema pode ignorar o travamento de tela do app e desligar mesmo assim.</p>
-      </section>
-
-      <!-- DISFARCE -->
-      <section class="card premium">
-        <h2>Disfarce da tela</h2>
-        <div class="listen-row">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Abrir sempre disfarçado</div>
-            <div class="hint" style="margin-top:2px;">A tela mostra um bloco de notas comum. Digite o código abaixo no campo de busca das notas para revelar o Farol.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="disguiseToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <label for="pinInput">Código para revelar o app real</label>
-        <input type="text" id="pinInput" placeholder="Ex.: 4 a 6 dígitos ou uma palavra" maxlength="12">
-        <button class="btn btn-primary" id="savePinBtn" style="margin-top:10px;">Salvar código</button>
-        <p class="hint" id="pinSaveHint" style="margin-top:6px;"></p>
-        <p class="hint">Ao salvar um código aqui, o app passa a exigir ele sempre que for aberto — mesmo com "Abrir sempre disfarçado" desligado. Isso ajuda a impedir que alguém que ache o link consiga configurar o Farol sem o código.</p>
-        <p class="hint">Se esquecer o código, toque 5 vezes seguidas no título "Notas" para revelar o app mesmo assim.</p>
-      </section>
-
-      <!-- NOTIFICAÇÃO AUTOMÁTICA (NTFY) -->
-      <section class="card premium">
-        <h2>Notificação automática (sem toque)</h2>
-        <p class="hint">Além do WhatsApp, o Farol pode avisar a família instantaneamente, sem precisar confirmar nada — usando o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid). É só a família instalar o app e "assinar" o mesmo código de canal abaixo.</p>
-        <label for="ntfyTopicInput">Código do canal (como uma senha, não deixe óbvio)</label>
-        <input type="text" id="ntfyTopicInput" placeholder="Ex.: farol-8f3k2x9q">
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <button class="btn btn-ghost" id="genTopicBtn">Gerar código aleatório</button>
-          <button class="btn btn-primary" id="saveTopicBtn">Salvar canal</button>
-        </div>
-        <p class="hint" id="topicSaveHint" style="margin-top:8px;"></p>
-        <p class="hint" style="margin-top:10px;">Na família: abrir o app ntfy → tocar em "+" ou "Subscribe" → colar exatamente o mesmo código → pronto, já recebe os alertas na hora.</p>
-        <div class="listen-row" style="margin-top:14px;">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Acompanhamento contínuo (Follow Me) após o alerta</div>
-            <div class="hint" style="margin-top:2px;">Depois de um alerta real, envia a localização de novo a cada 1 minuto, por até 10 minutos — silencioso, sem som alto repetido, sem mexer na tela.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="followMeToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <button class="btn btn-ghost" id="stopFollowBtn" style="margin-top:10px;">Parar acompanhamento agora</button>
-      </section>
-
-      <!-- BOTÃO DE PÂNICO -->
-      <section class="card premium">
-        <h2>Alerta manual</h2>
-        <div class="beacon-wrap">
-          <button class="beacon" id="beaconBtn" aria-label="Enviar alerta de emergência">
-            <span class="ring"></span>
-            <span class="ring r2"></span>
-            <span class="ring r3"></span>
-            <span class="beacon-core">
-              <span class="label">SOCORRO</span>
-              <span class="sub">toque para acionar</span>
-            </span>
-          </button>
-          <p class="beacon-caption">Ao tocar, você terá 5 segundos para cancelar antes do alerta ser preparado.</p>
-        </div>
-        <button class="btn btn-ghost" id="testBtn" style="margin-top:6px;">Enviar mensagem de teste</button>
-      </section>
-
-      <!-- ESCUTA POR PALAVRA-CÓDIGO -->
-      <section class="card premium">
-        <h2>Escuta por palavra-código</h2>
-        <div class="listen-row">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Ativar escuta neste dispositivo</div>
-            <div class="hint" style="margin-top:2px;">Continua funcionando mesmo com a tela disfarçada de bloco de notas, desde que o app esteja aberto e a tela ligada.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="listenToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="listening-banner" id="listeningBanner">
-          <span class="mic-pulse"></span>
-          <span>Escutando pela palavra-código — tela precisa ficar ligada.</span>
-        </div>
-        <p class="hint" id="listenSupportNote" style="margin-top:10px;"></p>
-      </section>
-
-      <!-- AGITAR PARA ALERTAR -->
-      <section class="card premium">
-        <h2>Alerta ao agitar o celular</h2>
-        <div class="listen-row">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Ativar gesto de agitar</div>
-            <div class="hint" style="margin-top:2px;">Com o celular no bolso ou na mão, agitar com força aciona o alerta sem precisar olhar para a tela.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="shakeToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <button class="btn btn-ghost" id="motionPermBtn" style="margin-top:12px; display:none;">Permitir sensor de movimento (iPhone)</button>
-        <p class="hint" id="shakeNote" style="margin-top:8px;"></p>
-      </section>
-
-      <!-- TELA ESCURA -->
-      <section class="card premium">
-        <h2>Tela escura (parece desligada)</h2>
-        <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque e segure na tela preta por 3 segundos.</p>
-        <button class="btn btn-primary" id="darkScreenBtn" style="margin-top:12px;">Ativar tela escura agora</button>
-        <p class="hint" style="margin-top:10px;"><b>Importante:</b> se alguém apertar o botão físico de ligar/desligar do celular, o sistema bloqueia de verdade e a escuta para — esse recurso só engana quem apenas olha a tela, não quem manuseia o aparelho. No iPhone, a tela cheia é mais limitada; a barra de horário pode continuar visível.</p>
-      </section>
-
-      <!-- HISTÓRICO -->
-      <section class="card premium">
-        <h2>Histórico</h2>
-        <div id="logList"><p class="log-empty">Nenhum alerta enviado ainda.</p></div>
-      </section>
-
-    </main>
-
-    <footer>
-      <p><span class="em">Transparência:</span> este app não grava nem escuta ninguém escondido. A escuta por palavra-código e o disfarce visual só existem no celular de quem está protegendo — como um botão de pânico discreto, e não como vigilância oculta de outra pessoa.</p>
-      <p><span class="em">Envio pelo WhatsApp:</span> ao acionar o alerta, o app abre o WhatsApp com a mensagem e a localização já prontas — falta só tocar em enviar, para garantir que é você quem confirma o disparo.</p>
-      <p class="numbers"><span class="em">Em emergência real:</span> 190 (Polícia), 180 (Violência contra a mulher), 100 (Direitos Humanos). Em Santa Catarina, o app oficial <b>PMSC Cidadão</b> (Polícia Militar de SC) tem botão de pânico de violência doméstica ligado direto à central — use como canal principal em situações de risco alto.</p>
-    </footer>
-
-  </div>
-
-  <!-- OVERLAY CONTAGEM -->
-  <div class="overlay" id="countOverlay">
-    <div id="overlayAlertContent">
-      <div class="count mono" id="countNumber">5</div>
-      <p>Preparando alerta para <span id="countContact">contato</span>. Toque em cancelar se foi engano.</p>
+      <div class="card">
+        <div class="icon">3</div>
+        <h3>Sem amarras</h3>
+        <p>Teste de verdade por 30 dias, sem cartão de crédito. Só continue se fizer sentido pra sua família.</p>
+      </div>
     </div>
-    <div id="overlayNeutralContent" style="display:none;">
-      <div class="spinner"></div>
-      <p>Sincronizando notas...</p>
-      <div class="bar"><div id="neutralBar"></div></div>
+  </div>
+</section>
+
+<section id="como-funciona">
+  <div class="wrap">
+    <h2 class="display">Como funciona</h2>
+    <div class="steps">
+      <div class="step"><div class="num"></div><div class="txt"><h3>Instale no celular</h3><p>Funciona direto pelo navegador, sem loja de aplicativos — em menos de 2 minutos.</p></div></div>
+      <div class="step"><div class="num"></div><div class="txt"><h3>Escolha o contato</h3><p>Alguém da família que possa agir rapidamente se precisar de assistência.</p></div></div>
+      <div class="step"><div class="num"></div><div class="txt"><h3>Ative a forma</h3><p>Botão, palavra-código ou gesto — você escolhe o que faz sentido na rotina.</p></div></div>
+      <div class="step"><div class="num"></div><div class="txt"><h3>Pronto</h3><p>O sistema fica de prontidão passiva, garantindo proteção sem incômodos.</p></div></div>
     </div>
-    <button class="btn btn-ghost" id="cancelBtn">Cancelar</button>
   </div>
+</section>
 
-  <!-- TELA ESCURA FALSA -->
-  <div id="darkScreen">
-    <div id="darkClock">00:00</div>
-    <div id="darkDate">—</div>
+<section class="alt">
+  <div class="wrap">
+    <h2 class="display">Para quem é</h2>
+    <ul class="forwho">
+      <li><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3.2" stroke="#0E6E66" stroke-width="1.8"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" stroke="#0E6E66" stroke-width="1.8" stroke-linecap="round"/><path d="M9 20v-3M15 20v-3" stroke="#E1543E" stroke-width="1.8" stroke-linecap="round"/></svg></span>Idosos que moram sozinhos ou com cuidadores</li>
+      <li><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="#0E6E66" stroke-width="1.8"/><path d="M12 8v4l3 2" stroke="#E1543E" stroke-width="1.8" stroke-linecap="round"/></svg></span>Pessoas com deficiência ou limitações de saúde</li>
+      <li><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="2.6" stroke="#0E6E66" stroke-width="1.8"/><circle cx="17" cy="9" r="2" stroke="#0E6E66" stroke-width="1.8"/><path d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="#0E6E66" stroke-width="1.8" stroke-linecap="round"/><path d="M15 15.2c1.7.4 3 1.9 3 3.8" stroke="#E1543E" stroke-width="1.8" stroke-linecap="round"/></svg></span>Crianças sob cuidado de terceiros</li>
+      <li><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.4-7-9.5C5 7.5 7.2 5.5 10 5.5c1.6 0 2.7.8 2 2.4 0 0 1.1-2.4 3.7-2.4 2.6 0 4.3 2 4.3 4.5C20 15.6 12 20 12 20Z" stroke="#E1543E" stroke-width="1.8" stroke-linejoin="round"/></svg></span>Momentos familiares delicados que pedem atenção</li>
+    </ul>
   </div>
+</section>
 
-  <!-- PAINEL DE ENVIO -->
-  <div class="send-panel" id="sendPanel">
-    <h3 class="display">Alerta pronto</h3>
-    <p>Toque em cada contato para abrir o WhatsApp com a mensagem preenchida. Confirme o envio lá dentro.</p>
-    <div class="contacts" id="sendContacts"></div>
-    <button class="btn btn-ghost" id="closeSendBtn" style="margin-top:16px; max-width:320px;">Fechar</button>
+<section id="teste">
+  <div class="wrap">
+    <h2 class="display">Teste por 30 dias, sem custo</h2>
+    <div class="trial-box">
+      <p style="color:var(--ink-soft); font-size:15px; margin:0;">Preencha seu nome — geramos seu código de teste na hora, sem cadastro complicado.</p>
+      <input type="text" id="nomeInput" placeholder="Digite seu nome">
+      <br>
+      <button class="btn btn-primary" id="gerarBtn">Gerar código de teste</button>
+      <div class="code-result" id="codeResult">
+        <p style="margin:0; font-size:14px; color:var(--ink-soft);">Seu código de teste (válido por 30 dias):</p>
+        <div class="code" id="codeOut">—</div>
+        <p style="font-size:13px; color:var(--ink-soft); margin-bottom: 16px;">Anote ou tire um print. Instale o Farol e digite esse código na tela de ativação.</p>
+        <a class="btn btn-outline" id="whatsBtn" href="#" target="_blank">Confirmar por WhatsApp</a>
+      </div>
+    </div>
   </div>
+</section>
+
+<section id="comprar">
+  <div class="wrap" style="text-align:center;">
+    <h2 class="display">Já testou e quer continuar?</h2>
+    <p style="color:var(--ink-soft); max-width:480px; margin:0 auto 24px; font-size:15px;">O acesso definitivo libera todos os recursos permanentemente, sem depender de renovação nem de novo código.</p>
+    <a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" style="margin:0 auto;">Comprar acesso definitivo</a>
+    <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Pagamento processado com segurança pela Kiwify (Pix, cartão ou boleto).</p>
+  </div>
+</section>
+
+<section class="alt" id="profissionais">
+  <div class="wrap">
+    <div class="pro-box">
+      <h2 class="display" style="margin-bottom:14px;">Você trabalha com famílias em situações delicadas?</h2>
+      <p style="color:var(--ink-soft); max-width:560px; margin:0 auto 24px; font-size: 15px;">Psicólogos, advogados de família, assistentes sociais e ONGs de apoio podem oferecer o Farol como mais um recurso para quem atendem. Conversamos sobre parceria, condições especiais e material de apoio.</p>
+      <a class="btn btn-primary" id="parceriaBtn" href="#" target="_blank">Quero saber sobre parceria</a>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <h2 class="display">Perguntas frequentes</h2>
+    <details><summary>Funciona no Android e no iPhone?</summary><p>Sim, nos dois. Algumas funções avançadas variam de acordo com o aparelho.</p></details>
+    <details><summary>Preciso pagar para testar?</summary><p>Não. O período de teste de 30 dias é totalmente gratuito, sem necessidade de cartão de crédito.</p></details>
+    <details><summary>Alguém vai perceber que estou usando?</summary><p>O Farol foi pensado para funcionar de forma discreta. Detalhes de como isso funciona ficam disponíveis depois do cadastro.</p></details>
+    <details><summary>O que acontece depois dos 30 dias?</summary><p>Se fizer sentido continuar, você adquire o acesso definitivo. Se não, o teste simplesmente encerra — sem cobrança automática.</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="official-box">
+      <p class="label">Em situação de risco imediato, acione um canal oficial</p>
+      <div class="nums">
+        <div class="num-item"><div class="n">190</div><div class="d">Polícia</div></div>
+        <div class="num-item"><div class="n">180</div><div class="d">Violência contra a mulher</div></div>
+        <div class="num-item"><div class="n">100</div><div class="d">Direitos Humanos</div></div>
+      </div>
+    </div>
+    <p>© Farol. Ferramenta de apoio — não substitui atendimento policial ou institucional em emergências.</p>
+    <p style="margin-top:8px;"><a href="privacidade.html" style="color:var(--ink-soft);">Política de privacidade</a></p>
+  </div>
+</footer>
 
 <script>
-(function(){
-  "use strict";
+  var SELLER_WHATSAPP = "5547997220734";
+  var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/SEU-LINK-AQUI"; // <-- SUBSTITUA pelo link de checkout do seu produto na Kiwify
+  var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
 
-  var defaultState = {
-    c1name:"", c1phone:"", c2name:"", c2phone:"",
-    codeword:"socorro", extramsg:"", log:[],
-    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false, followMeOn:true, activated:false, activationType:null, activatedAt:null
-  };
-  var state = loadState();
+  document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
+  document.getElementById('comprarBtn').href = KIWIFY_CHECKOUT_URL;
 
-  function loadState(){
-    try{
-      var raw = window.localStorage.getItem("farol_state");
-      if(raw) return Object.assign({}, defaultState, JSON.parse(raw));
-    }catch(e){}
-    return Object.assign({}, defaultState);
-  }
-  function saveState(){
-    try{ window.localStorage.setItem("farol_state", JSON.stringify(state)); }
-    catch(e){}
+  function gerarCodigoTeste(){
+    var d = [];
+    for(var i=0;i<5;i++) d.push(Math.floor(Math.random()*10));
+    var checksum = d.reduce(function(a,b){return a+b;},0) % 10;
+    return 'FAROLT-'+d.join('')+checksum;
   }
 
-  var el = {
-    activationCard:document.getElementById('activationCard'), activationInput:document.getElementById('activationInput'),
-    activateBtn:document.getElementById('activateBtn'), activationHint:document.getElementById('activationHint'),
-    activatedBadge:document.getElementById('activatedBadge'), deactivateBtn:document.getElementById('deactivateBtn'),
-    c1name:document.getElementById('c1name'), c1phone:document.getElementById('c1phone'),
-    c2name:document.getElementById('c2name'), c2phone:document.getElementById('c2phone'),
-    codeword:document.getElementById('codeword'), extramsg:document.getElementById('extramsg'),
-    saveBtn:document.getElementById('saveBtn'), saveHint:document.getElementById('saveHint'),
-    whatsappToggle:document.getElementById('whatsappToggle'),
-    beaconBtn:document.getElementById('beaconBtn'), testBtn:document.getElementById('testBtn'),
-    listenToggle:document.getElementById('listenToggle'), listeningBanner:document.getElementById('listeningBanner'),
-    listenSupportNote:document.getElementById('listenSupportNote'),
-    statusDot:document.getElementById('statusDot'), statusText:document.getElementById('statusText'),
-    countOverlay:document.getElementById('countOverlay'), countNumber:document.getElementById('countNumber'),
-    countContact:document.getElementById('countContact'), cancelBtn:document.getElementById('cancelBtn'),
-    sendPanel:document.getElementById('sendPanel'), sendContacts:document.getElementById('sendContacts'),
-    closeSendBtn:document.getElementById('closeSendBtn'), logList:document.getElementById('logList'),
-    disguiseScreen:document.getElementById('disguiseScreen'), realApp:document.getElementById('realApp'),
-    disguiseToggle:document.getElementById('disguiseToggle'), pinInput:document.getElementById('pinInput'),
-    savePinBtn:document.getElementById('savePinBtn'), pinSaveHint:document.getElementById('pinSaveHint'),
-    ntfyTopicInput:document.getElementById('ntfyTopicInput'), genTopicBtn:document.getElementById('genTopicBtn'),
-    saveTopicBtn:document.getElementById('saveTopicBtn'), topicSaveHint:document.getElementById('topicSaveHint'),
-    followMeToggle:document.getElementById('followMeToggle'), stopFollowBtn:document.getElementById('stopFollowBtn'),
-    unlockInput:document.getElementById('unlockInput'), fakeTitle:document.getElementById('fakeTitle'),
-    hideBtn:document.getElementById('hideBtn'),
-    shakeToggle:document.getElementById('shakeToggle'), motionPermBtn:document.getElementById('motionPermBtn'),
-    shakeNote:document.getElementById('shakeNote'),
-    overlayAlertContent:document.getElementById('overlayAlertContent'), overlayNeutralContent:document.getElementById('overlayNeutralContent'),
-    neutralBar:document.getElementById('neutralBar'),
-    darkScreen:document.getElementById('darkScreen'), darkScreenBtn:document.getElementById('darkScreenBtn'),
-    darkClock:document.getElementById('darkClock'), darkDate:document.getElementById('darkDate'),
-    pocketModeBtn:document.getElementById('pocketModeBtn')
-  };
-
-  var TRIAL_DAYS = 30;
-  function checksumOk(digitsStr){
-    var digits = digitsStr.split('').map(Number);
-    var checksum = digits.slice(0,5).reduce(function(a,b){return a+b;},0) % 10;
-    return checksum === digits[5];
-  }
-  function getActivationType(code){
-    var c = (code||'').trim().toUpperCase();
-    var mFull = /^FAROL-(\d{6})$/.exec(c);
-    if(mFull && checksumOk(mFull[1])) return 'full';
-    var mTrial = /^FAROLT-(\d{6})$/.exec(c);
-    if(mTrial && checksumOk(mTrial[1])) return 'trial';
-    return null;
-  }
-  function isTrialExpired(){
-    if(state.activationType!=='trial' || !state.activatedAt) return false;
-    var elapsedDays = (Date.now()-state.activatedAt)/(1000*60*60*24);
-    return elapsedDays >= TRIAL_DAYS;
-  }
-  function applyActivationVisibility(){
-    var justExpired = false;
-    if(state.activated && isTrialExpired()){
-      state.activated=false; state.activationType=null; state.activatedAt=null;
-      saveState();
-      justExpired = true;
-    }
-    var premiumCards = document.querySelectorAll('.premium');
-    premiumCards.forEach(function(c){ c.style.display = state.activated ? '' : 'none'; });
-    el.activationCard.style.display = state.activated ? 'none' : 'block';
-    if(state.activated){
-      el.activatedBadge.style.display = 'block';
-      el.deactivateBtn.style.display = 'block';
-      if(state.activationType==='trial'){
-        var daysLeft = Math.max(0, Math.ceil(TRIAL_DAYS - (Date.now()-state.activatedAt)/(1000*60*60*24)));
-        el.activatedBadge.textContent = '✓ Período de teste ativo — '+daysLeft+' dia(s) restante(s)';
-      } else {
-        el.activatedBadge.textContent = '✓ Recursos completos ativados';
-      }
-    } else {
-      el.activatedBadge.style.display = 'none';
-      el.deactivateBtn.style.display = 'none';
-      if(justExpired){
-        el.activationHint.textContent = "Seu período de teste acabou. Adquira o código definitivo para continuar.";
-      }
-    }
-  }
-  el.deactivateBtn.addEventListener('click', function(){
-    state.activated=false; state.activationType=null; state.activatedAt=null;
-    saveState();
-    applyActivationVisibility();
+  document.getElementById('gerarBtn').addEventListener('click', function(){
+    var nome = document.getElementById('nomeInput').value.trim() || "Interessado(a)";
+    var codigo = gerarCodigoTeste();
+    document.getElementById('codeOut').textContent = codigo;
+    document.getElementById('codeResult').style.display = 'block';
+    var msg = "Olá! Meu nome é "+nome+" e gerei um código de teste do Farol: "+codigo;
+    document.getElementById('whatsBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
   });
-  el.activateBtn.addEventListener('click', function(){
-    var type = getActivationType(el.activationInput.value);
-    if(type){
-      state.activated=true;
-      state.activationType=type;
-      state.activatedAt=Date.now();
-      saveState();
-      applyActivationVisibility();
-      el.activationHint.textContent = "";
-    } else {
-      el.activationHint.textContent = "Código inválido. Confira e tente de novo.";
-    }
-  });
-  applyActivationVisibility();
-  document.addEventListener('visibilitychange', function(){
-    if(!document.hidden) applyActivationVisibility();
-  });
-
-  function fillForm(){
-    el.c1name.value=state.c1name; el.c1phone.value=state.c1phone;
-    el.c2name.value=state.c2name; el.c2phone.value=state.c2phone;
-    el.codeword.value=state.codeword; el.extramsg.value=state.extramsg;
-    el.whatsappToggle.checked=state.whatsappOn;
-    el.disguiseToggle.checked=state.disguiseOn; el.pinInput.value=state.pin;
-    el.shakeToggle.checked=state.shakeOn;
-    el.ntfyTopicInput.value=state.ntfyTopic;
-    el.followMeToggle.checked=state.followMeOn;
-    renderLog();
-  }
-  fillForm();
-
-  el.saveBtn.addEventListener('click', function(){
-    state.c1name=el.c1name.value.trim(); state.c1phone=el.c1phone.value.replace(/\D/g,'');
-    state.c2name=el.c2name.value.trim(); state.c2phone=el.c2phone.value.replace(/\D/g,'');
-    state.codeword=el.codeword.value.trim(); state.extramsg=el.extramsg.value.trim();
-    state.pin=el.pinInput.value.trim();
-    saveState();
-    el.saveHint.textContent="Configuração salva. ("+ (new Date()).toLocaleTimeString('pt-BR') +")";
-    setTimeout(function(){ el.saveHint.textContent=""; }, 3500);
-  });
-
-  el.whatsappToggle.addEventListener('change', function(){
-    state.whatsappOn = el.whatsappToggle.checked;
-    saveState();
-  });
-
-  function getContacts(){
-    var list=[];
-    if(state.c1name && state.c1phone) list.push({name:state.c1name, phone:state.c1phone});
-    if(state.c2name && state.c2phone) list.push({name:state.c2name, phone:state.c2phone});
-    return list;
-  }
-
-  function setStatus(mode, text){
-    el.statusDot.className = 'dot ' + mode;
-    el.statusText.textContent = text;
-  }
-
-  el.genTopicBtn.addEventListener('click', function(){
-    var rand = Math.random().toString(36).substring(2,10) + Math.random().toString(36).substring(2,6);
-    el.ntfyTopicInput.value = 'farol-'+rand;
-  });
-  el.saveTopicBtn.addEventListener('click', function(){
-    state.ntfyTopic = el.ntfyTopicInput.value.trim().replace(/\s+/g,'-');
-    saveState();
-    el.topicSaveHint.textContent = state.ntfyTopic ? "Canal salvo. Peça pra família assinar exatamente: "+state.ntfyTopic : "Canal removido.";
-    setTimeout(function(){ el.topicSaveHint.textContent=""; }, 5000);
-  });
-  var lastNtfySend=0;
-  function sendNtfy(kind, loc){
-    if(!state.ntfyTopic) return;
-    var now = Date.now();
-    if(now - lastNtfySend < 5000) return;
-    lastNtfySend = now;
-    var title = kind==='test' ? 'FAROL TESTE' : (kind==='tracking' ? 'FAROL (acompanhando)' : 'FAROL');
-    var priority = kind==='tracking' ? 'low' : (kind==='test' ? 'default' : 'urgent');
-    var body = loc ? ('https://maps.google.com/?q='+loc.lat+','+loc.lng) : 'Localizacao indisponivel';
-    fetch('https://ntfy.sh/'+encodeURIComponent(state.ntfyTopic), {
-      method:'POST',
-      headers:{ 'Title': title, 'Priority': priority, 'Tags': 'rotating_light' },
-      body: body
-    }).then(function(){
-      addLog(kind, kind==='tracking' ? 'ntfy (localização)' : 'ntfy (automático)');
-    }).catch(function(){ /* falha silenciosa — o WhatsApp continua como respaldo manual */ });
-  }
-
-  var FOLLOWME_INTERVAL_MS=60000, FOLLOWME_MAX_TICKS=10;
-  var followMeTimer=null, followMeTicks=0;
-  function startFollowMe(){
-    if(!state.ntfyTopic || !state.followMeOn) return;
-    stopFollowMe();
-    followMeTicks=0;
-    followMeTimer=setInterval(function(){
-      followMeTicks++;
-      if(followMeTicks>FOLLOWME_MAX_TICKS){ stopFollowMe(); return; }
-      withLocation(function(loc){ sendNtfy('tracking', loc); });
-    }, FOLLOWME_INTERVAL_MS);
-  }
-  function stopFollowMe(){
-    if(followMeTimer){ clearInterval(followMeTimer); followMeTimer=null; }
-    followMeTicks=0;
-  }
-  el.followMeToggle.addEventListener('change', function(){
-    state.followMeOn = el.followMeToggle.checked;
-    saveState();
-    if(!state.followMeOn) stopFollowMe();
-  });
-  el.stopFollowBtn.addEventListener('click', stopFollowMe);
-
-  function withLocation(cb){
-    if(!navigator.geolocation){ cb(null); return; }
-    var done=false;
-    var timer=setTimeout(function(){ if(!done){ done=true; cb(null); } }, 4000);
-    navigator.geolocation.getCurrentPosition(
-      function(pos){ if(done) return; done=true; clearTimeout(timer); cb({lat:pos.coords.latitude, lng:pos.coords.longitude}); },
-      function(){ if(done) return; done=true; clearTimeout(timer); cb(null); },
-      {enableHighAccuracy:true, timeout:3800}
-    );
-  }
-
-  function buildMessage(kind, loc){
-    var lines=[];
-    lines.push(kind==='test' ? "FAROL TESTE" : "FAROL");
-    if(loc) lines.push("https://maps.google.com/?q="+loc.lat+","+loc.lng);
-    else lines.push("Localização indisponível");
-    return lines.join("\n");
-  }
-
-  function openSendPanel(kind, loc){
-    var contacts = getContacts();
-    el.sendContacts.innerHTML="";
-    if(contacts.length===0){
-      el.sendContacts.innerHTML = "<p style='color:#CFE3E0;font-size:13px;'>Nenhum contato configurado. Feche e preencha um WhatsApp em Configuração.</p>";
-    }
-    contacts.forEach(function(c){
-      var msg = buildMessage(kind, loc);
-      var url = "https://wa.me/"+c.phone+"?text="+encodeURIComponent(msg);
-      var a=document.createElement('a');
-      a.href=url; a.target="_blank"; a.rel="noopener";
-      a.className="btn btn-whats";
-      a.textContent="Enviar para "+c.name;
-      a.addEventListener('click', function(){ addLog(kind, c.name); });
-      el.sendContacts.appendChild(a);
-    });
-    el.sendPanel.classList.add('show');
-    setStatus('ready','Sistema pronto');
-  }
-  el.closeSendBtn.addEventListener('click', function(){
-    el.sendPanel.classList.remove('show');
-    if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
-    else if(shouldHide()){ showDisguise(); }
-  });
-
-  function addLog(kind, contactName){
-    state.log.unshift({time:new Date().toLocaleString('pt-BR'), kind:kind, to:contactName});
-    state.log = state.log.slice(0,30);
-    saveState();
-    renderLog();
-  }
-  function renderLog(){
-    if(!state.log || state.log.length===0){
-      el.logList.innerHTML="<p class='log-empty'>Nenhum alerta enviado ainda.</p>";
-      return;
-    }
-    var labels={botao:'Botão', voz:'Voz', test:'Teste', agitar:'Agitar'};
-    el.logList.innerHTML = state.log.map(function(item){
-      return "<div class='log-item'><span>"+item.to+"</span><span class='tag'>"+(labels[item.kind]||item.kind)+"</span></div>"
-        + "<div class='log-item' style='border-top:none;padding-top:0;'><span class='hint' style='margin:0;'>"+item.time+"</span><span></span></div>";
-    }).join("");
-  }
-
-  /* ---------------- disfarce ---------------- */
-  function shouldHide(){ return !!(state.disguiseOn || state.pin); }
-
-  function showDisguise(){
-    el.disguiseScreen.style.display='block';
-    el.realApp.style.display='none';
-    el.unlockInput.value='';
-  }
-  function showReal(){
-    el.disguiseScreen.style.display='none';
-    el.realApp.style.display='block';
-  }
-  if(shouldHide()) showDisguise(); else showReal();
-
-  el.savePinBtn.addEventListener('click', function(){
-    state.pin = el.pinInput.value.trim();
-    saveState();
-    el.pinSaveHint.textContent = state.pin ? "Código salvo." : "Código apagado — o disfarce só poderá ser aberto pelos 5 toques no título.";
-    setTimeout(function(){ el.pinSaveHint.textContent=""; }, 3500);
-  });
-
-  el.hideBtn.addEventListener('click', function(){ if(shouldHide()) showDisguise(); });
-  el.disguiseToggle.addEventListener('change', function(){
-    state.disguiseOn = el.disguiseToggle.checked; saveState();
-  });
-
-  el.unlockInput.addEventListener('input', function(){
-    if(state.pin && el.unlockInput.value.trim()===state.pin){
-      showReal();
-      el.unlockInput.value='';
-    }
-  });
-  el.unlockInput.addEventListener('keyup', function(e){
-    if(e.key==='Enter'){
-      if(state.pin && el.unlockInput.value.trim()===state.pin){ showReal(); }
-      el.unlockInput.value='';
-    }
-  });
-  var titleTaps=0, titleTapTimer=null;
-  el.fakeTitle.addEventListener('click', function(){
-    titleTaps++;
-    clearTimeout(titleTapTimer);
-    titleTapTimer=setTimeout(function(){ titleTaps=0; }, 3000);
-    if(titleTaps>=5){ titleTaps=0; showReal(); }
-  });
-
-  /* ---------------- contagem regressiva ---------------- */
-  var countTimer=null, countValue=5;
-  var alertInProgress=false, lastAlertCompleted=0, wasDarkBeforeAlert=false;
-  var ALERT_COOLDOWN_MS=15000;
-  function startCountdown(kind){
-    var nowCheck = Date.now();
-    if(alertInProgress || (nowCheck - lastAlertCompleted) < ALERT_COOLDOWN_MS) return;
-    alertInProgress = true;
-    wasDarkBeforeAlert = darkScreenActive;
-    hideDarkOverlay();
-    var contacts=getContacts();
-    var whatsappReady = state.whatsappOn && contacts.length>0;
-    if(!whatsappReady && !state.ntfyTopic){
-      alertInProgress = false;
-      showReal();
-      alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de acionar o alerta.");
-      return;
-    }
-    var neutral = shouldHide();
-    el.overlayAlertContent.style.display = neutral ? 'none' : 'block';
-    el.overlayNeutralContent.style.display = neutral ? 'block' : 'none';
-    el.countOverlay.className = 'overlay show' + (neutral ? ' neutral' : '');
-
-    countValue=5;
-    el.countNumber.textContent=countValue;
-    el.countContact.textContent = contacts.map(function(c){return c.name;}).join(" e ");
-    el.neutralBar.style.width='0%';
-    setStatus('sending', neutral ? 'Sincronizando…' : 'Preparando alerta…');
-    countTimer=setInterval(function(){
-      countValue--;
-      el.neutralBar.style.width = ((5-countValue)/5*100)+'%';
-      if(countValue<=0){
-        clearInterval(countTimer); countTimer=null;
-        el.countOverlay.classList.remove('show');
-        withLocation(function(loc){
-          sendNtfy(kind, loc);
-          if(kind!=='test'){ startFollowMe(); }
-          if(whatsappReady){
-            showReal();
-            openSendPanel(kind, loc);
-          } else {
-            setStatus('ready','Sistema pronto');
-            if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
-            else if(shouldHide()){ showDisguise(); }
-            else { showReal(); }
-          }
-          lastAlertCompleted = Date.now();
-          alertInProgress = false;
-        });
-      } else {
-        el.countNumber.textContent=countValue;
-      }
-    },1000);
-  }
-  el.cancelBtn.addEventListener('click', function(){
-    if(countTimer){ clearInterval(countTimer); countTimer=null; }
-    el.countOverlay.classList.remove('show');
-    alertInProgress = false;
-    if(wasDarkBeforeAlert){ showDarkOverlayOnly(); return; }
-    if(shouldHide()) showDisguise();
-    setStatus(el.listenToggle.checked?'listening':'ready', el.listenToggle.checked?'Escutando pela palavra-código':'Sistema pronto');
-  });
-
-  el.beaconBtn.addEventListener('click', function(){ startCountdown('botao'); });
-  el.testBtn.addEventListener('click', function(){
-    var contacts=getContacts();
-    var whatsappReady = state.whatsappOn && contacts.length>0;
-    if(!whatsappReady && !state.ntfyTopic){ alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de testar."); return; }
-    withLocation(function(loc){
-      sendNtfy('test', loc);
-      if(whatsappReady){ openSendPanel('test', loc); }
-    });
-  });
-
-  /* ---------------- escuta por palavra-código ---------------- */
-  var recognition=null, listening=false, wakeLock=null;
-  var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  function normalize(s){
-    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
-  }
-
-  if(!SpeechRec){
-    el.listenSupportNote.textContent = "Este navegador não oferece reconhecimento de voz (comum no Safari/iPhone). O botão e o gesto de agitar continuam funcionando.";
-    el.listenToggle.disabled = true;
-  } else {
-    el.listenSupportNote.textContent = "Funciona melhor no Chrome para Android, com o app aberto (mesmo disfarçado) e a tela ligada. No Android, o sistema toca um bipe curto a cada reinício da escuta — deixe o celular no silencioso ou o volume de mídia em zero para eliminar o som; o microfone continua funcionando normalmente.";
-  }
-
-  function setupRecognition(){
-    recognition = new SpeechRec();
-    recognition.lang = 'pt-BR';
-    recognition.continuous = true;
-    recognition.interimResults = true;
-
-    recognition.onresult = function(event){
-      var words = normalize(state.codeword||"").split(",").map(function(w){return w.trim();}).filter(Boolean);
-      if(words.length===0) return;
-      for(var i=event.resultIndex; i<event.results.length; i++){
-        var transcript = normalize(event.results[i][0].transcript);
-        for(var w=0; w<words.length; w++){
-          if(words[w] && transcript.indexOf(words[w])!==-1){ startCountdown('voz'); return; }
-        }
-      }
-    };
-    recognition.onerror = function(e){
-      if(e.error==='not-allowed' || e.error==='service-not-allowed'){
-        el.listenToggle.checked=false;
-        stopListening();
-        el.listenSupportNote.textContent = "Permissão de microfone negada. Ative nas configurações do navegador para usar a escuta por palavra-código.";
-      }
-    };
-    recognition.onend = function(){
-      if(listening){ try{ recognition.start(); }catch(e){} }
-    };
-  }
-
-  function startListening(){
-    if(!SpeechRec) return;
-    if(!recognition) setupRecognition();
-    listening=true;
-    try{ recognition.start(); }catch(e){}
-    el.listeningBanner.classList.add('on');
-    setStatus('listening','Escutando pela palavra-código');
-    if('wakeLock' in navigator){
-      navigator.wakeLock.request('screen').then(function(wl){
-        wakeLock=wl;
-        wl.addEventListener('release', function(){
-          wakeLock=null;
-          if(listening && document.visibilityState==='visible'){
-            navigator.wakeLock.request('screen').then(function(wl2){ wakeLock=wl2; }).catch(function(){});
-          }
-        });
-      }).catch(function(){});
-    }
-  }
-  function stopListening(){
-    listening=false;
-    if(recognition){ try{ recognition.stop(); }catch(e){} }
-    el.listeningBanner.classList.remove('on');
-    setStatus('ready','Sistema pronto');
-    if(wakeLock){ wakeLock.release().catch(function(){}); wakeLock=null; }
-  }
-  el.listenToggle.addEventListener('change', function(){
-    if(el.listenToggle.checked) startListening(); else stopListening();
-  });
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden && wakeLock){ wakeLock.release().catch(function(){}); wakeLock=null; }
-    else if(!document.hidden && listening && 'wakeLock' in navigator && !wakeLock){
-      navigator.wakeLock.request('screen').then(function(wl){ wakeLock=wl; }).catch(function(){});
-    }
-  });
-
-  /* ---------------- agitar para alertar ---------------- */
-  var lastShake=0;
-  var shakePeaks=[];
-  var SHAKE_DELTA_THRESHOLD=16;
-  var SHAKE_PEAKS_NEEDED=3;
-  var SHAKE_WINDOW_MS=1200;
-  function handleMotion(e){
-    var acc = e.accelerationIncludingGravity || e.acceleration;
-    if(!acc || acc.x===null) return;
-    var magnitude = Math.sqrt((acc.x||0)*(acc.x||0) + (acc.y||0)*(acc.y||0) + (acc.z||0)*(acc.z||0));
-    var delta = Math.abs(magnitude - 9.81);
-    var now = Date.now();
-    if(delta > SHAKE_DELTA_THRESHOLD){
-      shakePeaks.push(now);
-      shakePeaks = shakePeaks.filter(function(t){ return now - t <= SHAKE_WINDOW_MS; });
-      if(shakePeaks.length >= SHAKE_PEAKS_NEEDED && now-lastShake>4000 && !el.countOverlay.classList.contains('show')){
-        lastShake=now;
-        shakePeaks=[];
-        startCountdown('agitar');
-      }
-    }
-  }
-  var needsIOSPermission = typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function';
-  if(needsIOSPermission){
-    el.motionPermBtn.style.display='block';
-  } else if(typeof window.DeviceMotionEvent==='undefined'){
-    el.shakeNote.textContent="Este navegador não oferece sensor de movimento.";
-    el.shakeToggle.disabled=true;
-  }
-  function turnOnShake(){
-    el.shakeToggle.checked = true;
-    state.shakeOn = true; saveState();
-    if(needsIOSPermission){
-      DeviceMotionEvent.requestPermission().then(function(resp){
-        if(resp==='granted'){
-          window.addEventListener('devicemotion', handleMotion);
-          el.shakeNote.textContent="Sensor de movimento liberado. Alerta por agitar ativado.";
-        } else {
-          el.shakeNote.textContent="Permissão negada pelo sistema. Ative em Ajustes > Privacidade > Movimento e Orientação.";
-        }
-      }).catch(function(){ el.shakeNote.textContent="Não foi possível pedir permissão do sensor."; });
-    } else {
-      window.addEventListener('devicemotion', handleMotion);
-      el.shakeNote.textContent="Alerta por agitar ativado.";
-    }
-  }
-  el.motionPermBtn.addEventListener('click', turnOnShake);
-  el.shakeToggle.addEventListener('change', function(){
-    if(el.shakeToggle.checked){
-      turnOnShake();
-    } else {
-      state.shakeOn=false; saveState();
-      window.removeEventListener('devicemotion', handleMotion);
-      el.shakeNote.textContent="";
-    }
-  });
-  if(state.shakeOn && !needsIOSPermission && typeof window.DeviceMotionEvent!=='undefined'){
-    window.addEventListener('devicemotion', handleMotion);
-  }
-
-  /* ---------------- tela escura falsa ---------------- */
-  var darkWakeLock=null, darkClockTimer=null, darkScreenActive=false;
-  function updateDarkClock(){
-    var now = new Date();
-    var hh = String(now.getHours()).padStart(2,'0');
-    var mm = String(now.getMinutes()).padStart(2,'0');
-    el.darkClock.textContent = hh+':'+mm;
-    el.darkDate.textContent = now.toLocaleDateString('pt-BR',{weekday:'long', day:'numeric', month:'long'});
-  }
-  function activateDarkScreen(){
-    darkScreenActive = true;
-    el.darkScreen.style.display='flex';
-    updateDarkClock();
-    darkClockTimer=setInterval(updateDarkClock, 1000);
-    if('wakeLock' in navigator){
-      navigator.wakeLock.request('screen').then(function(wl){
-        darkWakeLock=wl;
-        wl.addEventListener('release', function(){
-          darkWakeLock=null;
-          if(darkScreenActive && document.visibilityState==='visible'){
-            navigator.wakeLock.request('screen').then(function(wl2){ darkWakeLock=wl2; }).catch(function(){});
-          }
-        });
-      }).catch(function(){});
-    }
-    var root=document.documentElement;
-    var req = root.requestFullscreen || root.webkitRequestFullscreen;
-    if(req){ req.call(root).catch(function(){}); }
-  }
-  function deactivateDarkScreen(){
-    darkScreenActive = false;
-    el.darkScreen.style.display='none';
-    if(darkClockTimer){ clearInterval(darkClockTimer); darkClockTimer=null; }
-    var exitFs = document.exitFullscreen || document.webkitExitFullscreen;
-    if(exitFs && (document.fullscreenElement || document.webkitFullscreenElement)){ exitFs.call(document).catch(function(){}); }
-    if(darkWakeLock){ darkWakeLock.release().catch(function(){}); darkWakeLock=null; }
-  }
-  function hideDarkOverlay(){
-    darkScreenActive = false;
-    el.darkScreen.style.display='none';
-    if(darkClockTimer){ clearInterval(darkClockTimer); darkClockTimer=null; }
-  }
-  function showDarkOverlayOnly(){
-    darkScreenActive = true;
-    el.darkScreen.style.display='flex';
-    updateDarkClock();
-    darkClockTimer=setInterval(updateDarkClock, 1000);
-  }
-  el.darkScreenBtn.addEventListener('click', activateDarkScreen);
-  el.pocketModeBtn.addEventListener('click', function(){
-    if(!el.shakeToggle.checked){ turnOnShake(); }
-    activateDarkScreen();
-  });
-  var pressTimer=null;
-  function armExit(){ pressTimer=setTimeout(deactivateDarkScreen, 3000); }
-  function disarmExit(){ clearTimeout(pressTimer); }
-  el.darkScreen.addEventListener('touchstart', armExit);
-  el.darkScreen.addEventListener('touchend', disarmExit);
-  el.darkScreen.addEventListener('mousedown', armExit);
-  el.darkScreen.addEventListener('mouseup', disarmExit);
-
-})();
 </script>
 </body>
 </html>
