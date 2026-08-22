@@ -172,7 +172,9 @@
   .log-item .tag{font-size:10px; text-transform:uppercase; letter-spacing:.06em; font-weight:700; padding:2px 7px; border-radius:6px; background:var(--paper); color:var(--ink-soft);}
   .log-empty{font-size:13px; color:var(--ink-soft); padding:6px 0;}
 
-  #darkScreen{position:fixed; inset:0; background:#000; z-index:200; display:none;}
+  #darkScreen{position:fixed; inset:0; background:#000; z-index:200; display:none; flex-direction:column; align-items:center; justify-content:center;}
+  #darkClock{font-family:'Inter',sans-serif; font-weight:200; font-size:15vw; color:#DADADA; letter-spacing:1px; line-height:1;}
+  #darkDate{font-family:'Inter',sans-serif; font-size:4vw; color:#6E6E6E; margin-top:10px; text-transform:capitalize;}
 
   footer{max-width:520px; margin:26px auto 0; padding:0 20px; font-size:12px; color:var(--ink-soft); line-height:1.6;}
   footer .em{color:var(--ink); font-weight:700;}
@@ -212,7 +214,7 @@
         </svg>
         <h1 class="display">Farol</h1>
       </div>
-      <p class="tag">Sistema de alerta familiar. Um toque, uma palavra combinada, ou agitar o celular — chama quem precisa saber, na hora.</p>
+      <p class="tag">Agite o celular no bolso pra pedir ajuda sem precisar olhar pra tela — ou use a palavra-código e o botão manual como alternativa.</p>
     </header>
 
     <main>
@@ -242,6 +244,14 @@
           <button class="btn btn-primary" id="saveBtn">Salvar configuração</button>
         </div>
         <p class="hint" id="saveHint"></p>
+      </section>
+
+      <!-- MODO BOLSO (RECOMENDADO) -->
+      <section class="card" style="border:2px solid var(--teal);">
+        <h2 style="color:var(--teal-deep);">Modo bolso — recomendado</h2>
+        <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
+        <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar modo bolso agora</button>
+        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque e segure nela por 3 segundos.</p>
       </section>
 
       <!-- DISFARCE -->
@@ -356,7 +366,10 @@
   </div>
 
   <!-- TELA ESCURA FALSA -->
-  <div id="darkScreen"></div>
+  <div id="darkScreen">
+    <div id="darkClock">00:00</div>
+    <div id="darkDate">—</div>
+  </div>
 
   <!-- PAINEL DE ENVIO -->
   <div class="send-panel" id="sendPanel">
@@ -410,7 +423,9 @@
     shakeNote:document.getElementById('shakeNote'),
     overlayAlertContent:document.getElementById('overlayAlertContent'), overlayNeutralContent:document.getElementById('overlayNeutralContent'),
     neutralBar:document.getElementById('neutralBar'),
-    darkScreen:document.getElementById('darkScreen'), darkScreenBtn:document.getElementById('darkScreenBtn')
+    darkScreen:document.getElementById('darkScreen'), darkScreenBtn:document.getElementById('darkScreenBtn'),
+    darkClock:document.getElementById('darkClock'), darkDate:document.getElementById('darkDate'),
+    pocketModeBtn:document.getElementById('pocketModeBtn')
   };
 
   function fillForm(){
@@ -664,26 +679,33 @@
   var needsIOSPermission = typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function';
   if(needsIOSPermission){
     el.motionPermBtn.style.display='block';
-    el.motionPermBtn.addEventListener('click', function(){
-      DeviceMotionEvent.requestPermission().then(function(resp){
-        if(resp==='granted'){
-          el.shakeNote.textContent="Sensor de movimento liberado.";
-          if(el.shakeToggle.checked) window.addEventListener('devicemotion', handleMotion);
-        } else {
-          el.shakeNote.textContent="Permissão negada pelo sistema. Ative em Ajustes > Privacidade > Movimento e Orientação.";
-        }
-      }).catch(function(){ el.shakeNote.textContent="Não foi possível pedir permissão do sensor."; });
-    });
   } else if(typeof window.DeviceMotionEvent==='undefined'){
     el.shakeNote.textContent="Este navegador não oferece sensor de movimento.";
     el.shakeToggle.disabled=true;
   }
-  el.shakeToggle.addEventListener('change', function(){
-    state.shakeOn = el.shakeToggle.checked; saveState();
-    if(el.shakeToggle.checked){
-      if(!needsIOSPermission) window.addEventListener('devicemotion', handleMotion);
-      el.shakeNote.textContent = needsIOSPermission ? "Toque em 'Permitir sensor de movimento' acima." : "Alerta por agitar ativado.";
+  function turnOnShake(){
+    el.shakeToggle.checked = true;
+    state.shakeOn = true; saveState();
+    if(needsIOSPermission){
+      DeviceMotionEvent.requestPermission().then(function(resp){
+        if(resp==='granted'){
+          window.addEventListener('devicemotion', handleMotion);
+          el.shakeNote.textContent="Sensor de movimento liberado. Alerta por agitar ativado.";
+        } else {
+          el.shakeNote.textContent="Permissão negada pelo sistema. Ative em Ajustes > Privacidade > Movimento e Orientação.";
+        }
+      }).catch(function(){ el.shakeNote.textContent="Não foi possível pedir permissão do sensor."; });
     } else {
+      window.addEventListener('devicemotion', handleMotion);
+      el.shakeNote.textContent="Alerta por agitar ativado.";
+    }
+  }
+  el.motionPermBtn.addEventListener('click', turnOnShake);
+  el.shakeToggle.addEventListener('change', function(){
+    if(el.shakeToggle.checked){
+      turnOnShake();
+    } else {
+      state.shakeOn=false; saveState();
       window.removeEventListener('devicemotion', handleMotion);
       el.shakeNote.textContent="";
     }
@@ -693,9 +715,18 @@
   }
 
   /* ---------------- tela escura falsa ---------------- */
-  var darkWakeLock=null;
+  var darkWakeLock=null, darkClockTimer=null;
+  function updateDarkClock(){
+    var now = new Date();
+    var hh = String(now.getHours()).padStart(2,'0');
+    var mm = String(now.getMinutes()).padStart(2,'0');
+    el.darkClock.textContent = hh+':'+mm;
+    el.darkDate.textContent = now.toLocaleDateString('pt-BR',{weekday:'long', day:'numeric', month:'long'});
+  }
   function activateDarkScreen(){
-    el.darkScreen.style.display='block';
+    el.darkScreen.style.display='flex';
+    updateDarkClock();
+    darkClockTimer=setInterval(updateDarkClock, 1000);
     if('wakeLock' in navigator){
       navigator.wakeLock.request('screen').then(function(wl){ darkWakeLock=wl; }).catch(function(){});
     }
@@ -705,11 +736,16 @@
   }
   function deactivateDarkScreen(){
     el.darkScreen.style.display='none';
+    if(darkClockTimer){ clearInterval(darkClockTimer); darkClockTimer=null; }
     var exitFs = document.exitFullscreen || document.webkitExitFullscreen;
     if(exitFs && (document.fullscreenElement || document.webkitFullscreenElement)){ exitFs.call(document).catch(function(){}); }
     if(darkWakeLock){ darkWakeLock.release().catch(function(){}); darkWakeLock=null; }
   }
   el.darkScreenBtn.addEventListener('click', activateDarkScreen);
+  el.pocketModeBtn.addEventListener('click', function(){
+    if(!el.shakeToggle.checked){ turnOnShake(); }
+    activateDarkScreen();
+  });
   var pressTimer=null;
   function armExit(){ pressTimer=setTimeout(deactivateDarkScreen, 3000); }
   function disarmExit(){ clearTimeout(pressTimer); }
