@@ -225,8 +225,19 @@
 
     <main>
 
+      <!-- ATIVAÇÃO -->
+      <section class="card" id="activationCard">
+        <h2>Ativar recursos completos</h2>
+        <p class="hint">Todos os recursos do Farol — WhatsApp, botão de emergência, modo bolso, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
+        <label for="activationInput">Código de ativação</label>
+        <input type="text" id="activationInput" placeholder="Ex.: FAROL-123456">
+        <button class="btn btn-primary" id="activateBtn" style="margin-top:10px;">Ativar</button>
+        <p class="hint" id="activationHint" style="margin-top:8px;"></p>
+      </section>
+      <p class="hint" id="activatedBadge" style="display:none; margin:12px 20px 0; color:var(--teal-deep); font-weight:600;">✓ Recursos completos ativados</p>
+
       <!-- CONFIGURAÇÃO -->
-      <section class="card">
+      <section class="card premium">
         <h2>WhatsApp (opcional, manual)</h2>
         <div class="listen-row">
           <div>
@@ -263,7 +274,7 @@
       </section>
 
       <!-- MODO BOLSO (RECOMENDADO) -->
-      <section class="card" style="border:2px solid var(--teal);">
+      <section class="card premium" style="border:2px solid var(--teal);">
         <h2 style="color:var(--teal-deep);">Modo bolso — recomendado</h2>
         <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
         <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar modo bolso agora</button>
@@ -272,7 +283,7 @@
       </section>
 
       <!-- DISFARCE -->
-      <section class="card">
+      <section class="card premium">
         <h2>Disfarce da tela</h2>
         <div class="listen-row">
           <div>
@@ -293,7 +304,7 @@
       </section>
 
       <!-- NOTIFICAÇÃO AUTOMÁTICA (NTFY) -->
-      <section class="card">
+      <section class="card premium">
         <h2>Notificação automática (sem toque)</h2>
         <p class="hint">Além do WhatsApp, o Farol pode avisar a família instantaneamente, sem precisar confirmar nada — usando o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid). É só a família instalar o app e "assinar" o mesmo código de canal abaixo.</p>
         <label for="ntfyTopicInput">Código do canal (como uma senha, não deixe óbvio)</label>
@@ -318,7 +329,7 @@
       </section>
 
       <!-- BOTÃO DE PÂNICO -->
-      <section class="card">
+      <section class="card premium">
         <h2>Alerta manual</h2>
         <div class="beacon-wrap">
           <button class="beacon" id="beaconBtn" aria-label="Enviar alerta de emergência">
@@ -336,7 +347,7 @@
       </section>
 
       <!-- ESCUTA POR PALAVRA-CÓDIGO -->
-      <section class="card">
+      <section class="card premium">
         <h2>Escuta por palavra-código</h2>
         <div class="listen-row">
           <div>
@@ -356,7 +367,7 @@
       </section>
 
       <!-- AGITAR PARA ALERTAR -->
-      <section class="card">
+      <section class="card premium">
         <h2>Alerta ao agitar o celular</h2>
         <div class="listen-row">
           <div>
@@ -373,7 +384,7 @@
       </section>
 
       <!-- TELA ESCURA -->
-      <section class="card">
+      <section class="card premium">
         <h2>Tela escura (parece desligada)</h2>
         <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque e segure na tela preta por 3 segundos.</p>
         <button class="btn btn-primary" id="darkScreenBtn" style="margin-top:12px;">Ativar tela escura agora</button>
@@ -381,7 +392,7 @@
       </section>
 
       <!-- HISTÓRICO -->
-      <section class="card">
+      <section class="card premium">
         <h2>Histórico</h2>
         <div id="logList"><p class="log-empty">Nenhum alerta enviado ainda.</p></div>
       </section>
@@ -431,7 +442,7 @@
   var defaultState = {
     c1name:"", c1phone:"", c2name:"", c2phone:"",
     codeword:"socorro", extramsg:"", log:[],
-    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false, followMeOn:true
+    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false, followMeOn:true, activated:false
   };
   var state = loadState();
 
@@ -448,6 +459,9 @@
   }
 
   var el = {
+    activationCard:document.getElementById('activationCard'), activationInput:document.getElementById('activationInput'),
+    activateBtn:document.getElementById('activateBtn'), activationHint:document.getElementById('activationHint'),
+    activatedBadge:document.getElementById('activatedBadge'),
     c1name:document.getElementById('c1name'), c1phone:document.getElementById('c1phone'),
     c2name:document.getElementById('c2name'), c2phone:document.getElementById('c2phone'),
     codeword:document.getElementById('codeword'), extramsg:document.getElementById('extramsg'),
@@ -477,6 +491,30 @@
     darkClock:document.getElementById('darkClock'), darkDate:document.getElementById('darkDate'),
     pocketModeBtn:document.getElementById('pocketModeBtn')
   };
+
+  function isValidActivationCode(code){
+    var m = /^FAROL-(\d{6})$/.exec((code||'').trim().toUpperCase());
+    if(!m) return false;
+    var digits = m[1].split('').map(Number);
+    var checksum = digits.slice(0,5).reduce(function(a,b){return a+b;},0) % 10;
+    return checksum === digits[5];
+  }
+  function applyActivationVisibility(){
+    var premiumCards = document.querySelectorAll('.premium');
+    premiumCards.forEach(function(c){ c.style.display = state.activated ? '' : 'none'; });
+    el.activationCard.style.display = state.activated ? 'none' : 'block';
+    el.activatedBadge.style.display = state.activated ? 'block' : 'none';
+  }
+  el.activateBtn.addEventListener('click', function(){
+    if(isValidActivationCode(el.activationInput.value)){
+      state.activated = true; saveState();
+      applyActivationVisibility();
+      el.activationHint.textContent = "";
+    } else {
+      el.activationHint.textContent = "Código inválido. Confira e tente de novo.";
+    }
+  });
+  applyActivationVisibility();
 
   function fillForm(){
     el.c1name.value=state.c1name; el.c1phone.value=state.c1phone;
