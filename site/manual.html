@@ -176,21 +176,17 @@
   <div class="wrap">
     <h2><span class="tag">5</span>Configuração inicial</h2>
 
-    <h3>5.1 — WhatsApp (opcional)</h3>
-    <p>Cadastre o nome e o número de WhatsApp (com DDI e DDD, ex.: <code>5547999999999</code>) de até dois contatos de confiança. Esse canal é <b>desligado por padrão</b> e opcional.</p>
-    <div class="warn"><b>Atenção:</b> ativar o WhatsApp exige 2 toques na tela na hora do alerta (abrir a confirmação e tocar em enviar) — isso pode expor o celular num momento ruim. Prefira manter o ntfy (seção 9) como canal principal, e o WhatsApp só como reforço.</div>
+    <h3>5.1 — Palavra-código</h3>
+    <p>Dentro de "Escuta por palavra-código", defina uma palavra ou frase que, quando falada perto do celular (Android/Chrome), dispara o alerta. Pode colocar mais de uma opção separada por vírgula. Combine essa palavra com quem for usá-la — ela precisa ser natural de se dizer numa conversa comum.</p>
 
-    <h3>5.2 — Palavra-código</h3>
-    <p>Defina uma palavra ou frase que, quando falada perto do celular (Android/Chrome), dispara o alerta. Pode colocar mais de uma opção separada por vírgula. Combine essa palavra com quem for usá-la — ela precisa ser natural de se dizer numa conversa comum.</p>
-
-    <h3>5.3 — Disfarce e código de desbloqueio</h3>
+    <h3>5.2 — Disfarce e código de desbloqueio</h3>
     <p>Em "Disfarce da tela", digite um código (números ou palavra) e toque em <b>"Salvar código"</b>. A partir daí, o Farol sempre abre disfarçado de bloco de notas, e esse código é o que revela o app de verdade — digitado no campo "Pesquisar notas".</p>
     <div class="tip"><b>Esqueceu o código?</b> Toque 5 vezes seguidas no título "Notas" para entrar mesmo assim.</div>
 
-    <h3>5.4 — Notificação automática (ntfy)</h3>
-    <p>Veja o passo a passo completo na seção 9 deste manual.</p>
+    <h3>5.3 — Notificação automática (ntfy)</h3>
+    <p>Veja o passo a passo completo na seção 9 deste manual. É o canal principal e único de alerta do Farol — sem ele configurado, o app não consegue avisar ninguém.</p>
 
-    <h3>5.5 — Modo bolso e agitar</h3>
+    <h3>5.4 — Modo bolso e agitar</h3>
     <p>Em "Alerta ao agitar o celular", ative o interruptor (no iPhone, toque também em "Permitir sensor de movimento" quando pedido). Veja a seção 6 para as formas de disparo.</p>
   </div>
 </section>
@@ -200,14 +196,17 @@
     <h2><span class="tag">6</span>Formas de acionar o alerta</h2>
 
     <h3>Botão manual</h3>
-    <p>Toque no botão vermelho "SOCORRO". Uma contagem de 5 segundos aparece, com opção de cancelar caso tenha sido sem querer.</p>
+    <p>Toque no botão vermelho "SOCORRO". O alerta é enviado <b>imediatamente</b>, sem contagem nem espera.</p>
+
+    <h3>Três toques rápidos na tela</h3>
+    <p>Com a tela disfarçada de notas ou na tela escura, toque <b>3 vezes rapidamente</b> (em até 1 segundo) em qualquer parte da tela — exceto no campo de busca e no título "Notas" — para disparar o mesmo alerta instantâneo, sem precisar abrir o app de verdade.</p>
 
     <h3>Palavra-código (só Android)</h3>
-    <p>Ative "Escuta por palavra-código". O celular passa a ouvir enquanto o app estiver aberto (mesmo disfarçado) e a tela ligada. Ao detectar a palavra combinada, a mesma contagem de 5 segundos aparece.</p>
+    <p>Ative "Escuta por palavra-código". O celular passa a ouvir enquanto o app estiver aberto (mesmo disfarçado) e a tela ligada. Ao detectar a palavra combinada, aparece uma contagem de 5 segundos com opção de cancelar (esse gatilho é menos deliberado que o botão, por isso mantém a chance de cancelar caso tenha sido engano).</p>
     <div class="tip"><b>Sobre o bipe no Android:</b> o próprio sistema Android toca um bipe curto a cada reinício da escuta — não é falha do app. Deixe o celular no <b>modo silencioso ou volume de mídia em zero</b> para eliminar o som; o microfone continua funcionando normalmente.</div>
 
     <h3>Agitar o celular</h3>
-    <p>Com o celular no bolso ou na mão, uma sacudida forte e deliberada (o sistema exige 3 movimentos bruscos em menos de 1,2 segundo) dispara o alerta — pensado para não confundir com o balanço normal de andar.</p>
+    <p>Com o celular no bolso ou na mão, uma sacudida forte e deliberada (o sistema exige 3 movimentos bruscos em menos de 1,2 segundo) dispara o alerta — pensado para não confundir com o balanço normal de andar. Assim como a voz, esse gatilho também mostra a contagem de 5 segundos com opção de cancelar.</p>
 
     <h3>Modo bolso (recomendado)</h3>
     <p>Um único toque em <b>"Ativar modo bolso agora"</b> liga o gesto de agitar e escurece a tela ao mesmo tempo — o fluxo pensado para o dia a dia, com o celular guardado e fora de vista.</p>
@@ -217,7 +216,7 @@
 <section id="disfarce">
   <div class="wrap">
     <h2><span class="tag">7</span>Disfarce da tela</h2>
-    <p>Quando ativado, o Farol abre parecendo um bloco de notas comum, com anotações genéricas. Para revelar o app de verdade, digite o código configurado (seção 5.3) no campo "Pesquisar notas" — o desbloqueio acontece assim que o código bate, sem precisar de Enter.</p>
+    <p>Quando ativado, o Farol abre parecendo um bloco de notas comum, com anotações genéricas. Para revelar o app de verdade, digite o código configurado (seção 5.2) no campo "Pesquisar notas" — o desbloqueio acontece assim que o código bate, sem precisar de Enter.</p>
     <p>Dentro do app real, o botão <b>"Disfarçar"</b> no topo esconde tudo de novo manualmente, a qualquer momento.</p>
   </div>
 </section>
