@@ -677,7 +677,7 @@
   <div class="wrap">
     <h2 class="display">Como funciona</h2>
     <div class="steps">
-      <div class="step"><div class="num"></div><div class="txt"><h3>Instale no celular</h3><p>Funciona direto pelo navegador, sem loja de aplicativos — em menos de 2 minutos.</p></div></div>
+      <div class="step"><div class="num"></div><div class="txt"><h3>Instale no celular</h3><p>Funciona direto pelo navegador, sem loja de aplicativos — em menos de 2 minutos. <a href="#" id="instalarLink" target="_blank" style="color:var(--teal); font-weight:600;">Acessar o Farol</a>.</p></div></div>
       <div class="step"><div class="num"></div><div class="txt"><h3>Configure quem recebe</h3><p>A família instala em seu celular um outro app de mensagens gratuito e passa a receber os alertas automaticamente, sem precisar confirmar nada.</p></div></div>
       <div class="step"><div class="num"></div><div class="txt"><h3>Ative a forma</h3><p>Toque triplo, palavra-código ou gesto — você escolhe o que faz sentido na rotina.</p></div></div>
       <div class="step"><div class="num"></div><div class="txt"><h3>Pronto</h3><p>O sistema fica de prontidão passiva, garantindo proteção sem incômodos.</p></div></div>
@@ -721,8 +721,11 @@
       <div class="code-result" id="codeResult">
         <p style="margin:0; font-size:14px; color:var(--ink-soft);">Seu código de teste (válido por 30 dias):</p>
         <div class="code" id="codeOut">—</div>
-        <p style="font-size:13px; color:var(--ink-soft); margin-bottom: 16px;">Anote ou tire um print. Instale o Farol e digite esse código na tela de ativação.</p>
-        <a class="btn btn-outline" id="whatsBtn" href="#" target="_blank">Confirmar por WhatsApp</a>
+        <p style="font-size:13px; color:var(--ink-soft); margin-bottom: 16px;">Anote ou tire um print deste código antes de continuar.</p>
+        <a class="btn btn-primary" id="instalarBtn" href="#" target="_blank" style="margin-bottom:10px;">1. Instalar o Farol</a>
+        <br>
+        <a class="btn btn-outline" id="whatsBtn" href="#" target="_blank">2. Confirmar por WhatsApp</a>
+        <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Depois de instalar, cole este código na tela de ativação do app.</p>
       </div>
     </div>
   </div>
@@ -784,11 +787,14 @@
 <script>
   var SELLER_WHATSAPP = "5547997220734";
   var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/2IcKFOo";
+  var APP_URL = "https://sonunsolar-dev.github.io/FaroldaFam-lia/";
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
 
   document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
   document.getElementById('suporteBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent("Olá! Sou cliente do Farol e preciso de ajuda.");
   document.getElementById('comprarBtn').href = KIWIFY_CHECKOUT_URL;
+  document.getElementById('instalarBtn').href = APP_URL;
+  document.getElementById('instalarLink').href = APP_URL;
 
   function gerarCodigoTeste(){
     var d = [];
