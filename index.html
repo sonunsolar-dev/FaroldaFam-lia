@@ -116,7 +116,6 @@
   .btn-primary{background:var(--teal); color:#fff;}
   .btn-primary:hover:not(:disabled){background:var(--teal-deep);}
   .btn-ghost{background:transparent; color:var(--ink-soft); border:1.5px solid var(--line);}
-  .btn-whats{background:#128C4A; color:#fff;}
   .btn-amber{background:var(--amber); color:#fff;}
 
   /* ---------- beacon / SOS ---------- */
@@ -166,12 +165,6 @@
   @keyframes spin{to{transform:rotate(360deg);}}
   .bar{width:200px; height:6px; border-radius:4px; background:#E4E4E0; overflow:hidden; margin-top:14px;}
   .bar > div{height:100%; background:#9AA; width:0%; transition:width 1s linear;}
-
-  .send-panel{position:fixed; inset:0; background:rgba(16,38,43,0.94); display:none; align-items:center; justify-content:center; flex-direction:column; z-index:100; color:#fff; padding:28px; padding-top:max(28px, env(safe-area-inset-top)); padding-bottom:max(28px, env(safe-area-inset-bottom));}
-  .send-panel.show{display:flex;}
-  .send-panel h3{font-family:'Space Grotesk',sans-serif; font-size:20px; margin-bottom:4px;}
-  .send-panel p{color:#CFE3E0; font-size:13px; text-align:center; max-width:300px; margin:4px 0 22px;}
-  .send-panel .contacts{width:100%; max-width:320px; display:flex; flex-direction:column; gap:10px;}
 
   .log-item{display:flex; justify-content:space-between; align-items:baseline; padding:9px 0; border-bottom:1px solid var(--line); font-size:13px;}
   .log-item:last-child{border-bottom:none;}
@@ -228,7 +221,7 @@
       <!-- ATIVAÇÃO -->
       <section class="card" id="activationCard">
         <h2>Ativar recursos completos</h2>
-        <p class="hint">Todos os recursos do Farol — WhatsApp, botão de emergência, modo bolso, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
+        <p class="hint">Todos os recursos do Farol — botão de emergência, modo bolso, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
         <label for="activationInput">Código de ativação</label>
         <input type="text" id="activationInput" placeholder="Ex.: FAROL-123456">
         <button class="btn btn-primary" id="activateBtn" style="margin-top:10px;">Ativar</button>
@@ -238,43 +231,6 @@
       <div style="padding:0 20px;">
         <button class="btn btn-ghost" id="deactivateBtn" style="display:none; margin-top:6px;">Trocar código de ativação</button>
       </div>
-
-      <!-- CONFIGURAÇÃO -->
-      <section class="card premium">
-        <h2>WhatsApp (opcional, manual)</h2>
-        <div class="listen-row">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Ativar WhatsApp como canal adicional</div>
-            <div class="hint" style="margin-top:4px; color:var(--coral-deep); font-weight:600;">Atenção: ativar isso exige 2 toques na tela (abrir a confirmação e tocar em "enviar") pra completar o envio — isso pode expor o celular bem na hora em que a pessoa deveria estar discreta. A notificação automática (ntfy) não depende de nenhum toque.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="whatsappToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <label for="c1name" style="margin-top:16px;">Nome</label>
-        <input type="text" id="c1name" placeholder="Ex.: Marta (filha)">
-        <label for="c1phone">WhatsApp (com DDI e DDD)</label>
-        <input type="tel" id="c1phone" placeholder="Ex.: 5547999999999">
-        <p class="hint">Só números, começando com o código do país (55 para o Brasil).</p>
-
-        <label for="c2name">Segundo contato (opcional)</label>
-        <input type="text" id="c2name" placeholder="Ex.: João (vizinho)">
-        <label for="c2phone">WhatsApp do segundo contato</label>
-        <input type="tel" id="c2phone" placeholder="Ex.: 5547988888888">
-
-        <label for="codeword">Palavra ou frase-código</label>
-        <input type="text" id="codeword" placeholder="Ex.: girassol, preciso de ajuda">
-        <p class="hint">Pode colocar mais de uma opção separada por vírgula. Combine com a família — quem for dizer essa palavra precisa saber que ela existe.</p>
-
-        <label for="extramsg">Mensagem adicional (opcional)</label>
-        <textarea id="extramsg" placeholder="Ex.: Estou na casa da Vó Alice, rua tal, apto 12."></textarea>
-
-        <div style="margin-top:16px;">
-          <button class="btn btn-primary" id="saveBtn">Salvar configuração</button>
-        </div>
-        <p class="hint" id="saveHint"></p>
-      </section>
 
       <!-- MODO BOLSO (RECOMENDADO) -->
       <section class="card premium" style="border:2px solid var(--teal);">
@@ -309,7 +265,7 @@
       <!-- NOTIFICAÇÃO AUTOMÁTICA (NTFY) -->
       <section class="card premium">
         <h2>Notificação automática (sem toque)</h2>
-        <p class="hint">Além do WhatsApp, o Farol pode avisar a família instantaneamente, sem precisar confirmar nada — usando o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid). É só a família instalar o app e "assinar" o mesmo código de canal abaixo.</p>
+        <p class="hint">O Farol avisa a família instantaneamente, sem precisar confirmar nada — usando o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid). É só a família instalar o app e "assinar" o mesmo código de canal abaixo.</p>
         <label for="ntfyTopicInput">Código do canal (como uma senha, não deixe óbvio)</label>
         <input type="text" id="ntfyTopicInput" placeholder="Ex.: farol-8f3k2x9q">
         <div style="display:flex; gap:8px; margin-top:10px;">
@@ -352,7 +308,12 @@
       <!-- ESCUTA POR PALAVRA-CÓDIGO -->
       <section class="card premium">
         <h2>Escuta por palavra-código</h2>
-        <div class="listen-row">
+        <label for="codeword">Palavra ou frase-código</label>
+        <input type="text" id="codeword" placeholder="Ex.: girassol, preciso de ajuda">
+        <p class="hint">Pode colocar mais de uma opção separada por vírgula. Combine com a família — quem for dizer essa palavra precisa saber que ela existe.</p>
+        <button class="btn btn-primary" id="saveBtn" style="margin-top:6px;">Salvar</button>
+        <p class="hint" id="saveHint"></p>
+        <div class="listen-row" style="margin-top:16px;">
           <div>
             <div style="font-weight:600; font-size:14px;">Ativar escuta neste dispositivo</div>
             <div class="hint" style="margin-top:2px;">Continua funcionando mesmo com a tela disfarçada de bloco de notas, desde que o app esteja aberto e a tela ligada.</div>
@@ -404,7 +365,6 @@
 
     <footer>
       <p><span class="em">Transparência:</span> este app não grava nem escuta ninguém escondido. A escuta por palavra-código e o disfarce visual só existem no celular de quem está protegendo — como um botão de pânico discreto, e não como vigilância oculta de outra pessoa.</p>
-      <p><span class="em">Envio pelo WhatsApp:</span> ao acionar o alerta, o app abre o WhatsApp com a mensagem e a localização já prontas — falta só tocar em enviar, para garantir que é você quem confirma o disparo.</p>
       <p class="numbers"><span class="em">Em emergência real:</span> 190 (Polícia), 180 (Violência contra a mulher), 100 (Direitos Humanos). Em Santa Catarina, o app oficial <b>PMSC Cidadão</b> (Polícia Militar de SC) tem botão de pânico de violência doméstica ligado direto à central — use como canal principal em situações de risco alto.</p>
       <p style="margin-top:10px;"><a href="site/manual.html" target="_blank" style="color:var(--ink-soft);">Manual completo de instalação e uso</a> · <a href="site/privacidade.html" target="_blank" style="color:var(--ink-soft);">Política de privacidade</a></p>
     </footer>
@@ -431,22 +391,13 @@
     <div id="darkDate">—</div>
   </div>
 
-  <!-- PAINEL DE ENVIO -->
-  <div class="send-panel" id="sendPanel">
-    <h3 class="display">Alerta pronto</h3>
-    <p>Toque em cada contato para abrir o WhatsApp com a mensagem preenchida. Confirme o envio lá dentro.</p>
-    <div class="contacts" id="sendContacts"></div>
-    <button class="btn btn-ghost" id="closeSendBtn" style="margin-top:16px; max-width:320px;">Fechar</button>
-  </div>
-
 <script>
 (function(){
   "use strict";
 
   var defaultState = {
-    c1name:"", c1phone:"", c2name:"", c2phone:"",
-    codeword:"socorro", extramsg:"", log:[],
-    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", whatsappOn:false, followMeOn:true, activated:false, activationType:null, activatedAt:null
+    codeword:"socorro", log:[],
+    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", followMeOn:true, activated:false, activationType:null, activatedAt:null
   };
   var state = loadState();
 
@@ -466,19 +417,15 @@
     activationCard:document.getElementById('activationCard'), activationInput:document.getElementById('activationInput'),
     activateBtn:document.getElementById('activateBtn'), activationHint:document.getElementById('activationHint'),
     activatedBadge:document.getElementById('activatedBadge'), deactivateBtn:document.getElementById('deactivateBtn'),
-    c1name:document.getElementById('c1name'), c1phone:document.getElementById('c1phone'),
-    c2name:document.getElementById('c2name'), c2phone:document.getElementById('c2phone'),
-    codeword:document.getElementById('codeword'), extramsg:document.getElementById('extramsg'),
+    codeword:document.getElementById('codeword'),
     saveBtn:document.getElementById('saveBtn'), saveHint:document.getElementById('saveHint'),
-    whatsappToggle:document.getElementById('whatsappToggle'),
     beaconBtn:document.getElementById('beaconBtn'), testBtn:document.getElementById('testBtn'),
     listenToggle:document.getElementById('listenToggle'), listeningBanner:document.getElementById('listeningBanner'),
     listenSupportNote:document.getElementById('listenSupportNote'),
     statusDot:document.getElementById('statusDot'), statusText:document.getElementById('statusText'),
     countOverlay:document.getElementById('countOverlay'), countNumber:document.getElementById('countNumber'),
     countContact:document.getElementById('countContact'), cancelBtn:document.getElementById('cancelBtn'),
-    sendPanel:document.getElementById('sendPanel'), sendContacts:document.getElementById('sendContacts'),
-    closeSendBtn:document.getElementById('closeSendBtn'), logList:document.getElementById('logList'),
+    logList:document.getElementById('logList'),
     disguiseScreen:document.getElementById('disguiseScreen'), realApp:document.getElementById('realApp'),
     disguiseToggle:document.getElementById('disguiseToggle'), pinInput:document.getElementById('pinInput'),
     savePinBtn:document.getElementById('savePinBtn'), pinSaveHint:document.getElementById('pinSaveHint'),
@@ -566,10 +513,7 @@
   });
 
   function fillForm(){
-    el.c1name.value=state.c1name; el.c1phone.value=state.c1phone;
-    el.c2name.value=state.c2name; el.c2phone.value=state.c2phone;
-    el.codeword.value=state.codeword; el.extramsg.value=state.extramsg;
-    el.whatsappToggle.checked=state.whatsappOn;
+    el.codeword.value=state.codeword;
     el.disguiseToggle.checked=state.disguiseOn; el.pinInput.value=state.pin;
     el.shakeToggle.checked=state.shakeOn;
     el.ntfyTopicInput.value=state.ntfyTopic;
@@ -579,26 +523,11 @@
   fillForm();
 
   el.saveBtn.addEventListener('click', function(){
-    state.c1name=el.c1name.value.trim(); state.c1phone=el.c1phone.value.replace(/\D/g,'');
-    state.c2name=el.c2name.value.trim(); state.c2phone=el.c2phone.value.replace(/\D/g,'');
-    state.codeword=el.codeword.value.trim(); state.extramsg=el.extramsg.value.trim();
-    state.pin=el.pinInput.value.trim();
+    state.codeword=el.codeword.value.trim();
     saveState();
-    el.saveHint.textContent="Configuração salva. ("+ (new Date()).toLocaleTimeString('pt-BR') +")";
+    el.saveHint.textContent="Palavra-código salva.";
     setTimeout(function(){ el.saveHint.textContent=""; }, 3500);
   });
-
-  el.whatsappToggle.addEventListener('change', function(){
-    state.whatsappOn = el.whatsappToggle.checked;
-    saveState();
-  });
-
-  function getContacts(){
-    var list=[];
-    if(state.c1name && state.c1phone) list.push({name:state.c1name, phone:state.c1phone});
-    if(state.c2name && state.c2phone) list.push({name:state.c2name, phone:state.c2phone});
-    return list;
-  }
 
   function setStatus(mode, text){
     el.statusDot.className = 'dot ' + mode;
@@ -630,7 +559,7 @@
       body: body
     }).then(function(){
       addLog(kind, kind==='tracking' ? 'ntfy (localização)' : 'ntfy (automático)');
-    }).catch(function(){ /* falha silenciosa — o WhatsApp continua como respaldo manual */ });
+    }).catch(function(){ /* falha silenciosa — sem erro visível pro usuário */ });
   }
 
   var FOLLOWME_INTERVAL_MS=60000, FOLLOWME_MAX_TICKS=10;
@@ -666,39 +595,6 @@
       {enableHighAccuracy:true, timeout:3800}
     );
   }
-
-  function buildMessage(kind, loc){
-    var lines=[];
-    lines.push(kind==='test' ? "FAROL TESTE" : "FAROL");
-    if(loc) lines.push("https://maps.google.com/?q="+loc.lat+","+loc.lng);
-    else lines.push("Localização indisponível");
-    return lines.join("\n");
-  }
-
-  function openSendPanel(kind, loc){
-    var contacts = getContacts();
-    el.sendContacts.innerHTML="";
-    if(contacts.length===0){
-      el.sendContacts.innerHTML = "<p style='color:#CFE3E0;font-size:13px;'>Nenhum contato configurado. Feche e preencha um WhatsApp em Configuração.</p>";
-    }
-    contacts.forEach(function(c){
-      var msg = buildMessage(kind, loc);
-      var url = "https://wa.me/"+c.phone+"?text="+encodeURIComponent(msg);
-      var a=document.createElement('a');
-      a.href=url; a.target="_blank"; a.rel="noopener";
-      a.className="btn btn-whats";
-      a.textContent="Enviar para "+c.name;
-      a.addEventListener('click', function(){ addLog(kind, c.name); });
-      el.sendContacts.appendChild(a);
-    });
-    el.sendPanel.classList.add('show');
-    setStatus('ready','Sistema pronto');
-  }
-  el.closeSendBtn.addEventListener('click', function(){
-    el.sendPanel.classList.remove('show');
-    if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
-    else if(shouldHide()){ showDisguise(); }
-  });
 
   function addLog(kind, contactName){
     state.log.unshift({time:new Date().toLocaleString('pt-BR'), kind:kind, to:contactName});
@@ -783,27 +679,14 @@
   function triggerImmediate(kind){
     var nowCheck = Date.now();
     if(alertInProgress || (nowCheck - lastAlertCompleted) < ALERT_COOLDOWN_MS) return;
+    if(!state.ntfyTopic) return;
     alertInProgress = true;
     wasDarkBeforeAlert = darkScreenActive;
-    var contacts = getContacts();
-    var whatsappReady = state.whatsappOn && contacts.length>0;
-    if(!whatsappReady && !state.ntfyTopic){
-      alertInProgress = false;
-      return;
-    }
     withLocation(function(loc){
       sendNtfy(kind, loc);
       if(kind!=='test'){ startFollowMe(); }
-      if(whatsappReady){
-        hideDarkOverlay();
-        showReal();
-        openSendPanel(kind, loc);
-      } else {
-        setStatus('ready','Sistema pronto');
-        if(wasDarkBeforeAlert){ /* já está na tela escura, não mexe em nada */ }
-        else if(shouldHide()){ showDisguise(); }
-        else { showReal(); }
-      }
+      setStatus('ready','Sistema pronto');
+      if(!wasDarkBeforeAlert && shouldHide()){ showDisguise(); }
       lastAlertCompleted = Date.now();
       alertInProgress = false;
     });
@@ -815,17 +698,14 @@
   function startCountdown(kind){
     var nowCheck = Date.now();
     if(alertInProgress || (nowCheck - lastAlertCompleted) < ALERT_COOLDOWN_MS) return;
+    if(!state.ntfyTopic){
+      showReal();
+      alert("Configure o canal ntfy antes de acionar o alerta.");
+      return;
+    }
     alertInProgress = true;
     wasDarkBeforeAlert = darkScreenActive;
     hideDarkOverlay();
-    var contacts=getContacts();
-    var whatsappReady = state.whatsappOn && contacts.length>0;
-    if(!whatsappReady && !state.ntfyTopic){
-      alertInProgress = false;
-      showReal();
-      alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de acionar o alerta.");
-      return;
-    }
     var neutral = shouldHide();
     el.overlayAlertContent.style.display = neutral ? 'none' : 'block';
     el.overlayNeutralContent.style.display = neutral ? 'block' : 'none';
@@ -833,7 +713,7 @@
 
     countValue=5;
     el.countNumber.textContent=countValue;
-    el.countContact.textContent = contacts.map(function(c){return c.name;}).join(" e ");
+    el.countContact.textContent = "família";
     el.neutralBar.style.width='0%';
     setStatus('sending', neutral ? 'Sincronizando…' : 'Preparando alerta…');
     countTimer=setInterval(function(){
@@ -845,15 +725,10 @@
         withLocation(function(loc){
           sendNtfy(kind, loc);
           if(kind!=='test'){ startFollowMe(); }
-          if(whatsappReady){
-            showReal();
-            openSendPanel(kind, loc);
-          } else {
-            setStatus('ready','Sistema pronto');
-            if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
-            else if(shouldHide()){ showDisguise(); }
-            else { showReal(); }
-          }
+          setStatus('ready','Sistema pronto');
+          if(wasDarkBeforeAlert){ showDarkOverlayOnly(); }
+          else if(shouldHide()){ showDisguise(); }
+          else { showReal(); }
           lastAlertCompleted = Date.now();
           alertInProgress = false;
         });
@@ -873,13 +748,8 @@
 
   el.beaconBtn.addEventListener('click', function(){ triggerImmediate('botao'); });
   el.testBtn.addEventListener('click', function(){
-    var contacts=getContacts();
-    var whatsappReady = state.whatsappOn && contacts.length>0;
-    if(!whatsappReady && !state.ntfyTopic){ alert("Configure o canal ntfy (recomendado) ou ative e configure o WhatsApp antes de testar."); return; }
-    withLocation(function(loc){
-      sendNtfy('test', loc);
-      if(whatsappReady){ openSendPanel('test', loc); }
-    });
+    if(!state.ntfyTopic){ alert("Configure o canal ntfy antes de testar."); return; }
+    withLocation(function(loc){ sendNtfy('test', loc); });
   });
 
   /* ---------------- escuta por palavra-código ---------------- */
