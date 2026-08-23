@@ -590,6 +590,7 @@
       <a href="#como-funciona">Como funciona</a>
       <a href="#comprar">Comprar</a>
       <a href="#profissionais">Profissionais</a>
+      <a href="#suporte">Suporte</a>
       <a href="manual.html">Manual</a>
       <a href="#teste">Testar grátis</a>
     </nav>
@@ -733,6 +734,14 @@
   </div>
 </section>
 
+<section id="suporte">
+  <div class="wrap" style="text-align:center;">
+    <h2 class="display">Já é cliente e precisa de ajuda?</h2>
+    <p style="color:var(--ink-soft); max-width:480px; margin:0 auto 22px; font-size:15px;">Antes de mais nada, dá uma olhada no <a href="manual.html" style="color:var(--teal); font-weight:600;">manual completo</a> — a maioria das dúvidas de instalação e uso já está respondida lá. Não resolveu? Fale direto com o suporte.</p>
+    <a href="#" class="btn btn-outline" id="suporteBtn" target="_blank">Falar com o suporte</a>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="official-box">
@@ -754,6 +763,7 @@
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
 
   document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
+  document.getElementById('suporteBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent("Olá! Sou cliente do Farol e preciso de ajuda.");
   document.getElementById('comprarBtn').href = KIWIFY_CHECKOUT_URL;
 
   function gerarCodigoTeste(){
