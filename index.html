@@ -344,7 +344,7 @@
               <span class="sub">toque para acionar</span>
             </span>
           </button>
-          <p class="beacon-caption">Ao tocar, você terá 5 segundos para cancelar antes do alerta ser preparado.</p>
+          <p class="beacon-caption">Ao tocar, o alerta é enviado imediatamente, sem espera.</p>
         </div>
         <button class="btn btn-ghost" id="testBtn" style="margin-top:6px;">Enviar mensagem de teste</button>
       </section>
@@ -757,14 +757,58 @@
     }
   });
   var titleTaps=0, titleTapTimer=null;
-  el.fakeTitle.addEventListener('click', function(){
+  el.fakeTitle.addEventListener('click', function(e){
+    e.stopPropagation();
     titleTaps++;
     clearTimeout(titleTapTimer);
     titleTapTimer=setTimeout(function(){ titleTaps=0; }, 3000);
     if(titleTaps>=5){ titleTaps=0; showReal(); }
   });
+  el.unlockInput.addEventListener('click', function(e){ e.stopPropagation(); });
+
+  var panicTaps=[];
+  function handlePanicTap(){
+    var now = Date.now();
+    panicTaps.push(now);
+    panicTaps = panicTaps.filter(function(t){ return now - t <= 1000; });
+    if(panicTaps.length >= 3){
+      panicTaps = [];
+      triggerImmediate('botao');
+    }
+  }
+  el.disguiseScreen.addEventListener('click', handlePanicTap);
+  el.darkScreen.addEventListener('click', handlePanicTap);
 
   /* ---------------- contagem regressiva ---------------- */
+  function triggerImmediate(kind){
+    var nowCheck = Date.now();
+    if(alertInProgress || (nowCheck - lastAlertCompleted) < ALERT_COOLDOWN_MS) return;
+    alertInProgress = true;
+    wasDarkBeforeAlert = darkScreenActive;
+    var contacts = getContacts();
+    var whatsappReady = state.whatsappOn && contacts.length>0;
+    if(!whatsappReady && !state.ntfyTopic){
+      alertInProgress = false;
+      return;
+    }
+    withLocation(function(loc){
+      sendNtfy(kind, loc);
+      if(kind!=='test'){ startFollowMe(); }
+      if(whatsappReady){
+        hideDarkOverlay();
+        showReal();
+        openSendPanel(kind, loc);
+      } else {
+        setStatus('ready','Sistema pronto');
+        if(wasDarkBeforeAlert){ /* já está na tela escura, não mexe em nada */ }
+        else if(shouldHide()){ showDisguise(); }
+        else { showReal(); }
+      }
+      lastAlertCompleted = Date.now();
+      alertInProgress = false;
+    });
+  }
+
   var countTimer=null, countValue=5;
   var alertInProgress=false, lastAlertCompleted=0, wasDarkBeforeAlert=false;
   var ALERT_COOLDOWN_MS=15000;
@@ -827,7 +871,7 @@
     setStatus(el.listenToggle.checked?'listening':'ready', el.listenToggle.checked?'Escutando pela palavra-código':'Sistema pronto');
   });
 
-  el.beaconBtn.addEventListener('click', function(){ startCountdown('botao'); });
+  el.beaconBtn.addEventListener('click', function(){ triggerImmediate('botao'); });
   el.testBtn.addEventListener('click', function(){
     var contacts=getContacts();
     var whatsappReady = state.whatsappOn && contacts.length>0;
