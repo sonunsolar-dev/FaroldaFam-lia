@@ -213,7 +213,7 @@
         </svg>
         <h1 class="display">Farol</h1>
       </div>
-      <p class="tag">Agite o celular no bolso pra pedir ajuda sem precisar olhar pra tela — ou use a palavra-código e o botão manual como alternativa.</p>
+      <p class="tag">Agite o celular pra pedir ajuda sem precisar olhar pra tela — ou use a palavra-código e o botão manual como alternativa.</p>
     </header>
 
     <main>
@@ -221,7 +221,7 @@
       <!-- ATIVAÇÃO -->
       <section class="card" id="activationCard">
         <h2>Ativar recursos completos</h2>
-        <p class="hint">Todos os recursos do Farol — botão de emergência, modo bolso, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
+        <p class="hint">Todos os recursos do Farol — botão de emergência, Modo Agitar, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
         <label for="activationInput">Código de ativação</label>
         <input type="text" id="activationInput" placeholder="Ex.: FAROL-123456">
         <button class="btn btn-primary" id="activateBtn" style="margin-top:10px;">Ativar</button>
@@ -235,12 +235,12 @@
         <b style="color:var(--coral-deep);">Sua assinatura vence em breve.</b> Consulte o <a href="site/manual.html" target="_blank" style="color:var(--coral-deep); font-weight:600;">manual</a> para ver como renovar e continuar protegido sem interrupção.
       </div>
 
-      <!-- MODO BOLSO (RECOMENDADO) -->
+      <!-- MODO AGITAR (RECOMENDADO) -->
       <section class="card premium" style="border:2px solid var(--teal);">
-        <h2 style="color:var(--teal-deep);">Modo bolso — recomendado</h2>
+        <h2 style="color:var(--teal-deep);">Modo Agitar — recomendado</h2>
         <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
-        <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar modo bolso agora</button>
-        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque e segure nela por 3 segundos.</p>
+        <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar Modo Agitar agora</button>
+        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque com <b>dois dedos ao mesmo tempo</b> e segure por 3 segundos.</p>
         <p class="hint" style="margin-top:10px; color:var(--coral-deep); font-weight:600;">Antes de usar: vá nas configurações do celular e desative o bloqueio automático de tela (ou deixe no tempo máximo) e a economia de bateria para o navegador. Sem isso, o sistema pode ignorar o travamento de tela do app e desligar mesmo assim.</p>
       </section>
 
@@ -353,7 +353,7 @@
       <!-- TELA ESCURA -->
       <section class="card premium">
         <h2>Tela escura (parece desligada)</h2>
-        <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque e segure na tela preta por 3 segundos.</p>
+        <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque com <b>dois dedos ao mesmo tempo</b> na tela preta e segure por 3 segundos.</p>
         <button class="btn btn-primary" id="darkScreenBtn" style="margin-top:12px;">Ativar tela escura agora</button>
         <p class="hint" style="margin-top:10px;"><b>Importante:</b> se alguém apertar o botão físico de ligar/desligar do celular, o sistema bloqueia de verdade e a escuta para — esse recurso só engana quem apenas olha a tela, não quem manuseia o aparelho. No iPhone, a tela cheia é mais limitada; a barra de horário pode continuar visível.</p>
       </section>
@@ -956,10 +956,14 @@
     activateDarkScreen();
   });
   var pressTimer=null;
-  function armExit(){ pressTimer=setTimeout(deactivateDarkScreen, 3000); }
+  function armExit(e){
+    if(e.type==='touchstart' && (!e.touches || e.touches.length<2)) return;
+    pressTimer=setTimeout(deactivateDarkScreen, 3000);
+  }
   function disarmExit(){ clearTimeout(pressTimer); }
   el.darkScreen.addEventListener('touchstart', armExit);
   el.darkScreen.addEventListener('touchend', disarmExit);
+  el.darkScreen.addEventListener('touchcancel', disarmExit);
   el.darkScreen.addEventListener('mousedown', armExit);
   el.darkScreen.addEventListener('mouseup', disarmExit);
 
