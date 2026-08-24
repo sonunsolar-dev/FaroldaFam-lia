@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E6E66">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clientes Farol">
+<title>Cadastros — Farol</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; max-width:900px; margin:40px auto; color:#10262B; padding:0 20px;}
+  h2{text-align:center;}
+  .intro{text-align:center; font-size:13px; color:#666;}
+  .box{border:1px solid #ddd; border-radius:12px; padding:20px; margin-top:20px; text-align:left;}
+  label{display:block; font-size:13px; font-weight:600; margin:10px 0 4px;}
+  input{width:100%; padding:10px 12px; border:1.5px solid #ddd; border-radius:8px; font-size:15px; box-sizing:border-box;}
+  button{padding:13px 20px; font-size:15px; border-radius:10px; border:none; color:#fff; cursor:pointer; width:100%; background:#0E6E66; margin-top:14px;}
+  .status{font-size:13px; margin-top:10px; text-align:center; min-height:18px;}
+  .navlink{display:block; margin-top:18px; font-size:13px; color:#0E6E66; font-weight:600; text-decoration:none; text-align:center;}
+  table{width:100%; border-collapse:collapse; margin-top:16px; font-size:13px;}
+  th, td{text-align:left; padding:8px 6px; border-bottom:1px solid #eee; white-space:nowrap;}
+  th{background:#F4F7F6; font-size:11px; text-transform:uppercase; color:#666;}
+  .tag{display:inline-block; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;}
+  .tag.ativo{background:#E6F4F1; color:#0E6E66;}
+  .tag.cancelado{background:#FBEAE8; color:#B93F2E;}
+  .tag.expirado{background:#F1EFE7; color:#8a7d5c;}
+  .tablewrap{overflow-x:auto;}
+</style>
+</head>
+<body>
+  <h2>Cadastros — Farol</h2>
+  <p class="intro">Protegido por PIN. Ainda assim, evite compartilhar este link.</p>
+
+  <div class="box">
+    <label for="pin">PIN de acesso</label>
+    <input type="password" id="pin" placeholder="Seu PIN">
+    <button onclick="listar()">Ver todos os cadastros</button>
+    <div class="status" id="status"></div>
+    <div class="tablewrap">
+      <table id="tabela" style="display:none;">
+        <thead>
+          <tr>
+            <th>Nome</th><th>WhatsApp</th><th>E-mail</th><th>Código</th><th>Plano</th><th>Status</th><th>Origem</th><th>Emissão</th><th>Expiração</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <a class="navlink" href="gerador.html">← Gerar novo código</a>
+
+<script>
+var LISTAR_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-listar-clientes";
+
+function fmtData(iso){
+  if(!iso) return '—';
+  var d = new Date(iso);
+  return d.toLocaleDateString('pt-BR');
+}
+
+function listar(){
+  var pin = document.getElementById('pin').value.trim();
+  var statusEl = document.getElementById('status');
+  var tabela = document.getElementById('tabela');
+  var body = document.getElementById('tabelaBody');
+
+  if(!pin){
+    alert('Digite o PIN antes de continuar.');
+    return;
+  }
+
+  statusEl.style.color = '#888';
+  statusEl.textContent = 'Carregando...';
+  tabela.style.display = 'none';
+
+  fetch(LISTAR_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pin:pin })
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, txt:txt}; }); })
+  .then(function(res){
+    if(res.ok){
+      var lista = JSON.parse(res.txt);
+      body.innerHTML = '';
+      lista.forEach(function(c){
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>'+(c.nome||'')+'</td>'+
+          '<td>'+(c.whatsapp||'')+'</td>'+
+          '<td>'+(c.email||'')+'</td>'+
+          '<td>'+(c.codigo||'')+'</td>'+
+          '<td>'+(c.plano||'')+'</td>'+
+          '<td><span class="tag '+(c.status||'')+'">'+(c.status||'')+'</span></td>'+
+          '<td>'+(c.origem||'')+'</td>'+
+          '<td>'+fmtData(c.data_emissao)+'</td>'+
+          '<td>'+fmtData(c.data_expiracao)+'</td>';
+        body.appendChild(tr);
+      });
+      tabela.style.display = lista.length ? 'table' : 'none';
+      statusEl.style.color = '#0E6E66';
+      statusEl.textContent = '✓ '+lista.length+' cadastro(s) encontrado(s).';
+    } else {
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'Erro: ' + res.txt;
+    }
+  })
+  .catch(function(err){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Falha de conexão: ' + err;
+  });
+}
+</script>
+</body>
+</html>
