@@ -367,7 +367,8 @@
 
   var defaultState = {
     codeword:"socorro", log:[],
-    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", followMeOn:true, activated:false, activationType:null, activatedAt:null
+    disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", followMeOn:true, activated:false, activationType:null, activatedAt:null,
+    activationCode:null, serverExpiracao:null, lastServerCheck:0
   };
   var state = loadState();
 
@@ -412,6 +413,10 @@
 
   var TRIAL_DAYS = 30;
   var FULL_DAYS = 365;
+  var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+  var SERVER_CHECK_INTERVAL_MS = 24*60*60*1000;
+
   function checksumOk(digitsStr){
     var digits = digitsStr.split('').map(Number);
     var checksum = digits.slice(0,5).reduce(function(a,b){return a+b;},0) % 10;
@@ -426,15 +431,47 @@
     return null;
   }
   function planDays(type){ return type==='trial' ? TRIAL_DAYS : FULL_DAYS; }
+
+  function verificarCodigoNoBanco(codigo, callback){
+    fetch(SUPABASE_URL+"/rest/v1/rpc/verificar_codigo", {
+      method:"POST",
+      headers:{
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer "+SUPABASE_ANON_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ p_codigo: codigo })
+    }).then(function(r){ return r.json(); })
+      .then(function(rows){
+        if(rows && rows.length>0 && rows[0].valido){
+          callback({ ok:true, status:rows[0].status, plano:rows[0].plano, data_expiracao:rows[0].data_expiracao });
+        } else {
+          callback({ ok:true, notFound:true });
+        }
+      })
+      .catch(function(){ callback({ ok:false, networkError:true }); });
+  }
+
   function isCodeExpired(){
     if(!state.activationType || !state.activatedAt) return false;
+    if(state.serverExpiracao){
+      return Date.now() > new Date(state.serverExpiracao).getTime();
+    }
     var elapsedDays = (Date.now()-state.activatedAt)/(1000*60*60*24);
     return elapsedDays >= planDays(state.activationType);
   }
+
+  function daysLeftCalc(){
+    if(state.serverExpiracao){
+      return Math.max(0, Math.ceil((new Date(state.serverExpiracao).getTime() - Date.now())/(1000*60*60*24)));
+    }
+    return Math.max(0, Math.ceil(planDays(state.activationType) - (Date.now()-state.activatedAt)/(1000*60*60*24)));
+  }
+
   function applyActivationVisibility(){
     var justExpired = false;
     if(state.activated && isCodeExpired()){
-      state.activated=false; state.activationType=null; state.activatedAt=null;
+      state.activated=false; state.activationType=null; state.activatedAt=null; state.serverExpiracao=null;
       saveState();
       justExpired = true;
     }
@@ -444,7 +481,7 @@
     if(state.activated){
       el.activatedBadge.style.display = 'block';
       el.deactivateBtn.style.display = 'block';
-      var daysLeft = Math.max(0, Math.ceil(planDays(state.activationType) - (Date.now()-state.activatedAt)/(1000*60*60*24)));
+      var daysLeft = daysLeftCalc();
       if(state.activationType==='trial'){
         el.activatedBadge.textContent = '✓ Período de teste ativo — '+daysLeft+' dia(s) restante(s)';
         el.renewalWarning.style.display = 'none';
@@ -459,29 +496,75 @@
       if(justExpired){
         el.activationHint.textContent = state.activationType==='trial'
           ? "Seu período de teste acabou. Adquira a assinatura para continuar."
-          : "Sua assinatura expirou. Renove ou digite seu código novamente para continuar.";
+          : "Sua assinatura expirou ou foi cancelada. Renove para continuar.";
       }
     }
   }
+
+  function revalidarComServidor(){
+    if(!state.activated || !state.activationCode) return;
+    var last = state.lastServerCheck || 0;
+    if(Date.now() - last < SERVER_CHECK_INTERVAL_MS) return;
+    verificarCodigoNoBanco(state.activationCode, function(resultado){
+      if(!resultado.ok) return;
+      if(resultado.notFound || resultado.status!=='ativo'){
+        state.activated=false; state.activationType=null; state.activatedAt=null; state.serverExpiracao=null;
+        saveState();
+        applyActivationVisibility();
+        el.activationHint.textContent = "Sua assinatura foi cancelada ou revogada. Fale com o suporte se isso for um engano.";
+        return;
+      }
+      state.lastServerCheck = Date.now();
+      state.serverExpiracao = resultado.data_expiracao;
+      saveState();
+      applyActivationVisibility();
+    });
+  }
+
   el.deactivateBtn.addEventListener('click', function(){
-    state.activated=false; state.activationType=null; state.activatedAt=null;
+    state.activated=false; state.activationType=null; state.activatedAt=null; state.serverExpiracao=null;
     saveState();
     applyActivationVisibility();
   });
   el.activateBtn.addEventListener('click', function(){
-    var type = getActivationType(el.activationInput.value);
-    if(type){
-      state.activated=true;
-      state.activationType=type;
-      state.activatedAt=Date.now();
-      saveState();
-      applyActivationVisibility();
-      el.activationHint.textContent = "";
-    } else {
+    var codigoDigitado = el.activationInput.value.trim().toUpperCase();
+    var type = getActivationType(codigoDigitado);
+    if(!type){
       el.activationHint.textContent = "Código inválido. Confira e tente de novo.";
+      return;
     }
+    el.activateBtn.disabled = true;
+    el.activationHint.textContent = "Verificando...";
+    verificarCodigoNoBanco(codigoDigitado, function(resultado){
+      el.activateBtn.disabled = false;
+      if(resultado.ok && !resultado.notFound && resultado.status==='ativo'){
+        state.activated=true;
+        state.activationType = resultado.plano==='teste' ? 'trial' : 'full';
+        state.activationCode = codigoDigitado;
+        state.activatedAt=Date.now();
+        state.serverExpiracao = resultado.data_expiracao;
+        state.lastServerCheck = Date.now();
+        saveState();
+        applyActivationVisibility();
+        el.activationHint.textContent = "";
+      } else if(resultado.ok && (resultado.notFound || resultado.status!=='ativo')){
+        el.activationHint.textContent = "Este código não foi encontrado ou não está mais ativo.";
+      } else {
+        state.activated=true;
+        state.activationType=type;
+        state.activationCode=codigoDigitado;
+        state.activatedAt=Date.now();
+        state.serverExpiracao=null;
+        state.lastServerCheck=0;
+        saveState();
+        applyActivationVisibility();
+        el.activationHint.textContent = "Ativado offline — será confirmado assim que houver internet.";
+      }
+    });
   });
   applyActivationVisibility();
+  revalidarComServidor();
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) revalidarComServidor(); });
   document.addEventListener('visibilitychange', function(){
     if(!document.hidden) applyActivationVisibility();
   });
