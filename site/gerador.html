@@ -24,7 +24,10 @@
 
   <div class="box">
     <label for="pin">PIN de acesso</label>
-    <input type="password" id="pin" placeholder="Seu PIN">
+    <div style="position:relative;">
+      <input type="password" id="pin" placeholder="Seu PIN" style="padding-right:44px;">
+      <button type="button" onclick="alternarPin('pin', this)" style="position:absolute; right:4px; top:4px; width:36px; height:calc(100% - 8px); padding:0; margin:0; background:transparent; color:#666; font-size:16px;">👁</button>
+    </div>
     <label for="nome">Nome do cliente</label>
     <input type="text" id="nome" placeholder="Nome completo">
     <label for="whatsapp">WhatsApp do cliente</label>
@@ -44,6 +47,12 @@
   <a class="navlink" href="clientes.html">Ver todos os cadastros →</a>
 
 <script>
+function alternarPin(id, btn){
+  var el = document.getElementById(id);
+  if(el.type === 'password'){ el.type = 'text'; btn.textContent = '🙈'; }
+  else { el.type = 'password'; btn.textContent = '👁'; }
+}
+
 var FUNCTION_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-gerar-codigo";
 
 function gerar(){
