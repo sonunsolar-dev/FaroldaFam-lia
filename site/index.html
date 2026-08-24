@@ -714,8 +714,9 @@
   <div class="wrap">
     <h2 class="display">Teste por 30 dias, sem custo</h2>
     <div class="trial-box">
-      <p style="color:var(--ink-soft); font-size:15px; margin:0;">Preencha seu nome — geramos seu código de teste na hora, sem cadastro complicado.</p>
+      <p style="color:var(--ink-soft); font-size:15px; margin:0;">Preencha seu nome e WhatsApp — geramos seu código de teste na hora, sem cadastro complicado.</p>
       <input type="text" id="nomeInput" placeholder="Digite seu nome">
+      <input type="tel" id="whatsInput" placeholder="Seu WhatsApp (com DDD)">
       <br>
       <button class="btn btn-primary" id="gerarBtn">Gerar código de teste</button>
       <div class="code-result" id="codeResult">
@@ -797,6 +798,21 @@
   var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/uG4J81J";
   var APP_URL = "https://sonunsolar-dev.github.io/FaroldaFam-lia/";
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
+  var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+
+  function registrarClienteNoBanco(nome, whatsapp, codigo){
+    fetch(SUPABASE_URL+"/rest/v1/clientes", {
+      method:"POST",
+      headers:{
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer "+SUPABASE_ANON_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, codigo:codigo, plano:"teste", status:"ativo", origem:"site" })
+    }).catch(function(){ /* falha silenciosa — o cliente já tem o código, o cadastro é só registro interno */ });
+  }
 
   document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
   document.getElementById('suporteBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent("Olá! Sou cliente do Farol e preciso de ajuda.");
@@ -813,9 +829,12 @@
 
   document.getElementById('gerarBtn').addEventListener('click', function(){
     var nome = document.getElementById('nomeInput').value.trim() || "Interessado(a)";
+    var whatsapp = document.getElementById('whatsInput').value.trim().replace(/\D/g,'');
+    if(!whatsapp){ alert("Preencha seu WhatsApp antes de gerar o código."); return; }
     var codigo = gerarCodigoTeste();
     document.getElementById('codeOut').textContent = codigo;
     document.getElementById('codeResult').style.display = 'block';
+    registrarClienteNoBanco(nome, whatsapp, codigo);
     var msg = "Olá! Meu nome é "+nome+" e gerei um código de teste do Farol: "+codigo;
     document.getElementById('whatsBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
   });
