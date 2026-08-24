@@ -240,7 +240,7 @@
         <h2 style="color:var(--teal-deep);">Modo Agitar — recomendado</h2>
         <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
         <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar Modo Agitar agora</button>
-        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque com <b>dois dedos ao mesmo tempo</b> e segure por 3 segundos.</p>
+        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque com <b>três dedos ao mesmo tempo</b> e segure por 3 segundos.</p>
         <p class="hint" style="margin-top:10px; color:var(--coral-deep); font-weight:600;">Antes de usar: vá nas configurações do celular e desative o bloqueio automático de tela (ou deixe no tempo máximo) e a economia de bateria para o navegador. Sem isso, o sistema pode ignorar o travamento de tela do app e desligar mesmo assim.</p>
       </section>
 
@@ -305,7 +305,7 @@
           </button>
           <p class="beacon-caption">Ao tocar, o alerta é enviado imediatamente, sem espera.</p>
         </div>
-        <button class="btn btn-ghost" id="testBtn" style="margin-top:6px;">Enviar mensagem de teste</button>
+        <p class="hint" style="text-align:center; margin-top:4px;">Para testar o envio, aperte o botão vermelho 3 vezes rapidamente — o mesmo gesto usado para pedir ajuda pela tela escura ou disfarçada.</p>
       </section>
 
       <!-- ESCUTA POR PALAVRA-CÓDIGO -->
@@ -353,7 +353,7 @@
       <!-- TELA ESCURA -->
       <section class="card premium">
         <h2>Tela escura (parece desligada)</h2>
-        <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque com <b>dois dedos ao mesmo tempo</b> na tela preta e segure por 3 segundos.</p>
+        <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque com <b>três dedos ao mesmo tempo</b> na tela preta e segure por 3 segundos.</p>
         <button class="btn btn-primary" id="darkScreenBtn" style="margin-top:12px;">Ativar tela escura agora</button>
         <p class="hint" style="margin-top:10px;"><b>Importante:</b> se alguém apertar o botão físico de ligar/desligar do celular, o sistema bloqueia de verdade e a escuta para — esse recurso só engana quem apenas olha a tela, não quem manuseia o aparelho. No iPhone, a tela cheia é mais limitada; a barra de horário pode continuar visível.</p>
       </section>
@@ -423,7 +423,7 @@
     renewalWarning:document.getElementById('renewalWarning'),
     codeword:document.getElementById('codeword'),
     saveBtn:document.getElementById('saveBtn'), saveHint:document.getElementById('saveHint'),
-    beaconBtn:document.getElementById('beaconBtn'), testBtn:document.getElementById('testBtn'),
+    beaconBtn:document.getElementById('beaconBtn'),
     listenToggle:document.getElementById('listenToggle'), listeningBanner:document.getElementById('listeningBanner'),
     listenSupportNote:document.getElementById('listenSupportNote'),
     statusDot:document.getElementById('statusDot'), statusText:document.getElementById('statusText'),
@@ -758,10 +758,6 @@
   });
 
   el.beaconBtn.addEventListener('click', function(){ triggerImmediate('botao'); });
-  el.testBtn.addEventListener('click', function(){
-    if(!state.ntfyTopic){ alert("Configure o canal ntfy antes de testar."); return; }
-    withLocation(function(loc){ sendNtfy('test', loc); });
-  });
 
   /* ---------------- escuta por palavra-código ---------------- */
   var recognition=null, listening=false, wakeLock=null;
@@ -957,7 +953,7 @@
   });
   var pressTimer=null;
   function armExit(e){
-    if(e.type==='touchstart' && (!e.touches || e.touches.length<2)) return;
+    if(e.type==='touchstart' && (!e.touches || e.touches.length<3)) return;
     pressTimer=setTimeout(deactivateDarkScreen, 3000);
   }
   function disarmExit(){ clearTimeout(pressTimer); }
