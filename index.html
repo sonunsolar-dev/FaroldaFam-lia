@@ -216,8 +216,24 @@
         <b style="color:var(--coral-deep);">Sua assinatura vence em breve.</b> Consulte o <a href="site/manual.html" target="_blank" style="color:var(--coral-deep); font-weight:600;">manual</a> para ver como renovar e continuar protegido sem interrupção.
       </div>
 
+      <!-- MODO ESTOU SOZINHO -->
+      <section class="card premium">
+        <h2>Modo Estou Sozinho</h2>
+        <div class="listen-row">
+          <div>
+            <div style="font-weight:600; font-size:14px;">Ativar Modo Estou Sozinho</div>
+            <div class="hint" style="margin-top:2px;">Para quando não há ninguém de quem se esconder. Desativa disfarce e tela escura, e deixa o botão de emergência sempre visível em destaque na tela.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="aloneModeToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button class="btn btn-ghost" id="backToAloneBtn" style="display:none; margin-top:12px;">Voltar à tela do botão</button>
+      </section>
+
       <!-- MODO AGITAR (RECOMENDADO) -->
-      <section class="card premium" style="border:2px solid var(--teal);">
+      <section class="card premium" id="pocketModeCard" style="border:2px solid var(--teal);">
         <h2 style="color:var(--teal-deep);">Modo Agitar — recomendado</h2>
         <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
         <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar Modo Agitar agora</button>
@@ -332,7 +348,7 @@
       </section>
 
       <!-- TELA ESCURA -->
-      <section class="card premium">
+      <section class="card premium" id="darkScreenCard">
         <h2>Tela escura (parece desligada)</h2>
         <p class="hint">A tela continua ligada e o app continua ouvindo — só o visual fica preto, imitando um celular desligado. Para voltar ao normal, toque com <b>três dedos ao mesmo tempo</b> na tela preta e segure por 3 segundos.</p>
         <button class="btn btn-primary" id="darkScreenBtn" style="margin-top:12px;">Ativar tela escura agora</button>
@@ -355,6 +371,28 @@
 
   </div>
 
+  <!-- TELA MODO ESTOU SOZINHO -->
+  <div id="aloneScreen" style="display:none; position:fixed; inset:0; z-index:150; background:var(--paper); flex-direction:column; align-items:center; justify-content:center; padding:env(safe-area-inset-top) 20px env(safe-area-inset-bottom);">
+    <svg width="44" height="44" viewBox="0 0 40 40" fill="none" style="margin-bottom:6px;">
+      <circle cx="20" cy="20" r="19" stroke="#0E6E66" stroke-width="1.5"/>
+      <circle cx="20" cy="20" r="12" stroke="#0E6E66" stroke-width="1.5" opacity="0.55"/>
+      <circle cx="20" cy="20" r="5" fill="#E1543E"/>
+    </svg>
+    <div class="beacon-wrap" style="transform:scale(1.35); margin:20px 0;">
+      <button class="beacon" id="aloneBeaconBtn" aria-label="Enviar alerta de emergência">
+        <span class="ring"></span>
+        <span class="ring r2"></span>
+        <span class="ring r3"></span>
+        <span class="beacon-core">
+          <span class="label">SOCORRO</span>
+          <span class="sub">toque para acionar</span>
+        </span>
+      </button>
+    </div>
+    <p style="text-align:center; color:var(--ink-soft); font-size:14px; max-width:260px; margin-top:30px;">Toque no botão, diga a palavra-código, ou agite o celular — qualquer um já avisa sua família.</p>
+    <button class="btn btn-ghost" id="aloneSettingsBtn" style="max-width:220px; margin-top:34px;">⚙ Configurações</button>
+  </div>
+
   <!-- TELA ESCURA FALSA -->
   <div id="darkScreen">
     <div id="darkClock">00:00</div>
@@ -368,7 +406,7 @@
   var defaultState = {
     codeword:"socorro", log:[],
     disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", followMeOn:true, activated:false, activationType:null, activatedAt:null,
-    activationCode:null, serverExpiracao:null, lastServerCheck:0, lastAlertConfirmed:false
+    activationCode:null, serverExpiracao:null, lastServerCheck:0, lastAlertConfirmed:false, aloneMode:false
   };
   var state = loadState();
 
@@ -408,7 +446,11 @@
     shakeNote:document.getElementById('shakeNote'),
     darkScreen:document.getElementById('darkScreen'), darkScreenBtn:document.getElementById('darkScreenBtn'),
     darkClock:document.getElementById('darkClock'), darkDate:document.getElementById('darkDate'),
-    pocketModeBtn:document.getElementById('pocketModeBtn')
+    pocketModeBtn:document.getElementById('pocketModeBtn'),
+    aloneModeToggle:document.getElementById('aloneModeToggle'), aloneScreen:document.getElementById('aloneScreen'),
+    aloneBeaconBtn:document.getElementById('aloneBeaconBtn'), aloneSettingsBtn:document.getElementById('aloneSettingsBtn'),
+    backToAloneBtn:document.getElementById('backToAloneBtn'),
+    pocketModeCard:document.getElementById('pocketModeCard'), darkScreenCard:document.getElementById('darkScreenCard')
   };
 
   var TRIAL_DAYS = 30;
@@ -575,6 +617,8 @@
     el.shakeToggle.checked=state.shakeOn;
     el.ntfyTopicInput.value=state.ntfyTopic;
     el.followMeToggle.checked=state.followMeOn;
+    el.aloneModeToggle.checked=state.aloneMode;
+    el.backToAloneBtn.style.display = state.aloneMode ? 'block' : 'none';
     renderLog();
   }
   fillForm();
@@ -675,18 +719,33 @@
   }
 
   /* ---------------- disfarce ---------------- */
-  function shouldHide(){ return !!(state.disguiseOn || state.pin); }
+  function shouldHide(){ if(state.aloneMode) return false; return !!(state.disguiseOn || state.pin); }
+
+  function showAloneScreen(){
+    el.disguiseScreen.style.display='none';
+    el.realApp.style.display='none';
+    el.aloneScreen.style.display='flex';
+    if('wakeLock' in navigator){
+      navigator.wakeLock.request('screen').then(function(wl){ aloneWakeLock=wl; }).catch(function(){});
+    }
+  }
+  var aloneWakeLock=null;
 
   function showDisguise(){
     el.disguiseScreen.style.display='block';
     el.realApp.style.display='none';
+    el.aloneScreen.style.display='none';
     el.unlockInput.value='';
   }
   function showReal(){
     el.disguiseScreen.style.display='none';
+    el.aloneScreen.style.display='none';
     el.realApp.style.display='block';
+    if(aloneWakeLock){ aloneWakeLock.release().catch(function(){}); aloneWakeLock=null; }
   }
-  if(shouldHide()) showDisguise(); else showReal();
+  if(state.aloneMode) showAloneScreen();
+  else if(shouldHide()) showDisguise();
+  else showReal();
 
   el.savePinBtn.addEventListener('click', function(){
     state.pin = el.pinInput.value.trim();
@@ -696,6 +755,30 @@
   });
 
   el.hideBtn.addEventListener('click', function(){ if(shouldHide()) showDisguise(); });
+
+  function applyAloneModeVisibility(){
+    if(state.aloneMode){
+      el.pocketModeCard.style.display = 'none';
+      el.darkScreenCard.style.display = 'none';
+    } else {
+      applyActivationVisibility();
+    }
+  }
+
+  el.aloneModeToggle.addEventListener('change', function(){
+    state.aloneMode = el.aloneModeToggle.checked;
+    saveState();
+    el.backToAloneBtn.style.display = state.aloneMode ? 'block' : 'none';
+    applyAloneModeVisibility();
+    if(state.aloneMode){
+      if(darkScreenActive){ deactivateDarkScreen(); }
+      showAloneScreen();
+    } else { showReal(); }
+  });
+  el.aloneSettingsBtn.addEventListener('click', function(){ showReal(); });
+  el.aloneBeaconBtn.addEventListener('click', function(){ triggerImmediate('botao'); });
+  el.backToAloneBtn.addEventListener('click', function(){ showAloneScreen(); });
+  applyAloneModeVisibility();
   el.disguiseToggle.addEventListener('change', function(){
     state.disguiseOn = el.disguiseToggle.checked; saveState();
   });
