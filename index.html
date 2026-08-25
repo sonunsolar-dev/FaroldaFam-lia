@@ -27,7 +27,7 @@
     --radius:18px;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0; overscroll-behavior:none;}
   body{
     background:var(--paper);
     color:var(--ink);
@@ -120,7 +120,7 @@
 
   /* ---------- beacon / SOS ---------- */
   .beacon-wrap{display:flex; flex-direction:column; align-items:center; gap:14px; padding:30px 20px 10px;}
-  .beacon{position:relative; width:180px; height:180px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; background:none; padding:0;}
+  .beacon{position:relative; width:180px; height:180px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:none; background:none; padding:0; touch-action:manipulation;}
   .ring{position:absolute; inset:0; border-radius:50%; border:1.5px solid rgba(225,84,62,0.35); animation:pulse 2.6s ease-out infinite;}
   .ring.r2{animation-delay:.9s;}
   .ring.r3{animation-delay:1.8s;}
@@ -390,6 +390,7 @@
       </button>
     </div>
     <p style="text-align:center; color:var(--ink-soft); font-size:14px; max-width:260px; margin-top:30px;">Toque no botão, diga a palavra-código, ou agite o celular — qualquer um já avisa sua família.</p>
+    <p id="aloneStatus" style="display:none; text-align:center; color:var(--teal-deep); font-weight:700; font-size:16px; margin-top:14px;">✓ Enviado com sucesso</p>
     <button class="btn btn-ghost" id="aloneSettingsBtn" style="max-width:220px; margin-top:34px;">⚙ Configurações</button>
   </div>
 
@@ -449,7 +450,7 @@
     pocketModeBtn:document.getElementById('pocketModeBtn'),
     aloneModeToggle:document.getElementById('aloneModeToggle'), aloneScreen:document.getElementById('aloneScreen'),
     aloneBeaconBtn:document.getElementById('aloneBeaconBtn'), aloneSettingsBtn:document.getElementById('aloneSettingsBtn'),
-    backToAloneBtn:document.getElementById('backToAloneBtn'),
+    backToAloneBtn:document.getElementById('backToAloneBtn'), aloneStatus:document.getElementById('aloneStatus'),
     pocketModeCard:document.getElementById('pocketModeCard'), darkScreenCard:document.getElementById('darkScreenCard')
   };
 
@@ -830,6 +831,10 @@
         if(sucesso && kind!=='test'){
           state.lastAlertConfirmed = true;
           saveState();
+          if(el.aloneScreen.style.display==='flex'){
+            el.aloneStatus.style.display='block';
+            setTimeout(function(){ el.aloneStatus.style.display='none'; }, 6000);
+          }
         }
       });
       if(kind!=='test'){ startFollowMe(); }
