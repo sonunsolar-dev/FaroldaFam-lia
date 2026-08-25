@@ -722,6 +722,12 @@
   /* ---------------- disfarce ---------------- */
   function shouldHide(){ if(state.aloneMode) return false; return !!(state.disguiseOn || state.pin); }
 
+  function dismissAloneStatus(){
+    el.aloneStatus.style.display='none';
+    el.aloneScreen.removeEventListener('touchstart', dismissAloneStatus);
+    el.aloneScreen.removeEventListener('mousedown', dismissAloneStatus);
+  }
+
   function showAloneScreen(){
     el.disguiseScreen.style.display='none';
     el.realApp.style.display='none';
@@ -833,7 +839,8 @@
           saveState();
           if(el.aloneScreen.style.display==='flex'){
             el.aloneStatus.style.display='block';
-            setTimeout(function(){ el.aloneStatus.style.display='none'; }, 6000);
+            el.aloneScreen.addEventListener('touchstart', dismissAloneStatus);
+            el.aloneScreen.addEventListener('mousedown', dismissAloneStatus);
           }
         }
       });
