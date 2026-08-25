@@ -368,7 +368,7 @@
   var defaultState = {
     codeword:"socorro", log:[],
     disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", followMeOn:true, activated:false, activationType:null, activatedAt:null,
-    activationCode:null, serverExpiracao:null, lastServerCheck:0
+    activationCode:null, serverExpiracao:null, lastServerCheck:0, lastAlertConfirmed:false
   };
   var state = loadState();
 
@@ -602,10 +602,10 @@
     setTimeout(function(){ el.topicSaveHint.textContent=""; }, 5000);
   });
   var lastNtfySend=0;
-  function sendNtfy(kind, loc){
-    if(!state.ntfyTopic) return;
+  function sendNtfy(kind, loc, callback){
+    if(!state.ntfyTopic){ if(callback) callback(false); return; }
     var now = Date.now();
-    if(now - lastNtfySend < 5000) return;
+    if(now - lastNtfySend < 5000){ if(callback) callback(false); return; }
     lastNtfySend = now;
     var title = kind==='test' ? 'FAROL TESTE' : (kind==='tracking' ? 'FAROL (acompanhando)' : 'FAROL');
     var priority = kind==='tracking' ? 'low' : (kind==='test' ? 'default' : 'urgent');
@@ -616,7 +616,10 @@
       body: body
     }).then(function(){
       addLog(kind, kind==='tracking' ? 'ntfy (localização)' : 'ntfy (automático)');
-    }).catch(function(){ /* falha silenciosa — sem erro visível pro usuário */ });
+      if(callback) callback(true);
+    }).catch(function(){
+      if(callback) callback(false);
+    });
   }
 
   var FOLLOWME_INTERVAL_MS=60000, FOLLOWME_MAX_TICKS=10;
@@ -740,7 +743,12 @@
     alertInProgress = true;
     wasDarkBeforeAlert = darkScreenActive;
     withLocation(function(loc){
-      sendNtfy(kind, loc);
+      sendNtfy(kind, loc, function(sucesso){
+        if(sucesso && kind!=='test'){
+          state.lastAlertConfirmed = true;
+          saveState();
+        }
+      });
       if(kind!=='test'){ startFollowMe(); }
       setStatus('ready','Sistema pronto');
       if(!wasDarkBeforeAlert && shouldHide()){ showDisguise(); }
@@ -901,6 +909,13 @@
     var mm = String(now.getMinutes()).padStart(2,'0');
     el.darkClock.textContent = hh+':'+mm;
     el.darkDate.textContent = now.toLocaleDateString('pt-BR',{weekday:'long', day:'numeric', month:'long'});
+    if(state.lastAlertConfirmed){
+      el.darkClock.style.color = '#C98A2C';
+      el.darkClock.style.fontWeight = '500';
+    } else {
+      el.darkClock.style.color = '';
+      el.darkClock.style.fontWeight = '';
+    }
   }
   function activateDarkScreen(){
     darkScreenActive = true;
@@ -929,6 +944,7 @@
     var exitFs = document.exitFullscreen || document.webkitExitFullscreen;
     if(exitFs && (document.fullscreenElement || document.webkitFullscreenElement)){ exitFs.call(document).catch(function(){}); }
     if(darkWakeLock){ darkWakeLock.release().catch(function(){}); darkWakeLock=null; }
+    if(state.lastAlertConfirmed){ state.lastAlertConfirmed=false; saveState(); }
   }
   function hideDarkOverlay(){
     darkScreenActive = false;
