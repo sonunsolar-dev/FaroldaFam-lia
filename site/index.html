@@ -20,6 +20,7 @@
     --coral-deep: #B93F2E;
     --coral-light: rgba(225, 84, 62, 0.08);
     --amber: #C98A2C;
+    --amber-light: rgba(201, 138, 44, 0.12);
     --line: #E1E9E6;
     --radius-lg: 20px;
     --radius-md: 14px;
@@ -379,6 +380,77 @@
     flex-shrink: 0;
   }
 
+  /* Promo Box Styles */
+  .promo-card {
+    background: var(--paper-card);
+    border: 2px solid var(--teal);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 5vw, 44px);
+    max-width: 680px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promo-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--coral);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+
+  .promo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+    text-align: left;
+  }
+
+  .promo-item {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .promo-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .promo-item h4 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  .promo-item p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
   /* Form & Interactive Box */
   .trial-box {
     background: var(--paper-card);
@@ -560,6 +632,10 @@
     ul.forwho {
       grid-template-columns: 1fr;
     }
+    
+    .promo-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 560px) {
@@ -574,6 +650,12 @@
 
     .trial-box input {
       max-width: none;
+    }
+    
+    .promo-badge {
+      position: static;
+      display: inline-block;
+      margin-bottom: 12px;
     }
   }
 </style>
@@ -600,7 +682,7 @@
 <section class="hero">
   <div class="wrap">
     <h1 class="display">Entre perceber o perigo e pedir ajuda, bastam segundos.</h1>
-    <p class="lead">Um toque triplo na tela, uma palavra combinada, ou um simples gesto — qualquer um já dispara o alerta na hora, sem espera e sem confirmação. Pensado para cuidar de quem está vulnerável a ação de terceiros ou sozinho em casa.</p>
+    <p class="lead">Um toque triplo na tela do seu SMARTPHONE (Celular), uma palavra combinada, ou um simples gesto — qualquer um já dispara o alerta na hora, sem espera e sem confirmação. Pensado para cuidar de quem está vulnerável a ação de terceiros ou sozinho em casa.</p>
     <a href="#teste" class="btn btn-primary">Testar grátis por 30 dias</a>
 
     <svg class="hero-illus" viewBox="0 0 340 220" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -620,7 +702,7 @@
 <section style="padding: 0 0 20px;">
   <div class="wrap">
     <div class="alert-box">
-      <p class="main">O Farol funciona como um botão de ajuda imediata — um complemento de segurança.</p>
+      <p class="main">O Farol funciona como um botão de ajuda imediata no seu SMARTPHONE Android (SAMSUNG,MOTOROLA, XIOMI, SONY entre outras), ou iOS (Apple) — um complemento de segurança. Pesquise qual o sistema operacional do seu celular antes de adquirir nosso app.</p>
       <p class="sub">Ele não substitui atendimento oficial. Em casos mais sérios, acione sempre os canais oficiais indicados no rodapé desta página.</p>
     </div>
   </div>
@@ -714,23 +796,17 @@
   <div class="wrap">
     <h2 class="display">Teste por 30 dias, sem custo</h2>
     <div class="trial-box">
-      <p style="color:var(--ink-soft); font-size:15px; margin:0;">Preencha seu nome COMPLETO e WhatsApp — geramos seu código de teste na hora, sem cadastro complicado.</p>
+      <p style="color:var(--ink-soft); font-size:15px; margin:0;">Preencha seu nome — geramos seu código de teste na hora, sem cadastro complicado.</p>
       <input type="text" id="nomeInput" placeholder="Digite seu nome">
-      <input type="tel" id="whatsInput" placeholder="Seu WhatsApp (com DDD)">
-      <input type="email" id="emailInput" placeholder="Seu e-mail">
       <br>
       <button class="btn btn-primary" id="gerarBtn">Gerar código de teste</button>
       <div class="code-result" id="codeResult">
         <p style="margin:0; font-size:14px; color:var(--ink-soft);">Seu código de teste (válido por 30 dias):</p>
         <div class="code" id="codeOut">—</div>
-        <button class="btn btn-outline" id="copyBtn" type="button" style="margin-bottom:14px; max-width:220px;">📋 Copiar código</button>
-        <div style="background:var(--coral-light); border:1.5px solid rgba(225,84,62,.35); border-radius:12px; padding:14px 16px; margin-bottom:18px;">
-          <p style="margin:0; font-size:14px; color:var(--ink); font-weight:700;">⚠️ Não pule esta etapa</p>
-          <p style="margin:6px 0 0; font-size:13px; color:var(--ink-soft);">Toque em "1. Salvar meu código" ANTES de instalar — ele manda o código pro seu próprio WhatsApp, pra você não perder mesmo trocando de tela.</p>
-        </div>
-        <a class="btn btn-primary" id="whatsBtn" href="#" target="_blank" style="margin-bottom:10px;">1. Salvar meu código (WhatsApp)</a>
+        <p style="font-size:13px; color:var(--ink-soft); margin-bottom: 16px;">Anote ou tire um print deste código antes de continuar.</p>
+        <a class="btn btn-primary" id="instalarBtn" href="#" target="_blank" style="margin-bottom:10px;">1. Instalar o Farol</a>
         <br>
-        <a class="btn btn-outline" id="instalarBtn" href="#" target="_blank">2. Instalar o Farol</a>
+        <a class="btn btn-outline" id="whatsBtn" href="#" target="_blank">2. Confirmar por WhatsApp</a>
         <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Depois de instalar, cole este código na tela de ativação do app.</p>
       </div>
     </div>
@@ -739,14 +815,42 @@
 
 <section id="comprar">
   <div class="wrap" style="text-align:center;">
-    <h2 class="display">Já testou e quer continuar?</h2>
-    <p style="color:var(--ink-soft); max-width:480px; margin:0 auto 18px; font-size:15px;">A assinatura anual libera todos os recursos, com renovação automática — sem precisar configurar nada de novo a cada ano.</p>
-    <div style="margin-bottom:20px;">
-      <div style="font-family:'Space Grotesk',sans-serif; font-size:36px; font-weight:700; color:var(--ink);">R$ 99,00 por Ano</div>
-      <div style="font-size:14px; color:var(--ink-soft); margin-top:2px;">à vista, ou em 12x fixas no cartão</div>
+    <h2 class="display">Proteção em dobro para a sua casa</h2>
+    
+    <div class="promo-card">
+      <span class="promo-badge">PROMOÇÃO LEVE 2</span>
+      
+      <h3 style="font-size: 22px; margin: 10px 0 12px; color: var(--ink);">Compre 1 Acesso e Ganhe +1 Licença Extra</h3>
+      
+      <p style="color: var(--ink-soft); max-width: 520px; margin: 0 auto; font-size: 15px;">
+        Ao adquirir seu acesso anual agora, você garante <strong>mais 1 acesso completo</strong> sem nenhum custo adicional. Instale no celular pessoal do vulnerável e o segundo em outro aparelho dentro de casa. Proteção em dobro!
+      </p>
+
+      <div class="promo-grid">
+        <div class="promo-item">
+          <div class="promo-item-icon">1</div>
+          <div>
+            <h4>Celular Pessoal</h4>
+            <p>Acesso individual completo e ativado no aparelho.</p>
+          </div>
+        </div>
+        <div class="promo-item">
+          <div class="promo-item-icon" style="background: var(--coral-light); color: var(--coral);">2</div>
+          <div>
+            <h4>+1 Licença Familiar</h4>
+            <p>Para colocar no celular do seu filho, do idoso da família ou em outro aparelho da casa.</p>
+          </div>
+        </div>
+      </div>
+
+      <a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" style="margin: 10px auto 0; width: 100%; max-width: 380px;">
+        Garantir Oferta 1 + 1 de Presente
+      </a>
+      
+      <p style="font-size:12px; color:var(--ink-soft); margin-top:16px;">
+        🔒 Pagamento único e processado com segurança pela Kiwify (Pix, cartão ou boleto). Assinatura Anual. Após término da licença basta adquirir outra.
+      </p>
     </div>
-    <a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" style="margin:0 auto;">Comprar acesso definitivo</a>
-    <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Pagamento processado com segurança pela Kiwify (Pix, cartão ou boleto).</p>
   </div>
 </section>
 
@@ -767,7 +871,7 @@
     <details><summary>Preciso pagar para testar?</summary><p>Não. O período de teste de 30 dias é totalmente gratuito, sem necessidade de cartão de crédito.</p></details>
     <details><summary>Alguém vai perceber que estou usando?</summary><p>O Farol foi pensado para funcionar de forma discreta. Detalhes de como isso funciona ficam disponíveis depois do cadastro.</p></details>
     <details><summary>Uso Samsung, preciso de algum ajuste extra?</summary><p>Sim: vale desativar o gesto "Deslizar a lateral da mão para capturar" (Configurações > Recursos avançados > Movimentos e gestos). Em alguns modelos, um deslize com 3 dedos também aciona essa função e pode interromper a tela discreta do Farol.</p></details>
-    <details><summary>O que acontece depois dos 30 dias?</summary><p>Se fizer sentido continuar, você assina o acesso definitivo por R$ 99,00/ano (ou 12x de R$ 10,24), com renovação automática. Se não, o teste simplesmente encerra — sem cobrança automática.</p></details>
+    <details><summary>O que acontece depois dos 30 dias?</summary><p>Se fizer sentido continuar, você adquire o acesso definitivo. Se não, o teste simplesmente encerra — sem cobrança automática.</p></details>
   </div>
 </section>
 
@@ -796,24 +900,9 @@
 
 <script>
   var SELLER_WHATSAPP = "5547997220734";
-  var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/uG4J81J";
+  var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/2IcKFOo";
   var APP_URL = "https://sonunsolar-dev.github.io/FaroldaFam-lia/";
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
-  var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
-  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
-
-  function registrarClienteNoBanco(nome, whatsapp, email, codigo){
-    fetch(SUPABASE_URL+"/rest/v1/clientes", {
-      method:"POST",
-      headers:{
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": "Bearer "+SUPABASE_ANON_KEY,
-        "Content-Type": "application/json",
-        "Prefer": "return=minimal"
-      },
-      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, codigo:codigo, plano:"teste", status:"ativo", origem:"site" })
-    }).catch(function(){ /* falha silenciosa — o cliente já tem o código, o cadastro é só registro interno */ });
-  }
 
   document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
   document.getElementById('suporteBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent("Olá! Sou cliente do Farol e preciso de ajuda.");
@@ -830,32 +919,11 @@
 
   document.getElementById('gerarBtn').addEventListener('click', function(){
     var nome = document.getElementById('nomeInput').value.trim() || "Interessado(a)";
-    var whatsapp = document.getElementById('whatsInput').value.trim().replace(/\D/g,'');
-    var email = document.getElementById('emailInput').value.trim();
-    if(!whatsapp){ alert("Preencha seu WhatsApp antes de gerar o código."); return; }
-    if(!email){ alert("Preencha seu e-mail antes de gerar o código."); return; }
     var codigo = gerarCodigoTeste();
     document.getElementById('codeOut').textContent = codigo;
     document.getElementById('codeResult').style.display = 'block';
-    registrarClienteNoBanco(nome, whatsapp, email, codigo);
-    var msg = "Olá! Meu nome é "+nome+", meu e-mail é "+email+" e gerei um código de teste do Farol: "+codigo;
+    var msg = "Olá! Meu nome é "+nome+" e gerei um código de teste do Farol: "+codigo;
     document.getElementById('whatsBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
-  });
-
-  document.getElementById('copyBtn').addEventListener('click', function(){
-    var codigo = document.getElementById('codeOut').textContent;
-    var btn = document.getElementById('copyBtn');
-    function marcarCopiado(){
-      btn.textContent = "✓ Copiado!";
-      setTimeout(function(){ btn.textContent = "📋 Copiar código"; }, 2000);
-    }
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(codigo).then(marcarCopiado).catch(function(){
-        alert("Não consegui copiar automaticamente. Anote o código: "+codigo);
-      });
-    } else {
-      alert("Seu código: "+codigo+"\n\n(copie manualmente)");
-    }
   });
 </script>
 </body>
