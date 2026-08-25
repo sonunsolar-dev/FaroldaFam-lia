@@ -603,6 +603,164 @@
     <p class="lead">Um toque triplo na tela do SMARTPHONE (celular), uma palavra combinada, ou um simples gesto — qualquer um já dispara o alerta na hora, sem espera e sem confirmação. Pensado para cuidar de quem está vulnerável a ação de terceiros ou sozinho em casa.</p>
     <a href="#teste" class="btn btn-primary">Testar grátis por 30 dias</a>
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Alerta de Socorro</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #061a33;
+    }
+
+    /* ================================
+       SEÇÃO PRINCIPAL
+       ================================ */
+
+    .alerta-socorro-section {
+      width: 100%;
+      padding: 40px 20px;
+      background:
+        radial-gradient(
+          circle at 15% 20%,
+          rgba(0, 150, 255, 0.12),
+          transparent 35%
+        ),
+        linear-gradient(
+          135deg,
+          #061a33 0%,
+          #09284a 100%
+        );
+    }
+
+    .alerta-socorro-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ================================
+       IMAGEM DO GITHUB
+       ================================ */
+
+    .alerta-socorro-imagem {
+      display: block;
+      width: 100%;
+      height: auto;
+
+      border-radius: 22px;
+
+      box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.35);
+
+      object-fit: contain;
+    }
+
+    /* ================================
+       TEXTO ABAIXO DA IMAGEM
+       ================================ */
+
+    .alerta-socorro-frase {
+      max-width: 1050px;
+      margin: 30px auto 0;
+
+      text-align: center;
+
+      color: #ffffff;
+
+      font-size: clamp(18px, 2vw, 27px);
+
+      line-height: 1.45;
+
+      font-weight: 600;
+    }
+
+    .alerta-socorro-destaque {
+      color: #38a8ff;
+    }
+
+    /* ================================
+       TABLET
+       ================================ */
+
+    @media (max-width: 768px) {
+
+      .alerta-socorro-section {
+        padding: 25px 12px;
+      }
+
+      .alerta-socorro-imagem {
+        border-radius: 15px;
+      }
+
+      .alerta-socorro-frase {
+        margin-top: 20px;
+        font-size: 18px;
+      }
+    }
+
+    /* ================================
+       CELULAR
+       ================================ */
+
+    @media (max-width: 480px) {
+
+      .alerta-socorro-section {
+        padding: 15px 6px 25px;
+      }
+
+      .alerta-socorro-imagem {
+        border-radius: 10px;
+      }
+
+      .alerta-socorro-frase {
+        font-size: 15px;
+        line-height: 1.5;
+        padding: 0 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section
+    class="alerta-socorro-section"
+    aria-label="Alerta de Socorro"
+  >
+
+    <div class="alerta-socorro-container">
+
+      <!-- =====================================================
+           IMAGEM HOSPEDADA NO GITHUB
+           
+           SUBSTITUA SOMENTE A URL ABAIXO PELA URL RAW
+           DA IMAGEM QUE VOCÊ SUBIR NO SEU REPOSITÓRIO.
+           ===================================================== -->
+
+      <img
+        class="alerta-socorro-imagem"
+        src="https://raw.githubusercontent.com/SEU-USUARIO/SEU-REPOSITORIO/main/nome-da-imagem.png"
+        alt="Alerta de Socorro: idoso aciona pedido de ajuda pelo celular e familiar recebe o alerta imediatamente"
+        loading="lazy"
+      >
+
+     
+    </div>
+
+  </section>
+
+
+    
+<!--
     <svg class="hero-illus" viewBox="0 0 340 220" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="170" cy="120" r="95" fill="#0E6E66" opacity="0.06"/>
       <circle cx="170" cy="120" r="68" fill="#0E6E66" opacity="0.08"/>
@@ -614,6 +772,7 @@
       <path d="M148 48 L134 32" stroke="#E1543E" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
       <path d="M192 48 L206 32" stroke="#E1543E" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
     </svg>
+    -->
   </div>
 </section>
 
