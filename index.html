@@ -910,7 +910,7 @@
     el.darkClock.textContent = hh+':'+mm;
     el.darkDate.textContent = now.toLocaleDateString('pt-BR',{weekday:'long', day:'numeric', month:'long'});
     if(state.lastAlertConfirmed){
-      el.darkClock.style.color = '#5AC8FA';
+      el.darkClock.style.color = '#8CB4D2';
       el.darkClock.style.fontWeight = '500';
     } else {
       el.darkClock.style.color = '';
@@ -919,6 +919,7 @@
   }
   function activateDarkScreen(){
     darkScreenActive = true;
+    if(state.lastAlertConfirmed){ state.lastAlertConfirmed=false; saveState(); }
     el.darkScreen.style.display='flex';
     updateDarkClock();
     darkClockTimer=setInterval(updateDarkClock, 1000);
