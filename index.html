@@ -590,6 +590,8 @@
         saveState();
         applyActivationVisibility();
         el.activationHint.textContent = "";
+      } else if(resultado.ok && resultado.status==='pendente'){
+        el.activationHint.textContent = "Seu código ainda está em análise. Você receberá a confirmação em breve.";
       } else if(resultado.ok && (resultado.notFound || resultado.status!=='ativo')){
         el.activationHint.textContent = "Este código não foi encontrado ou não está mais ativo.";
       } else {
