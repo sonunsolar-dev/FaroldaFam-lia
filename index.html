@@ -766,20 +766,10 @@
 
   el.hideBtn.addEventListener('click', function(){ if(shouldHide()) showDisguise(); });
 
-  function applyAloneModeVisibility(){
-    if(state.aloneMode){
-      el.pocketModeCard.style.display = 'none';
-      el.darkScreenCard.style.display = 'none';
-    } else {
-      applyActivationVisibility();
-    }
-  }
-
   el.aloneModeToggle.addEventListener('change', function(){
     state.aloneMode = el.aloneModeToggle.checked;
     saveState();
     el.backToAloneBtn.style.display = state.aloneMode ? 'block' : 'none';
-    applyAloneModeVisibility();
     if(state.aloneMode){
       if(darkScreenActive){ deactivateDarkScreen(); }
       showAloneScreen();
@@ -788,7 +778,6 @@
   el.aloneSettingsBtn.addEventListener('click', function(){ showReal(); });
   el.aloneBeaconBtn.addEventListener('click', function(){ triggerImmediate('botao'); });
   el.backToAloneBtn.addEventListener('click', function(){ showAloneScreen(); });
-  applyAloneModeVisibility();
   el.disguiseToggle.addEventListener('change', function(){
     state.disguiseOn = el.disguiseToggle.checked; saveState();
   });
