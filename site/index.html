@@ -370,20 +370,11 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     <h2 class="display">3 formas de pedir ajuda, sempre instantâneas</h2>
     <p style="text-align:center; color:var(--ink-soft); max-width:520px; margin:-10px auto 30px; font-size:15px;">Não importa qual — qualquer uma das três já dispara o alerta na hora, sem contagem, sem pedir confirmação.</p>
     <div class="grid3">
-  <div class="cards">
-    <div class="icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <!-- Azul mais claro e vibrante -->
-        <circle cx="6" cy="18" r="2.3" fill="#1E90FF"/>
-        <!-- Azul com menos opacidade -->
-        <circle cx="14" cy="18" r="2.3" fill="#1E90FF" opacity="0.5"/>
-        <circle cx="12" cy="7" r="2.3" fill="#E1543E"/>
-        <path d="M12 10v5" stroke="#1E90FF" stroke-width="1.6" stroke-linecap="round" opacity="0.4"/>
-      </svg>
-    </div>
-    <h3>Toque triplo</h3>
-    <p>Três toques rápidos na tela — mesmo a tela disfarçada — e o alerta já sai em segundos.</p>
-  </div>
+      <div class="card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="18" r="2.3" fill="#0E6E66"/><circle cx="14" cy="18" r="2.3" fill="#0E6E66" opacity="0.6"/><circle cx="12" cy="7" r="2.3" fill="#E1543E"/><path d="M12 10v5" stroke="#0E6E66" stroke-width="1.6" stroke-linecap="round" opacity="0.4"/></svg></div>
+        <h3>Toque triplo</h3>
+        <p>Três toques rápidos na tela — mesmo a tela disfarçada — e o alerta já sai em segundos.</p>
+      </div>
       <div class="card">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v10H9l-4 4v-4H4V6Z" stroke="#0E6E66" stroke-width="1.8" stroke-linejoin="round"/><circle cx="9" cy="11" r="1" fill="#E1543E"/><circle cx="12" cy="11" r="1" fill="#E1543E"/><circle cx="15" cy="11" r="1" fill="#E1543E"/></svg></div>
         <h3>Palavra-código</h3>
@@ -460,14 +451,12 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
 
 <section id="teste">
   <div class="wrap">
-    <div>
+    <div >
       <div style="display:inline-block; background:rgba(255,255,255,.18); padding:5px 14px; border-radius:100px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px;">Promoção por tempo limitado</div>
       <h3 class="display" style="font-size:24px; margin:0 0 10px; color:#fff;">Leve 2, pague por 1</h3>
       <p style="font-size:15px; line-height:1.6; color:rgba(255,255,255,.92); max-width:480px; margin:0 auto;">Ao assinar o acesso ANUAL agora, você recebe automaticamente <b>um segundo código ANUAL</b> — pra instalar num segundo celular, escondido em casa, como reforço extra. Um aparelho que a pessoa carrega, outro que pode ser deixado em casa, protegendo a mesma pessoa pelo preço de um.</p>
     </div>
-
-    <h2 class="display" style="margin: 32px auto; text-align: center;">Teste por 30 dias, sem custo</h2>
-
+    <h2 class="display">Teste por 30 dias, sem custo</h2>
     <div class="trial-box">
       <p style="color:var(--ink-soft); font-size:15px; margin:0;">Preencha seu nome COMPLETO e WhatsApp — geramos seu código de teste na hora, sem cadastro complicado.</p>
       <input type="text" id="nomeInput" placeholder="Digite seu nome">
@@ -491,13 +480,14 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     </div>
   </div>
 </section>
+
 <section id="comprar">
   <div class="wrap" style="text-align:center;">
     <h2 class="display">Já testou e quer continuar?</h2>
     <p style="color:var(--ink-soft); max-width:480px; margin:0 auto 18px; font-size:15px;">A assinatura anual libera todos os recursos, com renovação automática — sem precisar configurar nada de novo a cada ano.</p>
     <div style="margin-bottom:20px;">
       <div style="font-family:'Space Grotesk',sans-serif; font-size:36px; font-weight:700; color:var(--ink);">R$ 99,00 por Ano</div>
-      <div style="font-size:14px; color:var(--ink-soft); margin-top:2px;">à vista, ou em até 12 parcelas fixas no cartão</div>
+      <div style="font-size:14px; color:var(--ink-soft); margin-top:2px;">à vista, ou em 12x fixas no cartão</div>
       <div style="display:inline-block; margin-top:12px; background:var(--teal-light); color:var(--teal-deep); padding:6px 14px; border-radius:100px; font-size:13px; font-weight:700;">🎁 Por tempo limitado: ganhe um 2º código junto</div>
     </div>
     <a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" style="margin:0 auto;">Comprar acesso definitivo</a>
