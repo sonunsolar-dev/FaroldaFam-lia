@@ -554,7 +554,9 @@
         state.activated=false; state.activationType=null; state.activatedAt=null; state.serverExpiracao=null;
         saveState();
         applyActivationVisibility();
-        el.activationHint.textContent = "Sua assinatura foi cancelada ou revogada. Fale com o suporte se isso for um engano.";
+        el.activationHint.textContent = resultado.status==='expirado'
+          ? "Sua assinatura expirou. Renove para continuar protegido."
+          : "Sua assinatura foi cancelada ou revogada. Fale com o suporte se isso for um engano.";
         return;
       }
       state.lastServerCheck = Date.now();
@@ -592,6 +594,8 @@
         el.activationHint.textContent = "";
       } else if(resultado.ok && resultado.status==='pendente'){
         el.activationHint.textContent = "Seu código ainda está em análise. Você receberá a confirmação em breve.";
+      } else if(resultado.ok && resultado.status==='expirado'){
+        el.activationHint.textContent = "Este código expirou. Renove para continuar protegido.";
       } else if(resultado.ok && (resultado.notFound || resultado.status!=='ativo')){
         el.activationHint.textContent = "Este código não foi encontrado ou não está mais ativo.";
       } else {
