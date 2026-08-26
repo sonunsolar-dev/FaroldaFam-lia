@@ -24,7 +24,9 @@
   .tag.ativo{background:#E6F4F1; color:#0E6E66;}
   .tag.cancelado{background:#FBEAE8; color:#B93F2E;}
   .tag.expirado{background:#F1EFE7; color:#8a7d5c;}
+  .tag.pendente{background:#FCF3E3; color:#C98A2C;}
   .tablewrap{overflow-x:auto;}
+  .btn-aprovar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; background:#C98A2C;}
 </style>
 </head>
 <body>
@@ -43,7 +45,7 @@
       <table id="tabela" style="display:none;">
         <thead>
           <tr>
-            <th>Nome</th><th>WhatsApp</th><th>E-mail</th><th>Código</th><th>Plano</th><th>Status</th><th>Origem</th><th>Emissão</th><th>Expiração</th>
+            <th>Nome</th><th>WhatsApp</th><th>E-mail</th><th>Código</th><th>Plano</th><th>Status</th><th>Origem</th><th>Emissão</th><th>Expiração</th><th>Ação</th>
           </tr>
         </thead>
         <tbody id="tabelaBody"></tbody>
@@ -61,6 +63,7 @@ function alternarPin(id, btn){
 }
 
 var LISTAR_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-listar-clientes";
+var APROVAR_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-aprovar-cliente";
 
 function fmtData(iso){
   if(!iso) return '—';
@@ -95,6 +98,10 @@ function listar(){
       body.innerHTML = '';
       lista.forEach(function(c){
         var tr = document.createElement('tr');
+        var acaoHtml = '—';
+        if(c.status === 'pendente'){
+          acaoHtml = '<button class="btn-aprovar" onclick="aprovar(\'' + c.codigo + '\', this)">Aprovar</button>';
+        }
         tr.innerHTML =
           '<td>'+(c.nome||'')+'</td>'+
           '<td>'+(c.whatsapp||'')+'</td>'+
@@ -104,7 +111,8 @@ function listar(){
           '<td><span class="tag '+(c.status||'')+'">'+(c.status||'')+'</span></td>'+
           '<td>'+(c.origem||'')+'</td>'+
           '<td>'+fmtData(c.data_emissao)+'</td>'+
-          '<td>'+fmtData(c.data_expiracao)+'</td>';
+          '<td>'+fmtData(c.data_expiracao)+'</td>'+
+          '<td>'+acaoHtml+'</td>';
         body.appendChild(tr);
       });
       tabela.style.display = lista.length ? 'table' : 'none';
@@ -118,6 +126,32 @@ function listar(){
   .catch(function(err){
     statusEl.style.color = '#C94F4F';
     statusEl.textContent = 'Falha de conexão: ' + err;
+  });
+}
+
+function aprovar(codigo, btn){
+  var pin = document.getElementById('pin').value.trim();
+  btn.disabled = true;
+  btn.textContent = '...';
+  fetch(APROVAR_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pin:pin, codigo:codigo })
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, txt:txt}; }); })
+  .then(function(res){
+    if(res.ok){
+      listar();
+    } else {
+      alert('Erro ao aprovar: ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Aprovar';
+    }
+  })
+  .catch(function(err){
+    alert('Falha de conexão: ' + err);
+    btn.disabled = false;
+    btn.textContent = 'Aprovar';
   });
 }
 </script>
