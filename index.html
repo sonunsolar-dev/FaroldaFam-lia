@@ -407,7 +407,7 @@
   var defaultState = {
     codeword:"socorro", log:[],
     disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", followMeOn:true, activated:false, activationType:null, activatedAt:null,
-    activationCode:null, serverExpiracao:null, lastServerCheck:0, lastAlertConfirmed:false, aloneMode:false
+    activationCode:null, serverExpiracao:null, lastServerCheck:0, lastAlertConfirmed:false, aloneMode:false, listenOn:false
   };
   var state = loadState();
 
@@ -620,6 +620,7 @@
     el.followMeToggle.checked=state.followMeOn;
     el.aloneModeToggle.checked=state.aloneMode;
     el.backToAloneBtn.style.display = state.aloneMode ? 'block' : 'none';
+    el.listenToggle.checked=state.listenOn;
     renderLog();
   }
   fillForm();
@@ -932,8 +933,11 @@
     if(wakeLock){ wakeLock.release().catch(function(){}); wakeLock=null; }
   }
   el.listenToggle.addEventListener('change', function(){
+    state.listenOn = el.listenToggle.checked;
+    saveState();
     if(el.listenToggle.checked) startListening(); else stopListening();
   });
+  if(state.listenOn && SpeechRec){ startListening(); }
   document.addEventListener('visibilitychange', function(){
     if(document.hidden && wakeLock){ wakeLock.release().catch(function(){}); wakeLock=null; }
     else if(!document.hidden && listening){
