@@ -807,7 +807,7 @@
         "Content-Type": "application/json",
         "Prefer": "return=minimal"
       },
-      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, codigo:codigo, plano:"teste", status:"ativo", origem:"site" })
+      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, codigo:codigo, plano:"teste", status:"pendente", origem:"site" })
     }).then(function(r){
       if(r.ok){ callback(true); }
       else { r.text().then(function(txt){ callback(false, txt); }); }
