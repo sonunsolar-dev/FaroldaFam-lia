@@ -216,13 +216,13 @@
         <b style="color:var(--coral-deep);">Sua assinatura vence em breve.</b> Consulte o <a href="site/manual.html" target="_blank" style="color:var(--coral-deep); font-weight:600;">manual</a> para ver como renovar e continuar protegido sem interrupção.
       </div>
 
-      <!-- MODO ESTOU SOZINHO -->
+      <!-- MODO CELULAR EM MÃOS -->
       <section class="card premium">
-        <h2>Modo Estou Sozinho</h2>
+        <h2>Modo Celular em Mãos</h2>
         <div class="listen-row">
           <div>
-            <div style="font-weight:600; font-size:14px;">Ativar Modo Estou Sozinho</div>
-            <div class="hint" style="margin-top:2px;">Para quando não há ninguém de quem se esconder. Desativa disfarce e tela escura, e deixa o botão de emergência sempre visível em destaque na tela.</div>
+            <div style="font-weight:600; font-size:14px;">Ativar Modo Celular em Mãos</div>
+            <div class="hint" style="margin-top:2px;">Uma terceira forma, ainda mais simples: desbloquear a tela e apertar o botão — pensado para quem tem dificuldade motora ou esquece palavras combinadas com facilidade. Diferente dos outros modos, <b>só funciona com a tela do celular ligada e desbloqueada</b>; se apagar, volta a funcionar assim que for desbloqueada de novo.</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="aloneModeToggle">
@@ -389,8 +389,8 @@
         </span>
       </button>
     </div>
-    <p style="text-align:center; color:var(--ink-soft); font-size:14px; max-width:260px; margin-top:30px;">Toque no botão, diga a palavra-código, ou agite o celular — qualquer um já avisa sua família.</p>
-    <p id="aloneStatus" style="display:none; text-align:center; color:var(--teal-deep); font-weight:700; font-size:16px; margin-top:14px;">✓ Enviado com sucesso</p>
+    <p style="text-align:center; color:var(--ink-soft); font-size:14px; max-width:260px; margin-top:30px;">Toque no botão — o jeito mais simples. Voz e agitar também funcionam, enquanto a tela estiver desbloqueada.</p>
+    <p id="aloneStatus" style="display:none; text-align:center; color:var(--teal-deep); font-weight:700; font-size:22px; margin-top:16px;">✓ Enviado com sucesso</p>
     <button class="btn btn-ghost" id="aloneSettingsBtn" style="max-width:220px; margin-top:34px;">⚙ Configurações</button>
   </div>
 
@@ -931,8 +931,11 @@
   });
   document.addEventListener('visibilitychange', function(){
     if(document.hidden && wakeLock){ wakeLock.release().catch(function(){}); wakeLock=null; }
-    else if(!document.hidden && listening && 'wakeLock' in navigator && !wakeLock){
-      navigator.wakeLock.request('screen').then(function(wl){ wakeLock=wl; }).catch(function(){});
+    else if(!document.hidden && listening){
+      if('wakeLock' in navigator && !wakeLock){
+        navigator.wakeLock.request('screen').then(function(wl){ wakeLock=wl; }).catch(function(){});
+      }
+      if(recognition){ try{ recognition.start(); }catch(e){} }
     }
   });
 
