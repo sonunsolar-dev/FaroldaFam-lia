@@ -890,9 +890,14 @@
     };
     recognition.onerror = function(e){
       if(e.error==='not-allowed' || e.error==='service-not-allowed'){
-        el.listenToggle.checked=false;
-        stopListening();
-        el.listenSupportNote.textContent = "Permissão de microfone negada. Ative nas configurações do navegador para usar a escuta por palavra-código.";
+        if(!document.hidden){
+          el.listenToggle.checked=false;
+          stopListening();
+          el.listenSupportNote.textContent = "Permissão de microfone negada. Ative nas configurações do navegador para usar a escuta por palavra-código.";
+        }
+        /* se a tela estava apagada/segundo plano, não desliga de vez —
+           listening continua true, e o visibilitychange tenta reiniciar
+           quando a tela voltar a ficar acesa */
       }
     };
     recognition.onend = function(){
