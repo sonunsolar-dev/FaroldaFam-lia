@@ -798,7 +798,7 @@
   var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
   var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
 
-  function registrarClienteNoBanco(nome, whatsapp, email, codigo){
+  function registrarClienteNoBanco(nome, whatsapp, email, codigo, callback){
     fetch(SUPABASE_URL+"/rest/v1/clientes", {
       method:"POST",
       headers:{
@@ -808,7 +808,10 @@
         "Prefer": "return=minimal"
       },
       body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, codigo:codigo, plano:"teste", status:"ativo", origem:"site" })
-    }).catch(function(){ /* falha silenciosa — o cliente já tem o código, o cadastro é só registro interno */ });
+    }).then(function(r){
+      if(r.ok){ callback(true); }
+      else { r.text().then(function(txt){ callback(false, txt); }); }
+    }).catch(function(err){ callback(false, String(err)); });
   }
 
   document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
@@ -831,11 +834,23 @@
     if(!whatsapp){ alert("Preencha seu WhatsApp antes de gerar o código."); return; }
     if(!email){ alert("Preencha seu e-mail antes de gerar o código."); return; }
     var codigo = gerarCodigoTeste();
-    document.getElementById('codeOut').textContent = codigo;
-    document.getElementById('codeResult').style.display = 'block';
-    registrarClienteNoBanco(nome, whatsapp, email, codigo);
-    var msg = "Olá! Meu nome é "+nome+", meu e-mail é "+email+" e gerei um código de teste do Farol: "+codigo;
-    document.getElementById('whatsBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
+    var gerarBtn = document.getElementById('gerarBtn');
+    gerarBtn.disabled = true;
+    gerarBtn.textContent = 'Verificando...';
+    registrarClienteNoBanco(nome, whatsapp, email, codigo, function(sucesso, erro){
+      gerarBtn.disabled = false;
+      gerarBtn.textContent = 'Gerar código de teste';
+      if(sucesso){
+        document.getElementById('codeOut').textContent = codigo;
+        document.getElementById('codeResult').style.display = 'block';
+        var msg = "Olá! Meu nome é "+nome+", meu e-mail é "+email+" e gerei um código de teste do Farol: "+codigo;
+        document.getElementById('whatsBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
+      } else if(erro && erro.indexOf('duplicate') !== -1){
+        alert("Parece que este e-mail ou WhatsApp já testou o Farol antes. Se quiser continuar usando, veja a opção de assinatura anual mais abaixo.");
+      } else {
+        alert("Não foi possível gerar seu código agora. Tente novamente em instantes.");
+      }
+    });
   });
 
   document.getElementById('copyBtn').addEventListener('click', function(){
