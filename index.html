@@ -216,52 +216,6 @@
         <b style="color:var(--coral-deep);">Sua assinatura vence em breve.</b> Consulte o <a href="site/manual.html" target="_blank" style="color:var(--coral-deep); font-weight:600;">manual</a> para ver como renovar e continuar protegido sem interrupção.
       </div>
 
-      <!-- MODO CELULAR EM MÃOS -->
-      <section class="card premium">
-        <h2>Modo Celular em Mãos</h2>
-        <div class="listen-row">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Ativar Modo Celular em Mãos</div>
-            <div class="hint" style="margin-top:2px;">Uma terceira forma, ainda mais simples: desbloquear a tela e apertar o botão — pensado para quem tem dificuldade motora ou esquece palavras combinadas com facilidade. Diferente dos outros modos, <b>só funciona com a tela do celular ligada e desbloqueada</b>; se apagar, volta a funcionar assim que for desbloqueada de novo.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="aloneModeToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <button class="btn btn-ghost" id="backToAloneBtn" style="display:none; margin-top:12px;">Voltar à tela do botão</button>
-      </section>
-
-      <!-- MODO AGITAR (RECOMENDADO) -->
-      <section class="card premium" id="pocketModeCard" style="border:2px solid var(--teal);">
-        <h2 style="color:var(--teal-deep);">Modo Agitar — recomendado</h2>
-        <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
-        <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar Modo Agitar agora</button>
-        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque com <b>três dedos ao mesmo tempo</b> e segure por 3 segundos.</p>
-        <p class="hint" style="margin-top:10px; color:var(--coral-deep); font-weight:600;">Antes de usar: vá nas configurações do celular e desative o bloqueio automático de tela (ou deixe no tempo máximo) e a economia de bateria para o navegador. Sem isso, o sistema pode ignorar o travamento de tela do app e desligar mesmo assim.</p>
-      </section>
-
-      <!-- DISFARCE -->
-      <section class="card premium">
-        <h2>Disfarce da tela</h2>
-        <div class="listen-row">
-          <div>
-            <div style="font-weight:600; font-size:14px;">Abrir sempre disfarçado</div>
-            <div class="hint" style="margin-top:2px;">A tela mostra um bloco de notas comum. Digite o código abaixo no campo de busca das notas para revelar o Farol.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="disguiseToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <label for="pinInput">Código para revelar o app real</label>
-        <input type="text" id="pinInput" placeholder="Ex.: 4 a 6 dígitos ou uma palavra" maxlength="12">
-        <button class="btn btn-primary" id="savePinBtn" style="margin-top:10px;">Salvar código</button>
-        <p class="hint" id="pinSaveHint" style="margin-top:6px;"></p>
-        <p class="hint">Ao salvar um código aqui, o app passa a exigir ele sempre que for aberto — mesmo com "Abrir sempre disfarçado" desligado. Isso ajuda a impedir que alguém que ache o link consiga configurar o Farol sem o código.</p>
-        <p class="hint">Se esquecer o código, toque 5 vezes seguidas no título "Notas" para revelar o app mesmo assim.</p>
-      </section>
-
       <!-- NOTIFICAÇÃO AUTOMÁTICA (NTFY) -->
       <section class="card premium">
         <h2>Notificação automática (sem toque)</h2>
@@ -285,24 +239,6 @@
           </label>
         </div>
         <button class="btn btn-ghost" id="stopFollowBtn" style="margin-top:10px;">Parar acompanhamento agora</button>
-      </section>
-
-      <!-- BOTÃO DE PÂNICO -->
-      <section class="card premium">
-        <h2>Alerta manual</h2>
-        <div class="beacon-wrap">
-          <button class="beacon" id="beaconBtn" aria-label="Enviar alerta de emergência">
-            <span class="ring"></span>
-            <span class="ring r2"></span>
-            <span class="ring r3"></span>
-            <span class="beacon-core">
-              <span class="label">SOCORRO</span>
-              <span class="sub">toque para acionar</span>
-            </span>
-          </button>
-          <p class="beacon-caption">Ao tocar, o alerta é enviado imediatamente, sem espera.</p>
-        </div>
-        <p class="hint" style="text-align:center; margin-top:4px;">Para testar o envio, aperte o botão vermelho 3 vezes rapidamente — o mesmo gesto usado para pedir ajuda pela tela escura ou disfarçada.</p>
       </section>
 
       <!-- ESCUTA POR PALAVRA-CÓDIGO -->
@@ -345,6 +281,70 @@
         </div>
         <button class="btn btn-ghost" id="motionPermBtn" style="margin-top:12px; display:none;">Permitir sensor de movimento (iPhone)</button>
         <p class="hint" id="shakeNote" style="margin-top:8px;"></p>
+      </section>
+
+      <!-- DISFARCE -->
+      <section class="card premium">
+        <h2>Disfarce da tela</h2>
+        <div class="listen-row">
+          <div>
+            <div style="font-weight:600; font-size:14px;">Abrir sempre disfarçado</div>
+            <div class="hint" style="margin-top:2px;">A tela mostra um bloco de notas comum. Digite o código abaixo no campo de busca das notas para revelar o Farol.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="disguiseToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <label for="pinInput">Código para revelar o app real</label>
+        <input type="text" id="pinInput" placeholder="Ex.: 4 a 6 dígitos ou uma palavra" maxlength="12">
+        <button class="btn btn-primary" id="savePinBtn" style="margin-top:10px;">Salvar código</button>
+        <p class="hint" id="pinSaveHint" style="margin-top:6px;"></p>
+        <p class="hint">Ao salvar um código aqui, o app passa a exigir ele sempre que for aberto — mesmo com "Abrir sempre disfarçado" desligado. Isso ajuda a impedir que alguém que ache o link consiga configurar o Farol sem o código.</p>
+        <p class="hint">Se esquecer o código, toque 5 vezes seguidas no título "Notas" para revelar o app mesmo assim.</p>
+      </section>
+
+      <!-- MODO AGITAR (RECOMENDADO) -->
+      <section class="card premium" id="pocketModeCard" style="border:2px solid var(--teal);">
+        <h2 style="color:var(--teal-deep);">Modo Agitar — recomendado</h2>
+        <p class="hint" style="color:var(--ink); font-size:13.5px;">Deixe o celular no bolso ou na bolsa. Um toque abaixo já ativa o gesto de agitar e escurece a tela com relógio, imitando um celular bloqueado normal.</p>
+        <button class="btn btn-primary" id="pocketModeBtn" style="margin-top:12px;">Ativar Modo Agitar agora</button>
+        <p class="hint" style="margin-top:8px;">Para sair da tela escura, toque com <b>três dedos ao mesmo tempo</b> e segure por 3 segundos.</p>
+        <p class="hint" style="margin-top:10px; color:var(--coral-deep); font-weight:600;">Antes de usar: vá nas configurações do celular e desative o bloqueio automático de tela (ou deixe no tempo máximo) e a economia de bateria para o navegador. Sem isso, o sistema pode ignorar o travamento de tela do app e desligar mesmo assim.</p>
+      </section>
+
+      <!-- MODO CELULAR EM MÃOS -->
+      <section class="card premium">
+        <h2>Modo Celular em Mãos</h2>
+        <div class="listen-row">
+          <div>
+            <div style="font-weight:600; font-size:14px;">Ativar Modo Celular em Mãos</div>
+            <div class="hint" style="margin-top:2px;">Uma terceira forma, ainda mais simples: desbloquear a tela e apertar o botão — pensado para quem tem dificuldade motora ou esquece palavras combinadas com facilidade. Diferente dos outros modos, <b>só funciona com a tela do celular ligada e desbloqueada</b>; se apagar, volta a funcionar assim que for desbloqueada de novo.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="aloneModeToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button class="btn btn-ghost" id="backToAloneBtn" style="display:none; margin-top:12px;">Voltar à tela do botão</button>
+      </section>
+
+      <!-- BOTÃO DE PÂNICO -->
+      <section class="card premium">
+        <h2>Alerta manual</h2>
+        <div class="beacon-wrap">
+          <button class="beacon" id="beaconBtn" aria-label="Enviar alerta de emergência">
+            <span class="ring"></span>
+            <span class="ring r2"></span>
+            <span class="ring r3"></span>
+            <span class="beacon-core">
+              <span class="label">SOCORRO</span>
+              <span class="sub">toque para acionar</span>
+            </span>
+          </button>
+          <p class="beacon-caption">Ao tocar, o alerta é enviado imediatamente, sem espera.</p>
+        </div>
+        <p class="hint" style="text-align:center; margin-top:4px;">Para testar o envio, aperte o botão vermelho 3 vezes rapidamente — o mesmo gesto usado para pedir ajuda pela tela escura ou disfarçada.</p>
       </section>
 
       <!-- TELA ESCURA -->
