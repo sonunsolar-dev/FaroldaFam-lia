@@ -576,16 +576,13 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
   var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
   var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
 
+  var REGISTRAR_TESTE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-registrar-teste";
+
   function registrarClienteNoBanco(nome, whatsapp, email, codigo, callback){
-    fetch(SUPABASE_URL+"/rest/v1/clientes", {
+    fetch(REGISTRAR_TESTE_URL, {
       method:"POST",
-      headers:{
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": "Bearer "+SUPABASE_ANON_KEY,
-        "Content-Type": "application/json",
-        "Prefer": "return=minimal"
-      },
-      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, codigo:codigo, plano:"teste", status:"pendente", origem:"site" })
+      headers:{ "Content-Type": "application/json" },
+      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, codigo:codigo })
     }).then(function(r){
       if(r.ok){ callback(true); }
       else { r.text().then(function(txt){ callback(false, txt); }); }
@@ -624,6 +621,8 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
         document.getElementById('whatsBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
       } else if(erro && erro.indexOf('duplicate') !== -1){
         alert("Parece que este e-mail ou WhatsApp já testou o Farol antes. Se quiser continuar usando, veja a opção de assinatura anual mais abaixo.");
+      } else if(erro && erro.indexOf('Muitas tentativas') !== -1){
+        alert("Muitas tentativas em pouco tempo. Aguarde um pouco antes de tentar de novo.");
       } else {
         alert("Não foi possível gerar seu código agora. Tente novamente em instantes.");
       }
