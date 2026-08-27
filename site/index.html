@@ -624,7 +624,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       } else if(erro && erro.indexOf('Muitas tentativas') !== -1){
         alert("Muitas tentativas em pouco tempo. Aguarde um pouco antes de tentar de novo.");
       } else {
-        alert("Não foi possível gerar seu código agora. Tente novamente em instantes.");
+        alert("DIAGNÓSTICO (temporário): " + erro);
       }
     });
   });
