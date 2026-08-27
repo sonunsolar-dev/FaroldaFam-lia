@@ -475,15 +475,13 @@
   }
   function planDays(type){ return type==='trial' ? TRIAL_DAYS : FULL_DAYS; }
 
+  var VERIFICAR_CODIGO_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-verificar-codigo";
+
   function verificarCodigoNoBanco(codigo, callback){
-    fetch(SUPABASE_URL+"/rest/v1/rpc/verificar_codigo", {
+    fetch(VERIFICAR_CODIGO_URL, {
       method:"POST",
-      headers:{
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": "Bearer "+SUPABASE_ANON_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ p_codigo: codigo })
+      headers:{ "Content-Type": "application/json" },
+      body: JSON.stringify({ codigo: codigo })
     }).then(function(r){ return r.json(); })
       .then(function(rows){
         if(rows && rows.length>0 && rows[0].valido){
