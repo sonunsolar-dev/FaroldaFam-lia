@@ -67,7 +67,7 @@ function alternarPin(id, btn){
   else { el.type = 'password'; btn.textContent = '👁'; }
 }
 
-function getToken(){ return sessionStorage.getItem('farol_admin_token'); }
+function getToken(){ return localStorage.getItem('farol_admin_token'); }
 
 function mostrarTelaCerta(){
   if(getToken()){
@@ -95,7 +95,7 @@ function login(){
   .then(function(r){ return r.json().then(function(data){ return {ok:r.ok, data:data}; }); })
   .then(function(res){
     if(res.ok && res.data.access_token){
-      sessionStorage.setItem('farol_admin_token', res.data.access_token);
+      localStorage.setItem('farol_admin_token', res.data.access_token);
       statusEl.textContent = '';
       mostrarTelaCerta();
     } else {
@@ -110,7 +110,7 @@ function login(){
 }
 
 function logout(){
-  sessionStorage.removeItem('farol_admin_token');
+  localStorage.removeItem('farol_admin_token');
   mostrarTelaCerta();
 }
 
