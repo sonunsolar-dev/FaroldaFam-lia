@@ -138,7 +138,11 @@ function gerar(){
   })
   .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
   .then(function(res){
-    if(res.status === 401){ logout(); return; }
+    if(res.status === 401){
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'Não autorizado (401): ' + res.txt;
+      return;
+    }
     if(res.ok){
       var data = JSON.parse(res.txt);
       outEl.textContent = data.codigo;
