@@ -338,7 +338,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     <nav>
       <a href="#como-funciona">Como funciona</a>
       <a href="#comprar">Comprar</a>
-      <a href="#profissionais">Profissionais</a>
+      <a href="#profissionais">Afiliados</a>
       <a href="#suporte">Suporte</a>
       <a href="manual.html">Manual</a>
       <a href="#teste">Testar grátis</a>
@@ -525,8 +525,10 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
   <div class="wrap">
     <div class="pro-box">
       <h2 class="display" style="margin-bottom:14px;">Você trabalha com famílias em situações delicadas?</h2>
-      <p style="color:var(--ink-soft); max-width:560px; margin:0 auto 24px; font-size: 15px;">Psicólogos, advogados de família, assistentes sociais e ONGs de apoio podem oferecer o Farol como mais um recurso para quem atendem. Conversamos sobre parceria, condições especiais e material de apoio.</p>
-      <a class="btn btn-primary" id="parceriaBtn" href="#" target="_blank">Quero saber sobre parceria</a>
+      <p style="color:var(--ink-soft); max-width:560px; margin:0 auto 24px; font-size: 15px;">Psicólogos, advogados de família, assistentes sociais e ONGs de apoio podem se tornar <b>Afiliados Kiwify</b> do Farol — indicando pros próprios clientes com <b>45% de comissão</b> por venda, material de apoio pronto, e condições especiais.</p>
+      <a class="btn btn-primary" href="afiliados.html" target="_blank" style="margin-bottom:12px;">Área de Afiliados KIWIFI</a>
+      <br>
+      <a class="btn btn-outline" href="https://ajuda.kiwify.com.br/pt-br/category/afiliados-18psomu/" target="_blank">Parceiros conheçam a KIWIFI</a>
     </div>
   </div>
 </section>
@@ -538,7 +540,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     <details><summary>Preciso pagar para testar?</summary><p>Não. O período de teste de 30 dias é totalmente gratuito, sem necessidade de cartão de crédito.</p></details>
     <details><summary>Alguém vai perceber que estou usando?</summary><p>O Farol foi pensado para funcionar de forma discreta. Detalhes de como isso funciona ficam disponíveis no link Manual Completo no final da página.</p></details>
     <details><summary>Uso Samsung, preciso de algum ajuste extra?</summary><p>Sim: vale desativar o gesto "Deslizar a lateral da mão para capturar" (Configurações > Recursos avançados > Movimentos e gestos). Em alguns modelos, um deslize com 3 dedos também aciona essa função e pode interromper a tela discreta do Farol.</p></details>
-    <details><summary>O que acontece depois dos 30 dias?</summary><p>Você tem a opção de comprar a assinatura anual que libera todos os recursos, com renovação automática — sem precisar configurar nada de novo a cada ano.</p></details>
+    <details><summary>O que acontece depois dos 30 dias?</summary><p>Se fizer sentido continuar, você assina o acesso anual por R$ 99,00/ano a vista ou até em 12 parcelas fixas no cartão, com renovação simples bastando fazer o mesmo processo de aquisição de uma licença anual. Se não, o teste simplesmente encerra — sem cobrança automática.</p></details>
     <details><summary>Como cancelo ou troco o cartão da assinatura?</summary><p>A cada renovação, a Kiwify manda um e-mail "Pagamento de assinatura aprovado" com um botão para gerenciar, cancelar ou trocar o cartão. Também dá pra acessar direto em dashboard.kiwify.com.br/minhas-compras, com o mesmo e-mail da compra.</p></details>
   </div>
 </section>
@@ -570,7 +572,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
   var SELLER_WHATSAPP = "5547997220734";
   var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/uG4J81J";
   var APP_URL = "https://sonunsolar-dev.github.io/FaroldaFam-lia/";
-  var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre parceria com o Farol.";
+  var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre me tornar um parceiro afiliado do Farol.";
   var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
   var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
 
@@ -590,7 +592,6 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     }).catch(function(err){ callback(false, String(err)); });
   }
 
-  document.getElementById('parceriaBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(PARTNER_MESSAGE);
   document.getElementById('suporteBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent("Olá! Sou cliente do Farol e preciso de ajuda.");
   document.getElementById('comprarBtn').href = KIWIFY_CHECKOUT_URL;
   document.getElementById('instalarBtn').href = APP_URL;
