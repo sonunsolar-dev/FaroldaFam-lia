@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Seja Afiliado do Farol — Kiwify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+:root{
+  --bg:#07111f; --surface:#101d2f; --white:#f7fbff; --muted:#9cafc2;
+  --line:rgba(255,255,255,.09); --blue:#4da3ff; --cyan:#29d7d0; --red:#ff5d6c;
+  --shadow:0 25px 70px rgba(0,0,0,.28); --radius:28px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;color:var(--white);font-family:'DM Sans',sans-serif;line-height:1.7;
+  background:
+    radial-gradient(circle at 10% -5%,rgba(77,163,255,.20),transparent 27%),
+    radial-gradient(circle at 92% 8%,rgba(41,215,208,.13),transparent 25%),
+    linear-gradient(180deg,#07111f 0%,#091525 48%,#07111f 100%);
+  -webkit-font-smoothing:antialiased;
+}
+.display{font-family:'Manrope',sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:60px 25px 80px}
+h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacing:-.04em;margin:0 0 6px;text-align:center}
+.sub{text-align:center;color:var(--muted);font-size:15px;margin:0 0 34px}
+.commission{
+  text-align:center;background:linear-gradient(135deg,rgba(41,215,208,.14),rgba(77,163,255,.06));
+  border:1px solid rgba(41,215,208,.28);border-radius:24px;padding:28px;margin-bottom:36px;
+}
+.commission .n{font-family:'Manrope',sans-serif;font-size:56px;font-weight:800;color:#6eece4;line-height:1}
+.commission .d{color:var(--muted);font-size:14px;margin-top:6px}
+.box{
+  background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:20px;
+  padding:26px 28px;margin-bottom:20px;
+}
+.box h3{margin:0 0 10px;font-size:17px;color:#f5f9ff}
+.box p{margin:0;color:var(--muted);font-size:14.5px}
+.warn{border-color:rgba(255,93,108,.28);background:rgba(255,93,108,.06)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;width:100%;max-width:340px;
+  min-height:55px;padding:15px 25px;margin:30px auto 0;border:0;border-radius:15px;
+  text-decoration:none;font:700 15px 'DM Sans',sans-serif;color:#04101d;
+  background:linear-gradient(110deg,#61b1ff 0%,#35ded5 100%);
+}
+.center{text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="display">Seja Afiliado Kiwify do Farol</h1>
+  <p class="sub">Um programa fechado, por convite, para profissionais que trabalham com famílias em situações delicadas.</p>
 
+  <div class="commission">
+    <div class="n">45%</div>
+    <div class="d">de comissão por venda aprovada — pago automaticamente pela Kiwify</div>
+  </div>
+
+  <div class="box">
+    <h3>Como indicar</h3>
+    <p>O Farol é indicado de forma pessoal, não por anúncios públicos ou redes sociais. Funciona melhor quando você apresenta a ferramenta individualmente, durante o atendimento, para a família ou pessoa que já está acompanhando — como mais um recurso de apoio, não como uma campanha de marketing.</p>
+  </div>
+
+  <div class="box warn">
+    <h3>Cuidado com a linguagem</h3>
+    <p>Use sempre termos neutros ao falar do produto: "segurança e bem-estar familiar", "pessoa vulnerável em casa", "idosos e pessoas com deficiência". Evite mencionar publicamente termos como "violência doméstica" ou "botão de pânico contra agressor" em qualquer material compartilhado abertamente (posts, grupos, sites) — isso pode expor a pessoa que mais precisamos proteger.</p>
+  </div>
+
+  <div class="box">
+    <h3>Para onde direcionar</h3>
+    <p>Direcione o interessado para o teste grátis de 30 dias no site oficial do Farol, onde encontra todas as informações com cuidado, sem precisar de cadastro complicado.</p>
+  </div>
+
+  <div class="center">
+    <a class="btn" id="waBtn" href="#" target="_blank">Quero receber meu link de afiliado</a>
+  </div>
+</div>
+
+<script>
+  var SELLER_WHATSAPP = "5547997220734";
+  var msg = "Olá! Vi a página de afiliados do Farol e quero receber meu link de afiliação (comissão de 45%).";
+  document.getElementById('waBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
+</script>
+</body>
+</html>
