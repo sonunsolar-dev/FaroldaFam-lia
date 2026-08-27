@@ -16,47 +16,105 @@
   input, select{width:100%; padding:10px 12px; border:1.5px solid #ddd; border-radius:8px; font-size:15px; box-sizing:border-box;}
   .status{font-size:13px; margin-top:10px; text-align:center; min-height:18px;}
   .navlink{display:block; margin-top:18px; font-size:13px; color:#0E6E66; font-weight:600; text-decoration:none;}
+  #logoutBtn{background:#999; margin-top:8px;}
 </style>
 </head>
 <body>
   <h2>Gerador de código — Farol</h2>
-  <p style="font-size:13px; color:#666;">Protegido por PIN. Ainda assim, evite compartilhar este link.</p>
 
-  <div class="box">
-    <label for="pin">PIN de acesso</label>
+  <div id="loginBox" class="box">
+    <label for="loginEmail">E-mail</label>
+    <input type="email" id="loginEmail" placeholder="seu@email.com">
+    <label for="loginSenha">Senha</label>
     <div style="position:relative;">
-      <input type="password" id="pin" placeholder="Seu PIN" style="padding-right:44px;">
-      <button type="button" onclick="alternarPin('pin', this)" style="position:absolute; right:4px; top:4px; width:36px; height:calc(100% - 8px); padding:0; margin:0; background:transparent; color:#666; font-size:16px;">👁</button>
+      <input type="password" id="loginSenha" placeholder="Sua senha" style="padding-right:44px;">
+      <button type="button" onclick="alternarPin('loginSenha', this)" style="position:absolute; right:4px; top:4px; width:36px; height:calc(100% - 8px); padding:0; margin:0; background:transparent; color:#666; font-size:16px;">👁</button>
     </div>
-    <label for="nome">Nome do cliente</label>
-    <input type="text" id="nome" placeholder="Nome completo">
-    <label for="whatsapp">WhatsApp do cliente</label>
-    <input type="tel" id="whatsapp" placeholder="55479XXXXXXXX">
-    <label for="email">E-mail do cliente (mesmo da compra na Kiwify)</label>
-    <input type="email" id="email" placeholder="cliente@exemplo.com">
-    <label for="plano">Tipo de código</label>
-    <select id="plano">
-      <option value="anual">Definitivo (assinatura anual)</option>
-      <option value="teste">Teste (30 dias)</option>
-    </select>
-    <button onclick="gerar()">Gerar e salvar código</button>
-    <div class="code" id="out"></div>
-    <div class="status" id="status"></div>
+    <button onclick="login()">Entrar</button>
+    <div class="status" id="loginStatus"></div>
+  </div>
+
+  <div id="appBox" style="display:none;">
+    <div class="box">
+      <label for="nome">Nome do cliente</label>
+      <input type="text" id="nome" placeholder="Nome completo">
+      <label for="whatsapp">WhatsApp do cliente</label>
+      <input type="tel" id="whatsapp" placeholder="55479XXXXXXXX">
+      <label for="email">E-mail do cliente (mesmo da compra na Kiwify)</label>
+      <input type="email" id="email" placeholder="cliente@exemplo.com">
+      <label for="plano">Tipo de código</label>
+      <select id="plano">
+        <option value="anual">Definitivo (assinatura anual)</option>
+        <option value="teste">Teste (30 dias)</option>
+      </select>
+      <button onclick="gerar()">Gerar e salvar código</button>
+      <div class="code" id="out"></div>
+      <div class="status" id="status"></div>
+    </div>
+    <button id="logoutBtn" onclick="logout()">Sair</button>
   </div>
 
   <a class="navlink" href="clientes.html">Ver todos os cadastros →</a>
 
 <script>
+var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+var GERAR_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-gerar-codigo";
+
 function alternarPin(id, btn){
   var el = document.getElementById(id);
   if(el.type === 'password'){ el.type = 'text'; btn.textContent = '🙈'; }
   else { el.type = 'password'; btn.textContent = '👁'; }
 }
 
-var FUNCTION_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-gerar-codigo";
+function getToken(){ return sessionStorage.getItem('farol_admin_token'); }
+
+function mostrarTelaCerta(){
+  if(getToken()){
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('appBox').style.display = 'block';
+  } else {
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('appBox').style.display = 'none';
+  }
+}
+mostrarTelaCerta();
+
+function login(){
+  var email = document.getElementById('loginEmail').value.trim();
+  var senha = document.getElementById('loginSenha').value;
+  var statusEl = document.getElementById('loginStatus');
+  statusEl.style.color = '#888';
+  statusEl.textContent = 'Entrando...';
+
+  fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: senha })
+  })
+  .then(function(r){ return r.json().then(function(data){ return {ok:r.ok, data:data}; }); })
+  .then(function(res){
+    if(res.ok && res.data.access_token){
+      sessionStorage.setItem('farol_admin_token', res.data.access_token);
+      statusEl.textContent = '';
+      mostrarTelaCerta();
+    } else {
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'E-mail ou senha incorretos.';
+    }
+  })
+  .catch(function(err){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Falha de conexão: ' + err;
+  });
+}
+
+function logout(){
+  sessionStorage.removeItem('farol_admin_token');
+  mostrarTelaCerta();
+}
 
 function gerar(){
-  var pin = document.getElementById('pin').value.trim();
   var nome = document.getElementById('nome').value.trim();
   var whatsapp = document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
   var email = document.getElementById('email').value.trim();
@@ -64,8 +122,8 @@ function gerar(){
   var statusEl = document.getElementById('status');
   var outEl = document.getElementById('out');
 
-  if(!pin || !nome || !whatsapp || !email){
-    alert('Preencha todos os campos, incluindo o PIN.');
+  if(!nome || !whatsapp || !email){
+    alert('Preencha todos os campos.');
     return;
   }
 
@@ -73,13 +131,14 @@ function gerar(){
   statusEl.style.color = '#888';
   statusEl.textContent = 'Gerando...';
 
-  fetch(FUNCTION_URL, {
+  fetch(GERAR_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ pin:pin, nome:nome, whatsapp:whatsapp, email:email, plano:plano })
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, plano:plano })
   })
-  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, txt:txt}; }); })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
   .then(function(res){
+    if(res.status === 401){ logout(); return; }
     if(res.ok){
       var data = JSON.parse(res.txt);
       outEl.textContent = data.codigo;
