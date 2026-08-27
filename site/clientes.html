@@ -146,7 +146,11 @@ function listar(){
   })
   .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
   .then(function(res){
-    if(res.status === 401){ logout(); return; }
+    if(res.status === 401){
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'Não autorizado (401): ' + res.txt;
+      return;
+    }
     if(res.ok){
       var lista = JSON.parse(res.txt);
       body.innerHTML = '';
@@ -194,7 +198,12 @@ function aprovar(codigo, btn){
   })
   .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
   .then(function(res){
-    if(res.status === 401){ logout(); return; }
+    if(res.status === 401){
+      alert('Não autorizado (401): ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Aprovar';
+      return;
+    }
     if(res.ok){ listar(); }
     else {
       alert('Erro ao aprovar: ' + res.txt);
@@ -220,7 +229,12 @@ function reprovar(codigo, btn){
   })
   .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
   .then(function(res){
-    if(res.status === 401){ logout(); return; }
+    if(res.status === 401){
+      alert('Não autorizado (401): ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Reprovar';
+      return;
+    }
     if(res.ok){ listar(); }
     else {
       alert('Erro ao reprovar: ' + res.txt);
