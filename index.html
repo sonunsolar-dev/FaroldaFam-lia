@@ -6,12 +6,12 @@
 <meta name="theme-color" content="#0E6E66">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Farol">
+<meta name="apple-mobile-web-app-title" content="SOS Farol">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Farol — Alerta Familiar</title>
+<title>SOS Farol — Alerta Familiar</title>
 <style>
   :root{
     --ink:#10262B;
@@ -192,7 +192,7 @@
           <circle cx="20" cy="20" r="12" stroke="#0E6E66" stroke-width="1.5" opacity="0.55"/>
           <circle cx="20" cy="20" r="5" fill="#E1543E"/>
         </svg>
-        <h1 class="display">Farol</h1>
+        <h1 class="display">SOS Farol</h1>
       </div>
       <p class="tag">Agite o celular pra pedir ajuda sem precisar olhar pra tela — ou use a palavra-código e o botão manual como alternativa.</p>
     </header>
@@ -202,7 +202,7 @@
       <!-- ATIVAÇÃO -->
       <section class="card" id="activationCard">
         <h2>Ativar recursos completos</h2>
-        <p class="hint">Todos os recursos do Farol — botão de emergência, Modo Agitar, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
+        <p class="hint">Todos os recursos do SOS Farol — botão de emergência, Modo Agitar, disfarce, escuta por voz, agito, notificação automática e tela escura — ficam liberados com um código de ativação.</p>
         <label for="activationInput">Código de ativação</label>
         <input type="text" id="activationInput" placeholder="Ex.: FAROL-123456">
         <button class="btn btn-primary" id="activateBtn" style="margin-top:10px;">Ativar</button>
@@ -219,7 +219,7 @@
       <!-- NOTIFICAÇÃO AUTOMÁTICA (NTFY) -->
       <section class="card premium">
         <h2>Notificação automática (sem toque)</h2>
-        <p class="hint">O Farol avisa a família instantaneamente, sem precisar confirmar nada — usando o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid). É só a família instalar o app e "assinar" o mesmo código de canal abaixo.</p>
+        <p class="hint">O SOS Farol avisa a família instantaneamente, sem precisar confirmar nada — usando o app gratuito <b>ntfy</b> (Google Play, App Store ou F-Droid). É só a família instalar o app e "assinar" o mesmo código de canal abaixo.</p>
         <label for="ntfyTopicInput">Código do canal (como uma senha, não deixe óbvio)</label>
         <input type="text" id="ntfyTopicInput" placeholder="Ex.: farol-8f3k2x9q">
         <div style="display:flex; gap:8px; margin-top:10px;">
@@ -289,7 +289,7 @@
         <div class="listen-row">
           <div>
             <div style="font-weight:600; font-size:14px;">Abrir sempre disfarçado</div>
-            <div class="hint" style="margin-top:2px;">A tela mostra um bloco de notas comum. Digite o código abaixo no campo de busca das notas para revelar o Farol.</div>
+            <div class="hint" style="margin-top:2px;">A tela mostra um bloco de notas comum. Digite o código abaixo no campo de busca das notas para revelar o SOS Farol.</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="disguiseToggle">
@@ -300,7 +300,7 @@
         <input type="text" id="pinInput" placeholder="Ex.: 4 a 6 dígitos ou uma palavra" maxlength="12">
         <button class="btn btn-primary" id="savePinBtn" style="margin-top:10px;">Salvar código</button>
         <p class="hint" id="pinSaveHint" style="margin-top:6px;"></p>
-        <p class="hint">Ao salvar um código aqui, o app passa a exigir ele sempre que for aberto — mesmo com "Abrir sempre disfarçado" desligado. Isso ajuda a impedir que alguém que ache o link consiga configurar o Farol sem o código.</p>
+        <p class="hint">Ao salvar um código aqui, o app passa a exigir ele sempre que for aberto — mesmo com "Abrir sempre disfarçado" desligado. Isso ajuda a impedir que alguém que ache o link consiga configurar o SOS Farol sem o código.</p>
         <p class="hint">Se esquecer o código, toque 5 vezes seguidas no título "Notas" para revelar o app mesmo assim.</p>
       </section>
 
@@ -657,7 +657,7 @@
     var now = Date.now();
     if(now - lastNtfySend < 5000){ if(callback) callback(false); return; }
     lastNtfySend = now;
-    var title = kind==='test' ? 'FAROL TESTE' : (kind==='tracking' ? 'FAROL (acompanhando)' : 'FAROL');
+    var title = kind==='test' ? 'SOS FAROL TESTE' : (kind==='tracking' ? 'SOS FAROL (acompanhando)' : 'SOS FAROL');
     var priority = kind==='tracking' ? 'low' : (kind==='test' ? 'default' : 'urgent');
     var body = loc ? ('https://maps.google.com/?q='+loc.lat+','+loc.lng) : 'Localizacao indisponivel';
     fetch('https://ntfy.sh/'+encodeURIComponent(state.ntfyTopic), {
