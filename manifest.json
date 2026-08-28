@@ -1,6 +1,6 @@
 {
-  "name": "Farol",
-  "short_name": "Farol",
+  "name": "SOS Farol",
+  "short_name": "SOS Farol",
   "start_url": "./",
   "display": "fullscreen",
   "background_color": "#F1F6F4",
