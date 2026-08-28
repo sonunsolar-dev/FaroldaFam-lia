@@ -313,6 +313,38 @@
         <p class="hint" style="margin-top:10px; color:var(--coral-deep); font-weight:600;">Antes de usar: vá nas configurações do celular e desative o bloqueio automático de tela (ou deixe no tempo máximo) e a economia de bateria para o navegador. Sem isso, o sistema pode ignorar o travamento de tela do app e desligar mesmo assim.</p>
       </section>
 
+      <!-- GRAVAÇÃO DE ÁUDIO NO ALERTA -->
+      <section class="card premium">
+        <h2>Gravação de áudio no alerta (opcional)</h2>
+        <div class="listen-row">
+          <div>
+            <div style="font-weight:600; font-size:14px;">Gravar 10 segundos de áudio ao acionar um alerta real</div>
+            <div class="hint" style="margin-top:2px;">Além do aviso de sempre, a família recebe um áudio curto do ambiente — útil pra dar mais contexto numa emergência real, ou pra você avisar "foi engano" se acionou sem querer. Desligado por padrão.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="audioToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="warn" style="margin-top:12px;"><b>Para que este recurso foi criado:</b> única e exclusivamente para a pessoa vulnerável que está sozinha em casa e quer mandar uma mensagem de voz urgente pros seus responsáveis. Não indicamos nenhum outro uso.</div>
+      </section>
+
+      <!-- AVISO DE BATERIA BAIXA -->
+      <section class="card premium">
+        <h2>Aviso de bateria baixa</h2>
+        <div class="listen-row">
+          <div>
+            <div style="font-weight:600; font-size:14px;">Avisar a família se a bateria ficar baixa</div>
+            <div class="hint" style="margin-top:2px;">Manda um aviso discreto (sem som, sem interromper nada) pro mesmo canal do ntfy quando a bateria cair abaixo de 15% sem estar carregando — assim a família sabe que precisa lembrar de carregar o celular. Só funciona no Android/Chrome; o iPhone não permite ler o nível da bateria pelo navegador.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="batteryToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <p class="hint" id="batteryNote" style="margin-top:8px;"></p>
+      </section>
+
       <!-- MODO CELULAR EM MÃOS -->
       <section class="card premium">
         <h2>Modo Celular em Mãos</h2>
@@ -407,7 +439,7 @@
   var defaultState = {
     codeword:"socorro", log:[],
     disguiseOn:false, pin:"", shakeOn:false, ntfyTopic:"", followMeOn:true, activated:false, activationType:null, activatedAt:null,
-    activationCode:null, serverExpiracao:null, lastServerCheck:0, lastAlertConfirmed:false, aloneMode:false, listenOn:false
+    activationCode:null, serverExpiracao:null, lastServerCheck:0, lastAlertConfirmed:false, aloneMode:false, listenOn:false, batteryOn:false, audioOn:false
   };
   var state = loadState();
 
@@ -451,7 +483,9 @@
     aloneModeToggle:document.getElementById('aloneModeToggle'), aloneScreen:document.getElementById('aloneScreen'),
     aloneBeaconBtn:document.getElementById('aloneBeaconBtn'), aloneSettingsBtn:document.getElementById('aloneSettingsBtn'),
     backToAloneBtn:document.getElementById('backToAloneBtn'), aloneStatus:document.getElementById('aloneStatus'),
-    pocketModeCard:document.getElementById('pocketModeCard'), darkScreenCard:document.getElementById('darkScreenCard')
+    pocketModeCard:document.getElementById('pocketModeCard'), darkScreenCard:document.getElementById('darkScreenCard'),
+    batteryToggle:document.getElementById('batteryToggle'), batteryNote:document.getElementById('batteryNote'),
+    audioToggle:document.getElementById('audioToggle')
   };
 
   var TRIAL_DAYS = 30;
@@ -625,9 +659,74 @@
     el.aloneModeToggle.checked=state.aloneMode;
     el.backToAloneBtn.style.display = state.aloneMode ? 'block' : 'none';
     el.listenToggle.checked=state.listenOn;
+    el.batteryToggle.checked=state.batteryOn;
+    el.audioToggle.checked=state.audioOn;
     renderLog();
   }
   fillForm();
+
+  el.audioToggle.addEventListener('change', function(){
+    state.audioOn = el.audioToggle.checked;
+    saveState();
+  });
+
+  function gravarEEnviarAudio(){
+    if(!state.audioOn || !state.ntfyTopic) return;
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+      var chunks = [];
+      var recorder;
+      try{ recorder = new MediaRecorder(stream); }catch(e){ stream.getTracks().forEach(function(t){t.stop();}); return; }
+      recorder.ondataavailable = function(e){ if(e.data && e.data.size>0) chunks.push(e.data); };
+      recorder.onstop = function(){
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        var blob = new Blob(chunks, {type: recorder.mimeType || 'audio/webm'});
+        fetch('https://ntfy.sh/'+encodeURIComponent(state.ntfyTopic), {
+          method:'PUT',
+          headers:{
+            'Filename': 'audio-alerta.webm',
+            'Title': 'SOS FAROL (áudio do ambiente)',
+            'Priority': 'low'
+          },
+          body: blob
+        }).catch(function(){});
+      };
+      recorder.start();
+      setTimeout(function(){ if(recorder.state!=='inactive') recorder.stop(); }, 10000);
+    }).catch(function(){ /* microfone indisponível ou permissão negada — falha silenciosa */ });
+  }
+
+  var lowBatteryAlertado = false;
+  function checarBateria(){
+    if(!state.batteryOn) return;
+    if(!navigator.getBattery){
+      el.batteryNote.textContent = "Este navegador não permite ler o nível da bateria (comum no Safari/iPhone).";
+      return;
+    }
+    navigator.getBattery().then(function(battery){
+      function avaliar(){
+        var nivel = Math.round(battery.level*100);
+        if(!battery.charging && nivel<=15){
+          if(!lowBatteryAlertado){
+            lowBatteryAlertado = true;
+            sendNtfy('bateria', null);
+          }
+        } else if(battery.charging || nivel>25){
+          lowBatteryAlertado = false;
+        }
+      }
+      avaliar();
+      battery.addEventListener('levelchange', avaliar);
+      battery.addEventListener('chargingchange', avaliar);
+    }).catch(function(){});
+  }
+  el.batteryToggle.addEventListener('change', function(){
+    state.batteryOn = el.batteryToggle.checked;
+    saveState();
+    el.batteryNote.textContent = state.batteryOn ? "Ativado." : "";
+    if(state.batteryOn) checarBateria();
+  });
+  if(state.batteryOn) checarBateria();
 
   el.saveBtn.addEventListener('click', function(){
     state.codeword=el.codeword.value.trim();
@@ -657,12 +756,13 @@
     var now = Date.now();
     if(now - lastNtfySend < 5000){ if(callback) callback(false); return; }
     lastNtfySend = now;
-    var title = kind==='test' ? 'SOS FAROL TESTE' : (kind==='tracking' ? 'SOS FAROL (acompanhando)' : 'SOS FAROL');
-    var priority = kind==='tracking' ? 'low' : (kind==='test' ? 'default' : 'urgent');
-    var body = loc ? ('https://maps.google.com/?q='+loc.lat+','+loc.lng) : 'Localizacao indisponivel';
+    var title = kind==='test' ? 'SOS FAROL TESTE' : (kind==='tracking' ? 'SOS FAROL (acompanhando)' : (kind==='bateria' ? 'SOS FAROL (bateria baixa)' : 'SOS FAROL'));
+    var priority = (kind==='tracking' || kind==='bateria') ? 'low' : (kind==='test' ? 'default' : 'urgent');
+    var tags = kind==='bateria' ? 'battery' : 'rotating_light';
+    var body = kind==='bateria' ? 'A bateria do celular está baixa e não está carregando.' : (loc ? ('https://maps.google.com/?q='+loc.lat+','+loc.lng) : 'Localizacao indisponivel');
     fetch('https://ntfy.sh/'+encodeURIComponent(state.ntfyTopic), {
       method:'POST',
-      headers:{ 'Title': title, 'Priority': priority, 'Tags': 'rotating_light' },
+      headers:{ 'Title': title, 'Priority': priority, 'Tags': tags },
       body: body
     }).then(function(){
       addLog(kind, kind==='tracking' ? 'ntfy (localização)' : 'ntfy (automático)');
@@ -838,7 +938,7 @@
           }
         }
       });
-      if(kind!=='test'){ startFollowMe(); }
+      if(kind!=='test'){ startFollowMe(); gravarEEnviarAudio(); }
       setStatus('ready','Sistema pronto');
       if(!wasDarkBeforeAlert && shouldHide()){ showDisguise(); }
       lastAlertCompleted = Date.now();
