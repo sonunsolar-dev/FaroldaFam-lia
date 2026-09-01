@@ -33,7 +33,7 @@
     </div>
 
     <h2>O que o app envia quando um alerta é disparado</h2>
-    <p>Ao acionar um alerta (por toque na tela, palavra-código ou gesto de agitar), o SOS Farol grava <b>alguns segundos de áudio</b> do ambiente e captura a <b>localização do celular (GPS)</b>. Esse áudio e essa localização são enviados pela internet para o <b>ntfy.sh</b> — um serviço público e gratuito de notificações — no <b>tópico (canal) que você mesmo criou</b> na configuração. Quem recebe é apenas quem você adicionou a esse canal no app de mensagens da família. Os envios de localização do <b>MODO RUA</b> (acompanhamento contínuo depois de um alerta) usam esse mesmo canal.</p>
+    <p>Ao acionar um alerta (por toque na tela, palavra-código ou gesto de agitar), o SOS Farol grava <b>alguns segundos de áudio</b> do ambiente e captura a <b>localização do celular (GPS)</b>. Esse áudio e essa localização são enviados pela internet para o <b>ntfy.sh</b> — um serviço público e gratuito de notificações — no <b>tópico (canal) que você mesmo criou</b> na configuração. Quem recebe é apenas quem você adicionou a esse canal no app de mensagens da família. Os envios de localização do <b>MODO RUA</b> usam esse mesmo canal (ntfy.sh).</p>
 
     <h2>O que o app envia na ativação e no teste</h2>
     <p>Quando você digita o código de ativação, o app envia para o <b>Supabase</b> (um serviço de banco de dados) o <b>código</b>, um <b>identificador do aparelho (device_id)</b> e os dados que você preencheu (<b>nome, WhatsApp e e-mail</b>). Isso serve só para conferir se o código é válido e quantos dias de teste ainda restam.</p>
