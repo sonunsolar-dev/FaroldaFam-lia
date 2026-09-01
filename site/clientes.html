@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E6E66">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Clientes SOS Farol">
+<title>Cadastros — SOS Farol</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; max-width:900px; margin:40px auto; color:#10262B; padding:0 20px;}
+  h2{text-align:center;}
+  .box{border:1px solid #ddd; border-radius:12px; padding:20px; margin-top:20px; text-align:left; max-width:460px; margin-left:auto; margin-right:auto;}
+  label{display:block; font-size:13px; font-weight:600; margin:10px 0 4px;}
+  input{width:100%; padding:10px 12px; border:1.5px solid #ddd; border-radius:8px; font-size:15px; box-sizing:border-box;}
+  button{padding:13px 20px; font-size:15px; border-radius:10px; border:none; color:#fff; cursor:pointer; width:100%; background:#0E6E66; margin-top:14px;}
+  #logoutBtn{background:#999; max-width:460px; margin:14px auto 0; display:block;}
+  .status{font-size:13px; margin-top:10px; text-align:center; min-height:18px;}
+  .navlink{display:block; margin-top:18px; font-size:13px; color:#0E6E66; font-weight:600; text-decoration:none; text-align:center;}
+  table{width:100%; border-collapse:collapse; margin-top:16px; font-size:13px;}
+  th, td{text-align:left; padding:8px 6px; border-bottom:1px solid #eee; white-space:nowrap;}
+  th{background:#F4F7F6; font-size:11px; text-transform:uppercase; color:#666;}
+  .tag{display:inline-block; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;}
+  .tag.ativo{background:#E6F4F1; color:#0E6E66;}
+  .tag.cancelado{background:#FBEAE8; color:#B93F2E;}
+  .tag.expirado{background:#F1EFE7; color:#8a7d5c;}
+  .tag.pendente{background:#FCF3E3; color:#C98A2C;}
+  .tablewrap{overflow-x:auto;}
+  .btn-aprovar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; background:#C98A2C;}
+  .btn-reprovar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; margin-left:6px; background:#B93F2E;}
+</style>
+</head>
+<body>
+  <h2>Cadastros — SOS Farol</h2>
+
+  <div id="loginBox" class="box">
+    <label for="loginEmail">E-mail</label>
+    <input type="email" id="loginEmail" placeholder="seu@email.com">
+    <label for="loginSenha">Senha</label>
+    <div style="position:relative;">
+      <input type="password" id="loginSenha" placeholder="Sua senha" style="padding-right:44px;">
+      <button type="button" onclick="alternarPin('loginSenha', this)" style="position:absolute; right:4px; top:4px; width:36px; height:calc(100% - 8px); padding:0; margin:0; background:transparent; color:#666; font-size:16px;">👁</button>
+    </div>
+    <button onclick="login()">Entrar</button>
+    <div class="status" id="loginStatus"></div>
+  </div>
+
+  <div id="appBox" style="display:none;">
+    <div class="box">
+      <button onclick="listar()">Ver todos os cadastros</button>
+      <div class="status" id="status"></div>
+      <div class="tablewrap">
+        <table id="tabela" style="display:none;">
+          <thead>
+            <tr>
+              <th>Nome</th><th>WhatsApp</th><th>E-mail</th><th>Código</th><th>Plano</th><th>Status</th><th>Origem</th><th>Emissão</th><th>Expiração</th><th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <button id="logoutBtn" onclick="logout()">Sair</button>
+  </div>
+
+  <a class="navlink" href="gerador.html">← Gerar novo código</a>
+
+<script>
+var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+var LISTAR_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-listar-clientes";
+var APROVAR_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co/functions/v1/farol-aprovar-cliente";
+
+function alternarPin(id, btn){
+  var el = document.getElementById(id);
+  if(el.type === 'password'){ el.type = 'text'; btn.textContent = '🙈'; }
+  else { el.type = 'password'; btn.textContent = '👁'; }
+}
+
+function getToken(){ return localStorage.getItem('farol_admin_token'); }
+
+function mostrarTelaCerta(){
+  if(getToken()){
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('appBox').style.display = 'block';
+  } else {
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('appBox').style.display = 'none';
+  }
+}
+mostrarTelaCerta();
+
+function login(){
+  var email = document.getElementById('loginEmail').value.trim();
+  var senha = document.getElementById('loginSenha').value;
+  var statusEl = document.getElementById('loginStatus');
+  statusEl.style.color = '#888';
+  statusEl.textContent = 'Entrando...';
+
+  fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: senha })
+  })
+  .then(function(r){ return r.json().then(function(data){ return {ok:r.ok, data:data}; }); })
+  .then(function(res){
+    if(res.ok && res.data.access_token){
+      localStorage.setItem('farol_admin_token', res.data.access_token);
+      statusEl.textContent = '';
+      mostrarTelaCerta();
+    } else {
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'E-mail ou senha incorretos.';
+    }
+  })
+  .catch(function(err){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Falha de conexão: ' + err;
+  });
+}
+
+function logout(){
+  localStorage.removeItem('farol_admin_token');
+  mostrarTelaCerta();
+}
+
+function escapeHtml(texto){
+  var div = document.createElement('div');
+  div.textContent = texto == null ? '' : String(texto);
+  return div.innerHTML;
+}
+
+function fmtData(iso){
+  if(!iso) return '—';
+  var d = new Date(iso);
+  return d.toLocaleDateString('pt-BR');
+}
+
+function listar(){
+  var statusEl = document.getElementById('status');
+  var tabela = document.getElementById('tabela');
+  var body = document.getElementById('tabelaBody');
+
+  statusEl.style.color = '#888';
+  statusEl.textContent = 'Carregando...';
+  tabela.style.display = 'none';
+
+  fetch(LISTAR_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify({})
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
+  .then(function(res){
+    if(res.status === 401){
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'Não autorizado (401): ' + res.txt;
+      return;
+    }
+    if(res.ok){
+      var lista = JSON.parse(res.txt);
+      body.innerHTML = '';
+      lista.forEach(function(c){
+        var tr = document.createElement('tr');
+        var codigoSeguro = escapeHtml(c.codigo).replace(/'/g, '&#39;');
+        var acaoHtml = '—';
+        if(c.status === 'pendente'){
+          acaoHtml = '<button class="btn-aprovar" onclick="aprovar(\'' + codigoSeguro + '\', this)">Aprovar</button>' +
+                     '<button class="btn-reprovar" onclick="reprovar(\'' + codigoSeguro + '\', this)">Reprovar</button>';
+        }
+        tr.innerHTML =
+          '<td>'+escapeHtml(c.nome)+'</td>'+
+          '<td>'+escapeHtml(c.whatsapp)+'</td>'+
+          '<td>'+escapeHtml(c.email)+'</td>'+
+          '<td>'+escapeHtml(c.codigo)+'</td>'+
+          '<td>'+escapeHtml(c.plano)+'</td>'+
+          '<td><span class="tag '+escapeHtml(c.status)+'">'+escapeHtml(c.status)+'</span></td>'+
+          '<td>'+escapeHtml(c.origem)+'</td>'+
+          '<td>'+fmtData(c.data_emissao)+'</td>'+
+          '<td>'+fmtData(c.data_expiracao)+'</td>'+
+          '<td>'+acaoHtml+'</td>';
+        body.appendChild(tr);
+      });
+      tabela.style.display = lista.length ? 'table' : 'none';
+      statusEl.style.color = '#0E6E66';
+      statusEl.textContent = '✓ '+lista.length+' cadastro(s) encontrado(s).';
+    } else {
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'Erro: ' + res.txt;
+    }
+  })
+  .catch(function(err){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Falha de conexão: ' + err;
+  });
+}
+
+function aprovar(codigo, btn){
+  btn.disabled = true;
+  btn.textContent = '...';
+  fetch(APROVAR_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify({ codigo:codigo, acao:'aprovar' })
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
+  .then(function(res){
+    if(res.status === 401){
+      alert('Não autorizado (401): ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Aprovar';
+      return;
+    }
+    if(res.ok){ listar(); }
+    else {
+      alert('Erro ao aprovar: ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Aprovar';
+    }
+  })
+  .catch(function(err){
+    alert('Falha de conexão: ' + err);
+    btn.disabled = false;
+    btn.textContent = 'Aprovar';
+  });
+}
+
+function reprovar(codigo, btn){
+  if(!confirm('Reprovar e apagar este cadastro? Essa ação não pode ser desfeita.')) return;
+  btn.disabled = true;
+  btn.textContent = '...';
+  fetch(APROVAR_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify({ codigo:codigo, acao:'reprovar' })
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
+  .then(function(res){
+    if(res.status === 401){
+      alert('Não autorizado (401): ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Reprovar';
+      return;
+    }
+    if(res.ok){ listar(); }
+    else {
+      alert('Erro ao reprovar: ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Reprovar';
+    }
+  })
+  .catch(function(err){
+    alert('Falha de conexão: ' + err);
+    btn.disabled = false;
+    btn.textContent = 'Reprovar';
+  });
+}
+</script>
+</body>
+</html>
