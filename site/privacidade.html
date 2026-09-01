@@ -26,26 +26,29 @@
 <body>
   <div class="wrap">
     <h1 class="display">Política de privacidade</h1>
-    <p class="updated">Última atualização: agosto de 2026</p>
+    <p class="updated">Última atualização: setembro de 2026</p>
 
     <div class="box">
-      <p style="margin:0; color:var(--ink); font-weight:600;">Resumo direto: o Farol não tem servidor nem banco de dados próprio. As configurações que você faz dentro do aplicativo (contatos, códigos, senhas) ficam guardadas apenas no navegador do seu próprio celular — nunca chegam até nós.</p>
+      <p style="margin:0; color:var(--ink); font-weight:600;">Resumo direto: o SOS Farol é um aplicativo Android. No dia a dia ele não envia seus dados para lugar nenhum. Só quando um alerta é disparado o app grava alguns segundos de áudio e pega a localização do celular e envia para os contatos que você configurou. E, na ativação, ele envia o seu código e seus dados de contato uma vez, para conferir se a licença é válida.</p>
     </div>
 
-    <h2>O que NÃO coletamos</h2>
-    <p>Não temos acesso, não armazenamos e não conseguimos ver: seus contatos de emergência, sua localização, o conteúdo das suas mensagens de alerta, sua palavra-código, ou qualquer outra configuração feita dentro do aplicativo Farol. Tudo isso é salvo tecnicamente através do armazenamento local do navegador (localStorage), que existe apenas no seu próprio aparelho.</p>
+    <h2>O que o app envia quando um alerta é disparado</h2>
+    <p>Ao acionar um alerta (por toque na tela, palavra-código ou gesto de agitar), o SOS Farol grava <b>alguns segundos de áudio</b> do ambiente e captura a <b>localização do celular (GPS)</b>. Esse áudio e essa localização são enviados pela internet para o <b>ntfy.sh</b> — um serviço público e gratuito de notificações — no <b>tópico (canal) que você mesmo criou</b> na configuração. Quem recebe é apenas quem você adicionou a esse canal no app de mensagens da família. Os envios de localização do <b>MODO RUA</b> (acompanhamento contínuo depois de um alerta) usam esse mesmo canal.</p>
 
-    <h2>O que podemos receber</h2>
-    <p>Se você preencher o formulário de teste grátis ou entrar em contato pelo WhatsApp neste site, recebemos apenas o que você mesmo decide nos enviar (normalmente nome e número de WhatsApp), usado só para: gerar seu código de teste, tirar dúvidas, e processar a compra do acesso definitivo, quando aplicável.</p>
+    <h2>O que o app envia na ativação e no teste</h2>
+    <p>Quando você digita o código de ativação, o app envia para o <b>Supabase</b> (um serviço de banco de dados) o <b>código</b>, um <b>identificador do aparelho (device_id)</b> e os dados que você preencheu (<b>nome, WhatsApp e e-mail</b>). Isso serve só para conferir se o código é válido e quantos dias de teste ainda restam.</p>
+
+    <h2>O que o app NÃO coleta</h2>
+    <p>O SOS Farol não lê nem envia: o conteúdo das notas da tela disfarçada, a sua palavra-código, os contatos ou a agenda do seu celular, nem qualquer informação sobre o uso do aparelho fora de um disparo de alerta.</p>
 
     <h2>Pagamentos</h2>
-    <p>Pagamentos do acesso definitivo são processados pela Kiwify, uma plataforma de pagamentos independente. Dados de pagamento (cartão, Pix, boleto) são tratados diretamente pela política de privacidade da Kiwify, não por nós.</p>
+    <p>A compra do acesso definitivo é processada pela <b>Kiwify</b>, uma plataforma de pagamentos independente. Os dados de pagamento (cartão, Pix, boleto) são tratados diretamente pela política de privacidade da Kiwify, não por nós.</p>
 
-    <h2>Hospedagem</h2>
-    <p>Este site e o aplicativo são hospedados no GitHub Pages. Como qualquer site na internet, o GitHub pode registrar informações técnicas básicas de acesso (como endereço IP), conforme a própria política de privacidade do GitHub.</p>
+    <h2>Hospedagem do site e do aplicativo</h2>
+    <p>Este site e o arquivo de instalação do app (APK) são hospedados no <b>GitHub</b>. Como qualquer site na internet, o GitHub pode registrar informações técnicas básicas de acesso (como o endereço IP), conforme a própria política de privacidade do GitHub.</p>
 
-    <h2>Quanto tempo guardamos seus dados</h2>
-    <p>Mensagens trocadas por WhatsApp ficam guardadas pelo tempo necessário para dar suporte e processar sua compra. Você pode pedir a exclusão a qualquer momento pelo mesmo canal.</p>
+    <h2>Retenção e exclusão de dados</h2>
+    <p>Os dados de ativação e as mensagens trocadas com o suporte ficam guardados pelo tempo necessário para validar a licença e dar atendimento. Você pode pedir a exclusão a qualquer momento pelo mesmo WhatsApp usado para o suporte e o teste grátis.</p>
 
     <h2>Dúvidas</h2>
     <p>Qualquer pergunta sobre esta política, entre em contato pelo mesmo WhatsApp usado para o teste grátis.</p>
