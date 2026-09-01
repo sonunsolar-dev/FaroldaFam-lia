@@ -591,8 +591,22 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
 
   document.getElementById('suporteBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent("Olá! Sou cliente do SOS Farol e preciso de ajuda.");
   document.getElementById('comprarBtn').href = KIWIFY_CHECKOUT_URL;
-  document.getElementById('instalarBtn').href = APP_URL;
-  document.getElementById('instalarLink').href = APP_URL;
+
+  // O app é Android. Num computador (ou iPhone), baixar o APK não adianta —
+  // avisa em vez de baixar. No Android, o link baixa normalmente.
+  var IS_ANDROID = /Android/i.test(navigator.userAgent);
+  function ligarInstalar(el){
+    if(!el) return;
+    el.href = APP_URL;
+    if(!IS_ANDROID){
+      el.addEventListener('click', function(e){
+        e.preventDefault();
+        alert("O SOS Farol é um aplicativo Android.\n\nAbra este site no seu celular Android para baixar e instalar.\n\nLink direto do arquivo, se precisar passar pro celular depois:\n" + APP_URL);
+      });
+    }
+  }
+  ligarInstalar(document.getElementById('instalarBtn'));
+  ligarInstalar(document.getElementById('instalarLink'));
 
   function gerarCodigoTeste(){
     var d = [];
