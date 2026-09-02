@@ -43,9 +43,9 @@
 <body>
   <div class="wrap">
     <h1>Meu código de acesso</h1>
-    <p class="sub">Comprou o acesso definitivo do SOS Farol? Digite o <b>e-mail usado na compra</b> para ver o seu código.</p>
+    <p class="sub">Comprou o SOS Farol ou está no teste grátis? Digite o <b>e-mail usado na compra ou no cadastro</b> para ver o seu código de ativação (serve também para reabrir o manual).</p>
 
-    <label for="email">E-mail da compra</label>
+    <label for="email">E-mail da compra ou do cadastro</label>
     <input type="email" id="email" placeholder="voce@exemplo.com" autocomplete="email" inputmode="email">
     <button id="btn" onclick="buscar()">Ver meu código</button>
 
@@ -63,7 +63,7 @@
       <p style="margin:16px 0 0; font-size:14px;"><a id="manualLink" href="#">📖 Abrir o manual completo (com vídeos)</a></p>
     </div>
 
-    <p class="note">Acabou de comprar? O código pode levar alguns minutos para aparecer — atualize a página e tente de novo. Se não aparecer, fale com o suporte pelo WhatsApp com o e-mail e o comprovante da compra. <a href="index.html">Voltar ao site</a></p>
+    <p class="note">Acabou de comprar ou de se cadastrar? O código pode levar alguns minutos para aparecer — atualize a página e tente de novo. Código de teste ainda aguardando aprovação também não aparece aqui. Se não aparecer, fale com o suporte pelo WhatsApp com o seu e-mail. <a href="index.html">Voltar ao site</a></p>
   </div>
 
 <script>
@@ -105,10 +105,11 @@
       setMsg('');
       document.getElementById('codigo').textContent = data.codigo;
       document.getElementById('manualLink').href = 'manual.html?c=' + encodeURIComponent(data.codigo);
-      var meta = 'Plano anual';
+      var ehTeste = /^FAROLT-/i.test(data.codigo) || (data.plano && data.plano !== 'anual');
+      var meta = ehTeste ? 'Teste grátis' : 'Assinatura anual';
       if(data.data_expiracao){
         var d = new Date(data.data_expiracao);
-        if(!isNaN(d)) meta += ' — vence em ' + d.toLocaleDateString('pt-BR');
+        if(!isNaN(d)) meta += (ehTeste ? ' — expira em ' : ' — vence em ') + d.toLocaleDateString('pt-BR');
       }
       document.getElementById('meta').textContent = meta;
       box.style.display = 'block';
