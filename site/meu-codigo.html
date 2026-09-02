@@ -126,6 +126,19 @@
   document.getElementById('email').addEventListener('keydown', function(ev){
     if(ev.key === 'Enter') buscar();
   });
+
+  // Se a página foi aberta com ?email=... (ex.: redirecionamento da Kiwify),
+  // preenche e já busca.
+  (function(){
+    try{
+      var p = new URLSearchParams(location.search);
+      var e = (p.get('email') || p.get('customer_email') || p.get('e') || '').trim();
+      if(e && e.indexOf('@') > 0){
+        document.getElementById('email').value = e;
+        buscar();
+      }
+    }catch(_){}
+  })();
 </script>
 </body>
 </html>
