@@ -60,6 +60,7 @@
         <li>Toque em <b>"Trocar código de ativação"</b>.</li>
         <li>Cole este código e toque em <b>Ativar</b>. Nenhuma configuração é perdida.</li>
       </ol>
+      <p style="margin:16px 0 0; font-size:14px;"><a id="manualLink" href="#">📖 Abrir o manual completo (com vídeos)</a></p>
     </div>
 
     <p class="note">Acabou de comprar? O código pode levar alguns minutos para aparecer — atualize a página e tente de novo. Se não aparecer, fale com o suporte pelo WhatsApp com o e-mail e o comprovante da compra. <a href="index.html">Voltar ao site</a></p>
@@ -103,6 +104,7 @@
       }
       setMsg('');
       document.getElementById('codigo').textContent = data.codigo;
+      document.getElementById('manualLink').href = 'manual.html?c=' + encodeURIComponent(data.codigo);
       var meta = 'Plano anual';
       if(data.data_expiracao){
         var d = new Date(data.data_expiracao);
