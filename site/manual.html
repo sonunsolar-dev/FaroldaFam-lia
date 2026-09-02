@@ -83,8 +83,16 @@
 
   function setMsg(t, err){ msg.textContent = t || ''; msg.className = 'msg' + (err ? ' err' : ''); }
 
+  // Normaliza: qualquer traço/hífen unicode -> '-', e joga fora tudo que não for
+  // letra/numero/traço (espaço invisível, aspas, NBSP, zero-width, etc.).
+  function normCodigo(s){
+    return (s || '').toUpperCase()
+      .replace(/[‐-―−﹘﹣－]/g, '-')
+      .replace(/[^A-Z0-9-]/g, '');
+  }
+
   async function abrir(){
-    var codigo = (inp.value || '').trim().toUpperCase();
+    var codigo = normCodigo(inp.value);
     if(codigo.length < 6){ setMsg('Digite o código de ativação.', true); return; }
     btn.disabled = true; setMsg('Abrindo…');
     try{
