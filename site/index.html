@@ -497,12 +497,10 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
         <div class="code" id="codeOut">—</div>
         <button class="btn btn-outline" id="copyBtn" type="button" style="margin-bottom:14px; max-width:220px;">📋 Copiar código</button>
         <div style="background:var(--coral-light); border:1.5px solid rgba(225,84,62,.35); border-radius:12px; padding:14px 16px; margin-bottom:18px;">
-          <p style="margin:0; font-size:14px; color:var(--ink); font-weight:700;">⚠️ Não pule esta etapa</p>
-          <p style="margin:6px 0 0; font-size:13px; color:var(--ink-soft);">Toque em "1. Salvar meu código" ANTES de instalar — ele manda o código pro seu próprio WhatsApp, pra você não perder mesmo trocando de tela.</p>
+          <p style="margin:0; font-size:14px; color:var(--ink); font-weight:700;">⚠️ Anote o seu código agora</p>
+          <p style="margin:6px 0 0; font-size:13px; color:var(--ink-soft);">Copie e guarde antes de sair desta tela. Se perder, você recupera depois em <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">"Meu código"</a>, com o seu e-mail.</p>
         </div>
-        <a class="btn btn-primary" id="whatsBtn" href="#" target="_blank" style="margin-bottom:10px;">1. Salvar meu código (WhatsApp)</a>
-        <br>
-        <a class="btn btn-outline" id="instalarBtn" href="#">2. Baixar o SOS Farol (Android)</a>
+        <a class="btn btn-primary" id="instalarBtn" href="#">Baixar o SOS Farol (Android)</a>
         <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Abra o arquivo baixado para instalar. Depois cole este código na tela de ativação do app.</p>
       </div>
     </div>
@@ -550,8 +548,14 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
 <section id="suporte">
   <div class="wrap" style="text-align:center;">
     <h2 class="display">Já é cliente e precisa de ajuda?</h2>
-    <p style="color:var(--ink-soft); max-width:480px; margin:0 auto 22px; font-size:15px;">Depois da compra, o <b>manual completo (com vídeos)</b> fica na sua área em <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">"Meu código"</a> — a maioria das dúvidas de instalação e uso já está respondida lá. Não resolveu? Fale direto com o suporte.</p>
-    <a href="#" class="btn btn-outline" id="suporteBtn" target="_blank">Falar com o suporte</a>
+    <p style="color:var(--ink-soft); max-width:480px; margin:0 auto 22px; font-size:15px;">Depois da compra ou do cadastro do teste, o <b>manual completo (com vídeos)</b> fica na sua área em <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">"Meu código"</a> — a maioria das dúvidas de instalação e uso já está respondida lá. Não resolveu? Mande uma mensagem:</p>
+    <div class="trial-box" style="text-align:left; max-width:520px; margin:0 auto;">
+      <input type="text" id="supNome" placeholder="Seu nome">
+      <input type="email" id="supEmail" placeholder="Seu e-mail (é por onde respondemos)">
+      <textarea id="supMsg" rows="4" placeholder="Como podemos ajudar?" style="width:100%; margin-top:10px; padding:14px 17px; border-radius:14px; border:1px solid rgba(255,255,255,.12); background:#081525; color:#fff; font:500 15px 'DM Sans',sans-serif; outline:0; resize:vertical;"></textarea>
+      <button class="btn btn-primary" id="supBtn" type="button" style="margin-top:12px;">Enviar mensagem</button>
+      <p id="supStatus" style="font-size:14px; margin-top:12px; min-height:20px; color:var(--ink-soft);"></p>
+    </div>
   </div>
 </section>
 
@@ -571,7 +575,6 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
 </footer>
 
 <script>
-  var SELLER_WHATSAPP = "5547997220734";
   var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/uG4J81J";
   var APP_URL = "https://github.com/sonunsolar-dev/FaroldaFam-lia/releases/latest/download/sos-farol.apk";
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre me tornar um parceiro afiliado do SOS Farol.";
@@ -591,8 +594,52 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     }).catch(function(err){ callback(false, String(err)); });
   }
 
-  document.getElementById('suporteBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent("Olá! Sou cliente do SOS Farol e preciso de ajuda.");
   document.getElementById('comprarBtn').href = KIWIFY_CHECKOUT_URL;
+
+  // Formulário de suporte -> Edge Function farol-suporte (grava e avisa por ntfy)
+  var SUPORTE_URL = SUPABASE_URL + "/functions/v1/farol-suporte";
+  var supBtn = document.getElementById('supBtn');
+  var supStatus = document.getElementById('supStatus');
+  supBtn.addEventListener('click', function(){
+    var nome = document.getElementById('supNome').value.trim();
+    var email = document.getElementById('supEmail').value.trim();
+    var msg = document.getElementById('supMsg').value.trim();
+    if(!nome || email.indexOf('@') < 0 || msg.length < 5){
+      supStatus.style.color = "#ff8b95";
+      supStatus.textContent = "Preencha nome, um e-mail válido e a mensagem.";
+      return;
+    }
+    supBtn.disabled = true;
+    supStatus.style.color = "var(--ink-soft)";
+    supStatus.textContent = "Enviando…";
+    fetch(SUPORTE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ nome: nome, email: email, mensagem: msg })
+    }).then(function(r){
+      return r.text().then(function(txt){ return { ok: r.ok, txt: txt }; });
+    }).then(function(res){
+      supBtn.disabled = false;
+      if(res.ok){
+        supStatus.style.color = "#38d39f";
+        supStatus.textContent = "Mensagem enviada! Respondemos no seu e-mail.";
+        document.getElementById('supNome').value = "";
+        document.getElementById('supEmail').value = "";
+        document.getElementById('supMsg').value = "";
+      } else {
+        supStatus.style.color = "#ff8b95";
+        supStatus.textContent = res.txt || "Não foi possível enviar agora. Tente de novo em instantes.";
+      }
+    }).catch(function(){
+      supBtn.disabled = false;
+      supStatus.style.color = "#ff8b95";
+      supStatus.textContent = "Falha de conexão. Verifique a internet e tente de novo.";
+    });
+  });
 
   // O app é Android. Num computador (ou iPhone), baixar o APK não adianta —
   // avisa em vez de baixar. No Android, o link baixa normalmente.
@@ -633,8 +680,6 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       if(sucesso){
         document.getElementById('codeOut').textContent = codigo;
         document.getElementById('codeResult').style.display = 'block';
-        var msg = "Olá! Meu nome é "+nome+", meu e-mail é "+email+" e gerei um código de teste do SOS Farol: "+codigo;
-        document.getElementById('whatsBtn').href = "https://wa.me/"+SELLER_WHATSAPP+"?text="+encodeURIComponent(msg);
       } else if(erro && erro.indexOf('duplicate') !== -1){
         alert("Parece que este e-mail ou WhatsApp já testou o SOS Farol antes. Se quiser continuar usando, veja a opção de assinatura anual mais abaixo.");
       } else if(erro && erro.indexOf('Muitas tentativas') !== -1){
