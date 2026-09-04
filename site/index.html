@@ -491,6 +491,10 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       <input type="text" id="nomeInput" placeholder="Digite seu nome">
       <input type="tel" id="whatsInput" placeholder="Seu WhatsApp (com DDD)">
       <input type="email" id="emailInput" placeholder="Seu e-mail">
+      <label style="display:flex; align-items:flex-start; gap:8px; font-size:13px; color:var(--ink-soft); margin:14px 0 4px; text-align:left; cursor:pointer;">
+        <input type="checkbox" id="termosCheck" style="width:auto; margin-top:2px;">
+        <span>Li e concordo com os <a href="termos.html" target="_blank" rel="noopener" style="color:var(--teal); font-weight:600;">Termos de Uso</a> e a <a href="privacidade.html" target="_blank" rel="noopener" style="color:var(--teal); font-weight:600;">Política de Privacidade</a>.</span>
+      </label>
       <br>
       <button class="btn btn-primary" id="gerarBtn">Gerar código de teste</button>
       <div class="code-result" id="codeResult">
@@ -518,7 +522,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       <div style="display:inline-block; margin-top:12px; background:var(--teal-light); color:var(--teal-deep); padding:6px 14px; border-radius:100px; font-size:13px; font-weight:700;">🎁 Por tempo limitado: ganhe um 2º código junto</div>
     </div>
     <a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" style="margin:0 auto;">Comprar acesso definitivo</a>
-    <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Pagamento processado com segurança pela Kiwify (Pix, cartão ou boleto).</p>
+    <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Pagamento processado com segurança pela Kiwify (Pix, cartão ou boleto). Ao comprar, você concorda com os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
     <p style="font-size:14px; margin-top:18px;"><b>Já comprou?</b> <a href="meu-codigo.html">Pegue seu código de ativação aqui</a> (com o e-mail da compra).</p>
   </div>
 </section>
@@ -571,7 +575,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       </div>
     </div>
     <p>© SOS Farol. Ferramenta de apoio — não substitui atendimento policial ou institucional em emergências.</p>
-    <p style="margin-top:8px;"><a href="privacidade.html" style="color:var(--ink-soft);">Política de privacidade</a></p>
+    <p style="margin-top:8px;"><a href="privacidade.html" style="color:var(--ink-soft);">Política de privacidade</a> · <a href="termos.html" style="color:var(--ink-soft);">Termos de uso</a></p>
   </div>
 </footer>
 
@@ -671,6 +675,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     var email = document.getElementById('emailInput').value.trim();
     if(!whatsapp){ alert("Preencha seu WhatsApp antes de gerar o código."); return; }
     if(!email){ alert("Preencha seu e-mail antes de gerar o código."); return; }
+    if(!document.getElementById('termosCheck').checked){ alert("Marque que você leu e concorda com os Termos de Uso e a Política de Privacidade."); return; }
     var codigo = gerarCodigoTeste();
     var gerarBtn = document.getElementById('gerarBtn');
     gerarBtn.disabled = true;
