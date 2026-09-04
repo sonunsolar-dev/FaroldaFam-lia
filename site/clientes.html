@@ -29,6 +29,8 @@
   .tablewrap{overflow-x:auto;}
   .btn-aprovar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; background:#C98A2C;}
   .btn-reprovar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; margin-left:6px; background:#B93F2E;}
+  .btn-cancelar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; background:#B93F2E;}
+  .btn-reativar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; background:#0E6E66;}
 </style>
 </head>
 <body>
@@ -168,6 +170,10 @@ function listar(){
         if(c.status === 'pendente'){
           acaoHtml = '<button class="btn-aprovar" onclick="aprovar(\'' + codigoSeguro + '\', this)">Aprovar</button>' +
                      '<button class="btn-reprovar" onclick="reprovar(\'' + codigoSeguro + '\', this)">Reprovar</button>';
+        } else if(c.status === 'ativo'){
+          acaoHtml = '<button class="btn-cancelar" onclick="cancelar(\'' + codigoSeguro + '\', this)">Cancelar</button>';
+        } else if(c.status === 'cancelado'){
+          acaoHtml = '<button class="btn-reativar" onclick="reativar(\'' + codigoSeguro + '\', this)">Reativar</button>';
         }
         tr.innerHTML =
           '<td>'+escapeHtml(c.nome)+'</td>'+
@@ -223,6 +229,67 @@ function aprovar(codigo, btn){
     alert('Falha de conexão: ' + err);
     btn.disabled = false;
     btn.textContent = 'Aprovar';
+  });
+}
+
+function cancelar(codigo, btn){
+  if(!confirm('Cancelar o acesso deste cliente? O código deixa de funcionar no app até ser reativado.')) return;
+  btn.disabled = true;
+  btn.textContent = '...';
+  fetch(APROVAR_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify({ codigo:codigo, acao:'cancelar' })
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
+  .then(function(res){
+    if(res.status === 401){
+      alert('Não autorizado (401): ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Cancelar';
+      return;
+    }
+    if(res.ok){ listar(); }
+    else {
+      alert('Erro ao cancelar: ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Cancelar';
+    }
+  })
+  .catch(function(err){
+    alert('Falha de conexão: ' + err);
+    btn.disabled = false;
+    btn.textContent = 'Cancelar';
+  });
+}
+
+function reativar(codigo, btn){
+  btn.disabled = true;
+  btn.textContent = '...';
+  fetch(APROVAR_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify({ codigo:codigo, acao:'reativar' })
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
+  .then(function(res){
+    if(res.status === 401){
+      alert('Não autorizado (401): ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Reativar';
+      return;
+    }
+    if(res.ok){ listar(); }
+    else {
+      alert('Erro ao reativar: ' + res.txt);
+      btn.disabled = false;
+      btn.textContent = 'Reativar';
+    }
+  })
+  .catch(function(err){
+    alert('Falha de conexão: ' + err);
+    btn.disabled = false;
+    btn.textContent = 'Reativar';
   });
 }
 
