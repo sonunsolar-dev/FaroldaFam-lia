@@ -283,6 +283,8 @@ ul.forwho .ic{
 .faq summary::after{content:'+';font-size:22px;color:var(--cyan);font-weight:400}
 .faq details[open] summary::after{content:'−'}
 .faq p{font-size:14px;color:var(--muted);margin:12px 0 0}
+.faq h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);margin:30px 0 12px;font-weight:700}
+.faq h3:first-of-type{margin-top:22px}
 
 /* footer */
 footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center;color:var(--muted2);font-size:13px}
@@ -540,17 +542,6 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
   </div>
 </section>
 
-<section class="faq">
-  <div class="wrap">
-    <h2 class="display">Perguntas frequentes</h2>
-    <details><summary>Funciona no Android e no iPhone?</summary><p>Por enquanto só no Android — você baixa o app (arquivo APK) por este site e instala. A versão para iPhone está em desenvolvimento.</p></details>
-    <details><summary>Preciso pagar para testar?</summary><p>Não. O período de teste de 15 dias é totalmente gratuito, sem necessidade de cartão de crédito.</p></details>
-    <details><summary>Alguém vai perceber que estou usando?</summary><p>O SOS Farol foi pensado para funcionar de forma discreta. Os detalhes de instalação e uso ficam no manual, liberado com o seu código de ativação — depois da compra ou do cadastro do teste.</p></details>
-    <details><summary>O que acontece depois dos 15 dias?</summary><p>Se fizer sentido continuar, você assina o acesso anual por R$ 99,00/ano a vista ou em até 12 parcelas fixas no cartão. A assinatura anual libera todos os recursos, com renovação automática — sem precisar cadastrar nada novamente a cada ano.</p></details>
-    <details><summary>Como cancelo ou troco o cartão da assinatura?</summary><p>A cada renovação, a Kiwify manda um e-mail "Pagamento de assinatura aprovado" com um botão para gerenciar, cancelar ou trocar o cartão. Também dá pra acessar direto em dashboard.kiwify.com.br/courses (área do aluno), com o mesmo e-mail da compra.</p></details>
-  </div>
-</section>
-
 <section id="suporte">
   <div class="wrap" style="text-align:center;">
     <h2 class="display">Já é cliente e precisa de ajuda?</h2>
@@ -562,6 +553,40 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       <button class="btn btn-primary" id="supBtn" type="button" style="margin:12px auto 0; display:flex;">Enviar mensagem</button>
       <p id="supStatus" style="font-size:14px; margin-top:12px; min-height:20px; color:var(--ink-soft); text-align:center;"></p>
     </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <h2 class="display">Perguntas frequentes</h2>
+
+    <h3>Instalação</h3>
+    <details><summary>É difícil instalar?</summary><p>Reserve uns 30 minutos, num momento tranquilo. São 5 vídeos curtos mais um passo a passo escrito no manual. Não precisa entender de tecnologia — e é melhor ainda se você fizer junto com quem vai receber os alertas.</p></details>
+    <details><summary>Onde eu baixo o app?</summary><p>O link para baixar fica <b>no fim do manual</b>, que você abre com o seu código (do teste grátis ou da compra). É de propósito: um app mal configurado pode não avisar ninguém na hora do perigo, então a gente pede que você veja o manual antes.</p></details>
+    <details><summary>O Android bloqueia a instalação?</summary><p>Sim, aparece uma tela de "app bloqueado" — isso é normal para um aplicativo que não vem da Play Store, não quer dizer que ele é perigoso. O manual mostra exatamente onde tocar para continuar ("Mais detalhes" e depois "Instalar assim mesmo").</p></details>
+    <details><summary>Instalo em qual celular?</summary><p>No celular da <b>pessoa protegida</b> — é ele que fica de prontidão. O outro aplicativo, o que <b>recebe</b> os alertas (chama-se ntfy), vai só no celular de <b>quem vai ajudar</b> (família, amigos). Nunca os dois no mesmo aparelho.</p></details>
+    <details><summary>Tem versão para iPhone?</summary><p>Ainda não. Por enquanto só Android. A versão para iPhone está em desenvolvimento.</p></details>
+
+    <h3>Senhas e acesso</h3>
+    <details><summary>O app tem senha?</summary><p>Não. A proteção é o <b>disfarce</b>: o app abre sempre parecendo um bloco de notas comum, chamado "Notas". Só quem sabe entra no app de verdade — digitando uma palavra no campo de busca das notas, ou tocando várias vezes no título. Isso está explicado no manual, que só abre com o seu código.</p></details>
+    <details><summary>Perdi meu código de ativação.</summary><p>Recupere na página <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">"Meu código"</a>, aqui no site, com o e-mail que você usou na compra ou no cadastro do teste.</p></details>
+    <details><summary>Esqueci a senha da minha conta de pagamento (Kiwify).</summary><p>Use a opção "Esqueci minha senha" na tela de login da Kiwify, com o mesmo e-mail da compra. A conta da Kiwify é usada só para gerenciar o pagamento — não tem relação com o funcionamento do app.</p></details>
+
+    <h3>Compra e pagamento</h3>
+    <details><summary>Preciso testar antes de comprar?</summary><p>Não. Você pode assinar direto: nesse caso o código definitivo é liberado na hora, automaticamente.</p></details>
+    <details><summary>Quanto custa e como pago?</summary><p>R$ 99,00 por ano. O pagamento é pela Kiwify, no <b>cartão de crédito</b> (à vista ou em até 12 parcelas) ou no <b>Pix</b>. Não vendemos por boleto. Assinando agora, você recebe um <b>segundo código anual sem custo</b>, para instalar num segundo aparelho em casa.</p></details>
+    <details><summary>Paguei. Como recebo o código?</summary><p>Cartão ou Pix aprovado libera o código na hora. Você pega ele na página <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">"Meu código"</a>, com o e-mail da compra — e por ali já abre o manual.</p></details>
+    <details><summary>Tem garantia?</summary><p>Sim. No teste grátis de 15 dias você não paga nada. E se comprar e se arrepender, tem reembolso em até 7 dias, conforme os <a href="termos.html" style="color:var(--teal); font-weight:600;">Termos de Uso</a>.</p></details>
+    <details><summary>Já testei. Como faço para assinar?</summary><p>Compre o acesso anual na Kiwify e, no app, troque o código de teste (<code>FAROLT-…</code>) pelo código definitivo (<code>FAROL-…</code>) em "Trocar código de ativação". <b>Nada do que você já configurou é apagado.</b></p></details>
+
+    <h3>Renovação</h3>
+    <details><summary>A assinatura renova sozinha?</summary><p>Depende da forma de pagamento. <b>No cartão de crédito</b>, sim: a Kiwify cobra automaticamente a cada ano, sem você digitar nenhum código novo, e o app continua funcionando sem interrupção. <b>No Pix</b>, não é automático: a partir de 3 dias antes do vencimento a Kiwify manda um e-mail diário com o link de pagamento, e você precisa pagar de novo para continuar.</p></details>
+    <details><summary>E se eu não pagar a renovação?</summary><p>No Pix, se a renovação não for paga em até 5 dias após o vencimento, a Kiwify cancela a assinatura e o app para de proteger. É só assinar de novo para reativar — a sua configuração continua salva no aparelho.</p></details>
+    <details><summary>Como cancelo ou troco o cartão?</summary><p>Logo após a compra e a cada renovação, a Kiwify manda um e-mail "Pagamento de assinatura aprovado" com um botão para gerenciar, cancelar ou trocar o cartão. Também dá para entrar na área do aluno da Kiwify com o e-mail da compra. Se você paga por Pix, basta não pagar a próxima cobrança.</p></details>
+
+    <h3>Uso no dia a dia</h3>
+    <details><summary>Alguém vai perceber que estou usando?</summary><p>O app foi feito para passar despercebido: abre como "Notas", o ícone e a notificação fixa são neutros. Os detalhes de como usar ficam no manual, liberado só com o seu código.</p></details>
+    <details><summary>O SOS Farol garante a minha segurança?</summary><p>Não — ele é um <b>complemento</b>. Ajuda a pedir socorro rápido e discretamente e a avisar a sua rede de apoio, mas não substitui a polícia (190), o 180 ou uma denúncia formal.</p></details>
   </div>
 </section>
 
