@@ -440,7 +440,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
   <div class="wrap">
     <h2 class="display">Como funciona</h2>
     <div class="steps">
-      <div class="step"><div class="num"></div><div class="txt"><h3>Baixe e instale</h3><p>Baixe o app (arquivo APK) no celular Android do Vulnerável, toque para instalar e permita quando o Android pedir "instalar apps desconhecidos". Só Android por enquanto — <b>iPhone em breve</b>. <a href="#" id="instalarLink" style="color:var(--teal); font-weight:600;">Baixar o app</a>. Já tem o seu código? Abra o <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">manual</a> completo (com vídeos).</p> </div></div>
+      <div class="step"><div class="num"></div><div class="txt"><h3>Leia o manual e baixe</h3><p>Com o seu código (do teste grátis ou da compra), abra o <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">manual completo com vídeos</a>. O <b>link para baixar o app fica no fim do manual</b> — de propósito: um app mal configurado pode não avisar ninguém na hora do perigo. Só Android por enquanto — <b>iPhone em breve</b>.</p> </div></div>
       <div class="step"><div class="num"></div><div class="txt"><h3>Configure quem recebe</h3><p>A família instala em seu celular um outro app de mensagens gratuito e passa a receber os alertas automaticamente, sem precisar confirmar nada. IMPORTANTE: o OUTRO aplicativo de mensagens NÃO DEVE ser instalado no celular do Vulnerável</p></div></div>
       <div class="step"><div class="num"></div><div class="txt"><h3>Ative a forma</h3><p>Gestos discretos, palavras-código ou sacudir o celular — você escolhe o que faz sentido na rotina.</p></div></div>
       <div class="step"><div class="num"></div><div class="txt"><h3>Pronto</h3><p>O sistema fica de prontidão passiva, garantindo proteção sem incômodos.</p></div></div>
@@ -505,8 +505,8 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
           <p style="margin:0; font-size:14px; color:var(--ink); font-weight:700;">⚠️ Anote o seu código agora</p>
           <p style="margin:6px 0 0; font-size:13px; color:var(--ink-soft);">Copie e guarde antes de sair desta tela. Se perder, você recupera depois em <a href="meu-codigo.html" style="color:var(--teal); font-weight:600;">"Meu código"</a>, com o seu e-mail.</p>
         </div>
-        <a class="btn btn-primary" id="instalarBtn" href="#">Baixar o SOS Farol (Android)</a>
-        <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Abra o arquivo baixado para instalar. Depois cole este código na tela de ativação do app.</p>
+        <a class="btn btn-primary" id="manualBtn" href="manual.html">Abrir o manual (com vídeos)</a>
+        <p style="font-size:12px; color:var(--ink-soft); margin-top:14px;">Assista aos vídeos e siga o passo a passo. <b>O link para baixar o app está no fim do manual</b> — um app mal configurado pode não avisar ninguém na hora do perigo.</p>
       </div>
     </div>
   </div>
@@ -581,7 +581,6 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
 
 <script>
   var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/uG4J81J";
-  var APP_URL = "https://github.com/sonunsolar-dev/FaroldaFam-lia/releases/latest/download/sos-farol.apk";
   var PARTNER_MESSAGE = "Olá! Trabalho com famílias em situação de vulnerabilidade e gostaria de saber mais sobre me tornar um parceiro afiliado do SOS Farol.";
   var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
   var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
@@ -646,22 +645,6 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
     });
   });
 
-  // O app é Android. Num computador (ou iPhone), baixar o APK não adianta —
-  // avisa em vez de baixar. No Android, o link baixa normalmente.
-  var IS_ANDROID = /Android/i.test(navigator.userAgent);
-  function ligarInstalar(el){
-    if(!el) return;
-    el.href = APP_URL;
-    if(!IS_ANDROID){
-      el.addEventListener('click', function(e){
-        e.preventDefault();
-        alert("O SOS Farol é um aplicativo Android.\n\nAbra este site no seu celular Android para baixar e instalar.\n\nLink direto do arquivo, se precisar passar pro celular depois:\n" + APP_URL);
-      });
-    }
-  }
-  ligarInstalar(document.getElementById('instalarBtn'));
-  ligarInstalar(document.getElementById('instalarLink'));
-
   function gerarCodigoTeste(){
     var d = [];
     for(var i=0;i<5;i++) d.push(Math.floor(Math.random()*10));
@@ -685,6 +668,7 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       gerarBtn.textContent = 'Gerar código de teste';
       if(sucesso){
         document.getElementById('codeOut').textContent = codigo;
+        document.getElementById('manualBtn').href = 'manual.html?c=' + encodeURIComponent(codigo);
         document.getElementById('codeResult').style.display = 'block';
       } else if(erro && erro.indexOf('duplicate') !== -1){
         alert("Parece que este e-mail ou WhatsApp já testou o SOS Farol antes. Se quiser continuar usando, veja a opção de assinatura anual mais abaixo.");
