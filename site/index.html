@@ -474,13 +474,43 @@ footer{padding:70px 0 calc(45px + env(safe-area-inset-bottom));text-align:center
       </div>
 </section>
   
+```html
 <section id="rede-de-apoio">
   <div class="wrap">
     <h2 class="display">Tenha uma rede de apoio</h2>
-    <p style="text-align:center; color:var(--muted); max-width:660px; margin:0 auto; font-size:clamp(16px,2vw,19px); line-height:1.75;">O SOS Farol dispara mensagens de alerta para celular de familiares e amigos que tiverem o código de cadastro de mensagens disponibilizado pelo tutor ou pelo próprio vulnerável — ou seja, quem estiver mais próximo chega mais rápido para ajudar! Muito útil para pessoas que trabalham no COMÉRCIO sozinhos. Basta criar sua rede de apoio!</p>
-    <img src="redeapoiofarol.png" alt="Rede de apoio SOS Farol" style="display: block; width: 75%; height: auto; margin: 24px auto 0; border-radius: 33px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+
+    <p style="text-align:center; color:var(--muted); max-width:660px; margin:0 auto; font-size:clamp(16px,2vw,19px); line-height:1.75;">
+      O SOS Farol dispara mensagens de alerta para celular de familiares e amigos que tiverem o código de cadastro de mensagens disponibilizado pelo tutor ou pelo próprio vulnerável — ou seja, quem estiver mais próximo chega mais rápido para ajudar! Muito útil para pessoas que trabalham no COMÉRCIO sozinhos. Basta criar sua rede de apoio!
+    </p>
+
+    <img
+      src="redeapoiofarol.png"
+      alt="Rede de apoio SOS Farol"
+      class="imagem-rede-apoio"
+    >
   </div>
 </section>
+
+<style>
+  .imagem-rede-apoio {
+    display: block;
+    width: 75%;
+    max-width: 100%;
+    height: auto;
+    margin: 24px auto 0;
+    border-radius: 33px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .imagem-rede-apoio {
+      width: 55.5%;
+    }
+  }
+</style>
+```
+
   
 <section id="teste">
   <div class="wrap">
