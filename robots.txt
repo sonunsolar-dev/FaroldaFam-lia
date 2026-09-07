@@ -4,6 +4,7 @@ Allow: /site/$
 Allow: /site/index.html
 Allow: /site/privacidade.html
 Allow: /site/termos.html
+Disallow: /site/index-antigo.html
 Disallow: /site/manual.html
 Disallow: /site/meu-codigo.html
 Disallow: /site/afiliados.html
