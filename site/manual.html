@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0E6E66">
 <title>Manual — SOS Farol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#10262B; --ink-soft:#3C5257;
@@ -116,11 +119,58 @@
       gate.hidden = true;
       out.hidden = false;
       document.title = 'Manual de uso — SOS Farol';
+      wireManual();
       // volta ao topo (o link ?c= pode ter vindo com hash)
       window.scrollTo(0, 0);
     }catch(e){
       setMsg('Falha de conexão. Verifique a internet e tente de novo.', true);
       btn.disabled = false;
+    }
+  }
+
+  // Liga o que o conteudo injetado (innerHTML) nao consegue ligar sozinho:
+  // as caixinhas "Fiz" (progresso salvo no navegador) e o botao "voltar ao topo".
+  function wireManual(){
+    var KEY = 'sosfarol-manual-progress';
+    var boxes = [].slice.call(out.querySelectorAll('input[data-check]'));
+    var bar = document.getElementById('progBar');
+    var txt = document.getElementById('progTxt');
+
+    function loadState(){
+      try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }
+      catch(e){ return {}; }
+    }
+    function saveState(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} }
+    function render(s){
+      var n = 0;
+      boxes.forEach(function(b){
+        var k = b.getAttribute('data-check');
+        var on = !!s[k];
+        b.checked = on;
+        var card = document.getElementById('p' + k);
+        if (card) card.classList.toggle('is-done', on);
+        if (on) n++;
+      });
+      if (bar) bar.style.width = (boxes.length ? Math.round(n / boxes.length * 100) : 0) + '%';
+      if (txt) txt.textContent = n + ' de ' + boxes.length + ' passos';
+    }
+
+    var state = loadState();
+    render(state);
+    boxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        state[b.getAttribute('data-check')] = b.checked;
+        saveState(state);
+        render(state);
+      });
+    });
+
+    var toTop = document.getElementById('manualToTop');
+    if (toTop){
+      var onScroll = function(){ toTop.classList.toggle('show', window.scrollY > 600); };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
     }
   }
 
