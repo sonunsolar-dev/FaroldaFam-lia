@@ -100,31 +100,32 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacin
 </div>
 
 <script>
+(function(){
   var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
   var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
   var SUPORTE_URL = SUPABASE_URL + "/functions/v1/farol-suporte";
 
-  var form = document.getElementById('afForm');
-  var btn = document.getElementById('afBtn');
-  var status = document.getElementById('afStatus');
+  var afForm = document.getElementById('afForm');
+  var afBtn = document.getElementById('afBtn');
+  var afStatus = document.getElementById('afStatus');
 
-  form.addEventListener('submit', function(ev){
+  afForm.addEventListener('submit', function(ev){
     ev.preventDefault();
     var nome = document.getElementById('afNome').value.trim();
     var email = document.getElementById('afEmail').value.trim();
     var area = document.getElementById('afArea').value.trim();
     var msg = document.getElementById('afMsg').value.trim();
     if (!nome || email.indexOf('@') < 0){
-      status.style.color = "var(--red)";
-      status.textContent = "Preencha seu nome e um e-mail válido.";
+      afStatus.style.color = "var(--red)";
+      afStatus.textContent = "Preencha seu nome e um e-mail válido.";
       return;
     }
     var mensagem = "[AFILIADOS] Pedido de link de afiliado Kiwify.\n"
       + "Area: " + (area || "(nao informada)") + "\n\n"
       + (msg || "(sem detalhes)");
-    btn.disabled = true;
-    status.style.color = "var(--muted)";
-    status.textContent = "Enviando…";
+    afBtn.disabled = true;
+    afStatus.style.color = "var(--muted)";
+    afStatus.textContent = "Enviando…";
     fetch(SUPORTE_URL, {
       method: "POST",
       headers: {
@@ -136,21 +137,22 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacin
     }).then(function(r){
       return r.text().then(function(txt){ return { ok:r.ok, txt:txt }; });
     }).then(function(res){
-      btn.disabled = false;
+      afBtn.disabled = false;
       if (res.ok){
-        status.style.color = "var(--cyan)";
-        status.textContent = "Pedido enviado! Respondemos no seu e-mail com o link da Kiwify.";
-        form.reset();
+        afStatus.style.color = "var(--cyan)";
+        afStatus.textContent = "Pedido enviado! Respondemos no seu e-mail com o link da Kiwify.";
+        afForm.reset();
       } else {
-        status.style.color = "var(--red)";
-        status.textContent = res.txt || "Não foi possível enviar agora. Tente de novo em instantes.";
+        afStatus.style.color = "var(--red)";
+        afStatus.textContent = res.txt || "Não foi possível enviar agora. Tente de novo em instantes.";
       }
     }).catch(function(){
-      btn.disabled = false;
-      status.style.color = "var(--red)";
-      status.textContent = "Falha de conexão. Verifique a internet e tente de novo.";
+      afBtn.disabled = false;
+      afStatus.style.color = "var(--red)";
+      afStatus.textContent = "Falha de conexão. Verifique a internet e tente de novo.";
     });
   });
+})();
 </script>
 </body>
 </html>
