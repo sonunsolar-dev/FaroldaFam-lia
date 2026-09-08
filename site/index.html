@@ -83,15 +83,15 @@
     .burger{display:flex;}
     header nav{
       position:absolute; top:calc(100% + 1px); left:0; right:0;
-      flex-direction:column; align-items:stretch; gap:2px;
+      flex-direction:column; align-items:stretch; gap:0;
       background:var(--paper); border-bottom:1px solid var(--line);
       box-shadow:0 16px 30px rgba(34,49,46,.10);
-      padding:8px 16px 16px;
+      padding:4px 16px 12px;
       display:none;
     }
     header nav.open{display:flex;}
-    header nav a{font-size:15.5px; padding:13px 10px; border-radius:10px; white-space:normal;}
-    header nav a.cta{margin-top:6px; text-align:center; padding:14px;}
+    header nav a{font-size:15.5px; padding:8px 10px; border-radius:10px; white-space:normal;}
+    header nav a.cta{margin-top:8px; text-align:center; padding:13px;}
   }
 
   /* ---------- buttons ---------- */
@@ -266,6 +266,7 @@
       <a href="#preco">Preço</a>
       <a href="#afiliados">Afiliados</a>
       <a href="#duvidas">Dúvidas</a>
+      <a href="manual.html">Manual</a>
       <a href="meu-codigo.html">Meu código</a>
       <a class="cta" href="#teste">Testar grátis</a>
     </nav>
