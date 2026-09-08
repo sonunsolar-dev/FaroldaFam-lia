@@ -38,7 +38,7 @@
     --r-lg:22px; --r-md:15px; --r-sm:10px;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
   body{
     margin:0; background:var(--paper); color:var(--ink);
     font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -47,6 +47,7 @@
   img{max-width:100%; display:block;}
   a{color:var(--teal); text-decoration:none; font-weight:600;}
   a:hover{text-decoration:underline;}
+  code{word-break:break-word; overflow-wrap:anywhere;}
   h1,h2,h3{font-family:'Fraunces',Georgia,serif; font-weight:500; letter-spacing:-.01em; line-height:1.15; color:var(--ink);}
 
   .wrap{width:100%; max-width:680px; margin:0 auto; padding:0 24px;}
@@ -55,19 +56,43 @@
   /* ---------- header ---------- */
   header{
     position:sticky; top:0; z-index:50;
-    background:rgba(251,248,243,.82);
+    background:rgba(251,248,243,.86);
     backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px);
     border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top);
   }
-  header .row{max-width:920px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between;}
-  .word{font-family:'Fraunces',Georgia,serif; font-size:22px; font-weight:600; color:var(--accent); letter-spacing:.13em; text-transform:uppercase; white-space:nowrap;}
+  header .row{position:relative; max-width:920px; margin:0 auto; padding:0 clamp(16px,4vw,24px); height:64px; display:flex; align-items:center; justify-content:space-between; gap:12px;}
+  .word{font-family:'Fraunces',Georgia,serif; font-size:clamp(17px,4.6vw,22px); font-weight:600; color:var(--accent); letter-spacing:.12em; text-transform:uppercase; white-space:nowrap;}
   .word b{color:var(--ink); font-weight:600;}
   header nav{display:flex; align-items:center; gap:4px;}
   header nav a{color:var(--ink-soft); font-size:14px; font-weight:600; padding:8px 11px; border-radius:9px;}
   header nav a:hover{color:var(--ink); background:var(--teal-wash); text-decoration:none;}
   header nav a.cta{background:var(--teal); color:#fff;}
   header nav a.cta:hover{background:var(--teal-deep);}
-  @media(max-width:620px){ header nav a.plain{display:none;} .word{font-size:18.5px; letter-spacing:.11em;} }
+
+  /* hamburguer: some no desktop */
+  .burger{display:none; flex-direction:column; justify-content:center; gap:5px; width:42px; height:42px;
+    padding:10px; border:1px solid var(--line); border-radius:10px; background:var(--card); cursor:pointer; flex:0 0 auto;}
+  .burger span{display:block; height:2px; width:100%; background:var(--ink); border-radius:2px; transition:transform .2s, opacity .2s;}
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  @media(max-width:700px){
+    .word{letter-spacing:.11em;}
+    .burger{display:flex;}
+    header nav{
+      position:absolute; top:calc(100% + 1px); left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:2px;
+      background:var(--paper); border-bottom:1px solid var(--line);
+      box-shadow:0 16px 30px rgba(34,49,46,.10);
+      padding:8px 16px 16px;
+      display:none;
+    }
+    header nav.open{display:flex;}
+    header nav a{font-size:15.5px; padding:13px 10px; border-radius:10px; white-space:normal;}
+    header nav a.cta{margin-top:6px; text-align:center; padding:14px;}
+  }
 
   /* ---------- buttons ---------- */
   .btn{
@@ -189,7 +214,7 @@
   .form label.check input{width:auto; margin:2px 0 0;}
   .form .btn{width:100%; margin-top:8px;}
   .code-result{display:none; margin-top:20px; padding:20px; border-radius:var(--r-md); background:var(--teal-wash); border:1px solid rgba(14,110,102,.2);}
-  .code-result .code{font-family:'Fraunces',serif; font-size:clamp(24px,6vw,30px); font-weight:600; color:var(--teal-deep); letter-spacing:1px; margin:8px 0 14px;}
+  .code-result .code{font-family:'Fraunces',serif; font-size:clamp(22px,6vw,30px); font-weight:600; color:var(--teal-deep); letter-spacing:.5px; margin:8px 0 14px; overflow-wrap:anywhere;}
   .warnbox{background:var(--accent-wash); border:1px solid rgba(192,85,60,.3); border-radius:var(--r-sm); padding:13px 15px; margin:14px 0;}
   .warnbox p{margin:0; font-size:13.5px; color:var(--ink);}
   .warnbox p:first-child{font-weight:700;}
@@ -233,10 +258,14 @@
 <header>
   <div class="row">
     <span class="word">SOS <b>Farol</b></span>
-    <nav>
-      <a class="plain" href="#como">Como funciona</a>
-      <a class="plain" href="#preco">Preço</a>
-      <a class="plain" href="#duvidas">Dúvidas</a>
+    <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav">
+      <a href="#como">Como funciona</a>
+      <a href="#preco">Preço</a>
+      <a href="#duvidas">Dúvidas</a>
+      <a href="meu-codigo.html">Meu código</a>
       <a class="cta" href="#teste">Testar grátis</a>
     </nav>
   </div>
@@ -523,6 +552,29 @@
 
   var comprarBtn = document.getElementById('comprarBtn');
   if (comprarBtn) comprarBtn.href = KIWIFY_CHECKOUT_URL;
+
+  // Menu hambúrguer (só aparece no celular via CSS)
+  (function(){
+    var burger = document.getElementById('burger');
+    var nav = document.getElementById('nav');
+    if (!burger || !nav) return;
+    function setOpen(open){
+      nav.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    }
+    burger.addEventListener('click', function(){
+      setOpen(!nav.classList.contains('open'));
+    });
+    // fecha ao tocar num link (ancora ou página nova)
+    nav.addEventListener('click', function(e){
+      if (e.target.tagName === 'A') setOpen(false);
+    });
+    // fecha ao voltar pro tamanho de desktop
+    window.addEventListener('resize', function(){
+      if (window.innerWidth > 700) setOpen(false);
+    });
+  })();
 
   function gerarCodigoTeste(){
     var d = [];
