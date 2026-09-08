@@ -47,6 +47,17 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacin
   background:linear-gradient(110deg,#61b1ff 0%,#35ded5 100%);
 }
 .center{text-align:center}
+.contact{margin-top:32px}
+.contact input,.contact textarea{
+  display:block;width:100%;max-width:340px;margin:0 auto 12px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;
+  color:var(--white);font:400 15px 'DM Sans',sans-serif;padding:14px 16px;
+}
+.contact textarea{resize:vertical;line-height:1.6}
+.contact input::placeholder,.contact textarea::placeholder{color:#6f8296}
+.contact input:focus,.contact textarea:focus{outline:none;border-color:var(--cyan)}
+.contact .btn{margin:8px auto 0}
+.contact .btn:disabled{opacity:.6}
 </style>
 </head>
 <body>
@@ -75,9 +86,71 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacin
   </div>
 
   <div class="center">
-    <a class="btn" href="index.html#suporte">Pedir meu link de afiliado</a>
-    <p class="sub" style="margin-top:10px;">Use o formulário de suporte do site e escreva que é sobre <b>afiliação</b> — enviamos seu link da Kiwify por e-mail.</p>
+    <p class="sub" style="margin:0;">Chega direto pra nós. Respondemos com o seu link da Kiwify no e-mail informado.</p>
+    <form class="contact" id="afForm">
+      <input type="text" id="afNome" placeholder="Seu nome" autocomplete="name">
+      <input type="email" id="afEmail" placeholder="Seu e-mail (é por onde respondemos)" autocomplete="email">
+      <input type="text" id="afArea" placeholder="Sua área (ex.: psicologia, direito de família, ONG)">
+      <textarea id="afMsg" rows="3" placeholder="Como pretende indicar o SOS Farol (opcional)"></textarea>
+      <button class="btn" id="afBtn" type="submit">Pedir meu link de afiliado</button>
+      <p class="sub" id="afStatus" style="margin-top:12px;min-height:20px;"></p>
+    </form>
+    <noscript><p class="sub" style="margin-top:10px;">Sem JavaScript? Escreva pelo <a href="index.html#suporte" style="color:var(--cyan);">formulário de suporte</a> dizendo que é sobre <b>afiliação</b>.</p></noscript>
   </div>
 </div>
+
+<script>
+  var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+  var SUPORTE_URL = SUPABASE_URL + "/functions/v1/farol-suporte";
+
+  var form = document.getElementById('afForm');
+  var btn = document.getElementById('afBtn');
+  var status = document.getElementById('afStatus');
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var nome = document.getElementById('afNome').value.trim();
+    var email = document.getElementById('afEmail').value.trim();
+    var area = document.getElementById('afArea').value.trim();
+    var msg = document.getElementById('afMsg').value.trim();
+    if (!nome || email.indexOf('@') < 0){
+      status.style.color = "var(--red)";
+      status.textContent = "Preencha seu nome e um e-mail válido.";
+      return;
+    }
+    var mensagem = "[AFILIADOS] Pedido de link de afiliado Kiwify.\n"
+      + "Area: " + (area || "(nao informada)") + "\n\n"
+      + (msg || "(sem detalhes)");
+    btn.disabled = true;
+    status.style.color = "var(--muted)";
+    status.textContent = "Enviando…";
+    fetch(SUPORTE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ nome:nome, email:email, mensagem:mensagem })
+    }).then(function(r){
+      return r.text().then(function(txt){ return { ok:r.ok, txt:txt }; });
+    }).then(function(res){
+      btn.disabled = false;
+      if (res.ok){
+        status.style.color = "var(--cyan)";
+        status.textContent = "Pedido enviado! Respondemos no seu e-mail com o link da Kiwify.";
+        form.reset();
+      } else {
+        status.style.color = "var(--red)";
+        status.textContent = res.txt || "Não foi possível enviar agora. Tente de novo em instantes.";
+      }
+    }).catch(function(){
+      btn.disabled = false;
+      status.style.color = "var(--red)";
+      status.textContent = "Falha de conexão. Verifique a internet e tente de novo.";
+    });
+  });
+</script>
 </body>
 </html>
