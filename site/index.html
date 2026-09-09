@@ -165,6 +165,7 @@
   }
   .note p{margin:0; font-size:16px; color:var(--ink-soft);}
   .note p b{color:var(--ink);}
+  .note.important{border-left:4px solid var(--accent);}
 
   /* ---------- steps ---------- */
   ol.steps{list-style:none; counter-reset:st; margin:0; padding:0; display:grid; gap:12px;}
@@ -255,10 +256,11 @@
     background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
     padding:28px 24px; text-align:center; box-shadow:var(--shadow);
   }
-  .official .label{font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--ink-faint); margin:0 0 18px;}
+  .official .label{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--accent); margin:0 0 18px;}
   .official .nums{display:flex; flex-wrap:wrap; justify-content:center; gap:16px 40px;}
-  .official .n{font-family:'Fraunces',serif; font-size:30px; font-weight:600; color:var(--ink); line-height:1;}
-  .official .d{font-size:12px; color:var(--ink-soft); margin-top:5px;}
+  .official .n{font-family:'Fraunces',serif; font-size:32px; font-weight:700; color:var(--ink); line-height:1;}
+  .official .d{font-size:12px; font-weight:600; color:var(--ink-soft); margin-top:5px;}
+  .official .comp{font-size:12.5px; color:var(--ink-soft); margin:18px 0 0;}
   footer .foot-note{text-align:center; font-size:13px; color:var(--ink-faint); margin:26px auto 0; max-width:52ch;}
   footer .foot-note a{color:var(--ink-soft);}
 
@@ -412,6 +414,15 @@
   </div>
 </section>
 
+<!-- ===================== AVISO — FERRAMENTA A MAIS ===================== -->
+<section>
+  <div class="wrap">
+    <div class="note important">
+      <p><b>O SOS Farol é uma ferramenta a mais de segurança — não a única.</b> Ele depende de coisas que podem falhar: o celular de quem é protegido <b>ou</b> de quem recebe desligado, sem bateria ou sem internet; Wi-Fi fora do ar; operadora sem sinal; quem recebe com o som no silencioso. <b>Em risco imediato, ligue sempre primeiro para um canal oficial:</b> <b>190</b> (Polícia) · <b>180</b> (Violência contra a mulher) · <b>100</b> (Direitos Humanos).</p>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== TESTE ===================== -->
 <section id="teste">
   <div class="wrap">
@@ -545,12 +556,13 @@
 <footer>
   <div class="wrap wide">
     <div class="official">
-      <p class="label">Em situação de risco imediato, acione um canal oficial</p>
+      <p class="label">Prioridade — em risco imediato, ligue primeiro para um canal oficial</p>
       <div class="nums">
         <div><div class="n">190</div><div class="d">Polícia</div></div>
         <div><div class="n">180</div><div class="d">Violência contra a mulher</div></div>
         <div><div class="n">100</div><div class="d">Direitos Humanos</div></div>
       </div>
+      <p class="comp">O SOS Farol é uma ferramenta de apoio — não substitui esses canais.</p>
     </div>
     <p class="foot-note">
       © SOS Farol. Ferramenta de apoio — não substitui atendimento policial ou institucional em emergências.<br>
