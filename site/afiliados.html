@@ -1,103 +1,180 @@
-<!DOCTYPE html>
+<!doctype html>
+<!--
+  Área de afiliados do SOS Farol — mesmo padrão visual da landing
+  (site/index.html): fundo claro, Fraunces nos títulos + Inter no texto,
+  tokens --paper / --ink / --teal / --accent. Página "por convite", noindex
+  (robots.txt já bloqueia /site/afiliados.html). O formulário envia pra
+  Edge Function farol-suporte com a mensagem marcada [AFILIADOS].
+-->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Seja Afiliado do SOS Farol — Kiwify</title>
+<meta name="robots" content="noindex">
+<title>Afiliados — SOS Farol</title>
+<meta name="description" content="Programa de afiliados Kiwify do SOS Farol, por convite, para profissionais que trabalham com famílias em situações delicadas.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
-:root{
-  --bg:#07111f; --surface:#101d2f; --white:#f7fbff; --muted:#9cafc2;
-  --line:rgba(255,255,255,.09); --blue:#4da3ff; --cyan:#29d7d0; --red:#ff5d6c;
-  --shadow:0 25px 70px rgba(0,0,0,.28); --radius:28px;
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{
-  margin:0;color:var(--white);font-family:'DM Sans',sans-serif;line-height:1.7;
-  background:
-    radial-gradient(circle at 10% -5%,rgba(77,163,255,.20),transparent 27%),
-    radial-gradient(circle at 92% 8%,rgba(41,215,208,.13),transparent 25%),
-    linear-gradient(180deg,#07111f 0%,#091525 48%,#07111f 100%);
-  -webkit-font-smoothing:antialiased;
-}
-.display{font-family:'Manrope',sans-serif}
-.wrap{max-width:720px;margin:0 auto;padding:60px 25px 80px}
-h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacing:-.04em;margin:0 0 6px;text-align:center}
-.sub{text-align:center;color:var(--muted);font-size:15px;margin:0 0 34px}
-.commission{
-  text-align:center;background:linear-gradient(135deg,rgba(41,215,208,.14),rgba(77,163,255,.06));
-  border:1px solid rgba(41,215,208,.28);border-radius:24px;padding:28px;margin-bottom:36px;
-}
-.commission .n{font-family:'Manrope',sans-serif;font-size:56px;font-weight:800;color:#6eece4;line-height:1}
-.commission .d{color:var(--muted);font-size:14px;margin-top:6px}
-.box{
-  background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:20px;
-  padding:26px 28px;margin-bottom:20px;
-}
-.box h3{margin:0 0 10px;font-size:17px;color:#f5f9ff}
-.box p{margin:0;color:var(--muted);font-size:14.5px}
-.warn{border-color:rgba(255,93,108,.28);background:rgba(255,93,108,.06)}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;width:100%;max-width:340px;
-  min-height:55px;padding:15px 25px;margin:30px auto 0;border:0;border-radius:15px;
-  text-decoration:none;font:700 15px 'DM Sans',sans-serif;color:#04101d;
-  background:linear-gradient(110deg,#61b1ff 0%,#35ded5 100%);
-}
-.center{text-align:center}
-.contact{margin-top:32px}
-.contact input,.contact textarea{
-  display:block;width:100%;max-width:340px;margin:0 auto 12px;
-  background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;
-  color:var(--white);font:400 15px 'DM Sans',sans-serif;padding:14px 16px;
-}
-.contact textarea{resize:vertical;line-height:1.6}
-.contact input::placeholder,.contact textarea::placeholder{color:#6f8296}
-.contact input:focus,.contact textarea:focus{outline:none;border-color:var(--cyan)}
-.contact .btn{margin:8px auto 0}
-.contact .btn:disabled{opacity:.6}
+  :root{
+    color-scheme:light;
+    --paper:#FBF8F3;
+    --paper-2:#F4EFE6;
+    --card:#FFFFFF;
+    --ink:#22312E;
+    --ink-soft:#5B6B66;
+    --ink-faint:#8A968F;
+    --teal:#0E6E66;
+    --teal-deep:#0A4A45;
+    --teal-wash:rgba(14,110,102,.07);
+    --accent:#C0553C;
+    --accent-wash:rgba(192,85,60,.08);
+    --line:#E7E1D5;
+    --shadow:0 1px 2px rgba(34,49,46,.04), 0 12px 34px rgba(34,49,46,.07);
+    --r-lg:22px; --r-md:15px; --r-sm:10px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%; text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--teal); text-decoration:none; font-weight:600;}
+  a:hover{text-decoration:underline;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif; font-weight:500; letter-spacing:-.01em; line-height:1.15; color:var(--ink);}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(251,248,243,.86);
+    backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top);
+  }
+  header .row{max-width:920px; margin:0 auto; padding:0 clamp(16px,4vw,24px); height:64px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;}
+  .word{font-family:'Fraunces',Georgia,serif; font-size:clamp(17px,4.6vw,22px); font-weight:600;
+    color:var(--accent); letter-spacing:.12em; text-transform:uppercase; white-space:nowrap;}
+  .word:hover{text-decoration:none;}
+  .word b{color:var(--ink); font-weight:600;}
+  header .back{color:var(--ink-soft); font-size:14px; font-weight:600;}
+  header .back:hover{color:var(--ink); text-decoration:none;}
+
+  /* ---------- layout ---------- */
+  .wrap{width:100%; max-width:640px; margin:0 auto; padding:56px 24px 64px;}
+  .eyebrow{
+    font-family:'Inter',sans-serif; font-size:12.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.13em; color:var(--teal); margin:0 0 16px;
+  }
+  h1{font-size:clamp(28px,5.4vw,40px); font-weight:500; margin:0 0 14px;}
+  p.lede{font-size:18px; color:var(--ink-soft); margin:0 0 32px; max-width:52ch;}
+
+  /* ---------- comissão ---------- */
+  .commission{
+    text-align:center; background:var(--teal-wash);
+    border:1px solid rgba(14,110,102,.25); border-radius:var(--r-lg);
+    padding:28px 24px; margin:0 0 28px;
+  }
+  .commission .n{font-family:'Fraunces',Georgia,serif; font-size:56px; font-weight:600; color:var(--teal-deep); line-height:1;}
+  .commission .d{color:var(--ink-soft); font-size:14.5px; margin-top:8px;}
+
+  /* ---------- blocos ---------- */
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+    padding:24px 26px; margin:0 0 16px; box-shadow:var(--shadow);
+  }
+  .card h3{margin:0 0 8px; font-size:19px;}
+  .card p{margin:0; color:var(--ink-soft); font-size:15.5px;}
+  .card.warn{border-color:rgba(192,85,60,.32); background:linear-gradient(180deg,var(--accent-wash),transparent 70%);}
+  .card.warn h3{color:var(--accent);}
+
+  /* ---------- pedir link ---------- */
+  .ask{margin:34px 0 0; text-align:center;}
+  .ask h3{font-size:20px; margin:0 0 6px;}
+  .ask p.lede{font-size:15.5px; margin:0 auto 20px; text-align:center;}
+  .ask form{max-width:360px; margin:0 auto;}
+  .ask input, .ask textarea{
+    display:block; width:100%; margin:0 auto 12px;
+    background:var(--paper-2); border:1px solid var(--line); border-radius:var(--r-sm);
+    color:var(--ink); font:400 15px 'Inter',sans-serif; padding:13px 15px;
+  }
+  .ask textarea{resize:vertical; line-height:1.6;}
+  .ask input::placeholder, .ask textarea::placeholder{color:var(--ink-faint);}
+  .ask input:focus, .ask textarea:focus{outline:none; border-color:var(--teal);}
+  #afStatus{font-size:14px; color:var(--ink-soft); margin:12px 0 0; min-height:20px;}
+  .noscript-note{font-size:14px; color:var(--ink-soft); margin-top:12px;}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    width:100%; min-height:52px; padding:14px 26px; border:0; border-radius:var(--r-md);
+    font:600 16px 'Inter',sans-serif; cursor:pointer; transition:transform .15s ease, background .15s ease;
+    text-decoration:none;
+  }
+  .btn:hover{text-decoration:none; transform:translateY(-1px);}
+  .btn-primary{background:var(--teal); color:#fff; margin-top:4px;}
+  .btn-primary:hover{background:var(--teal-deep);}
+  .btn-primary:disabled{opacity:.6; transform:none; cursor:default;}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line); padding:28px 24px; text-align:center;}
+  footer p{margin:0; font-size:13px; color:var(--ink-faint);}
+  footer a{font-weight:600;}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1 class="display">Seja Afiliado Kiwify do SOS Farol</h1>
-  <p class="sub">Um programa fechado, por convite, para profissionais que trabalham com famílias em situações delicadas.</p>
+
+<header>
+  <div class="row">
+    <a class="word" href="index.html">SOS <b>Farol</b></a>
+    <a class="back" href="index.html">← Voltar ao site</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow">Programa de afiliados · por convite</p>
+  <h1>Seja Afiliado Kiwify do SOS Farol</h1>
+  <p class="lede">Um programa fechado, por convite, para profissionais que trabalham com famílias em situações delicadas.</p>
 
   <div class="commission">
     <div class="n">45%</div>
     <div class="d">de comissão por venda aprovada — pago automaticamente pela Kiwify</div>
   </div>
 
-  <div class="box">
+  <div class="card">
     <h3>Como indicar</h3>
     <p>O SOS Farol é indicado de forma pessoal, não por anúncios públicos ou redes sociais. Funciona melhor quando você apresenta a ferramenta individualmente, durante o atendimento, para a família ou pessoa que já está acompanhando — como mais um recurso de apoio, não como uma campanha de marketing.</p>
   </div>
 
-  <div class="box warn">
+  <div class="card warn">
     <h3>Cuidado com a linguagem</h3>
     <p>Use sempre termos neutros ao falar do produto: "segurança e bem-estar familiar", "pessoa vulnerável em casa", "idosos e pessoas com deficiência". Evite mencionar publicamente termos como "violência doméstica" ou "botão de pânico contra agressor" em qualquer material compartilhado abertamente (posts, grupos, sites) — isso pode expor a pessoa que mais precisamos proteger.</p>
   </div>
 
-  <div class="box">
+  <div class="card">
     <h3>Para onde direcionar</h3>
     <p>Direcione o interessado para o teste grátis de 15 dias no site oficial do SOS Farol, onde encontra todas as informações com cuidado, sem precisar de cadastro complicado.</p>
   </div>
 
-  <div class="center">
-    <p class="sub" style="margin:0;">Chega direto pra nós. Respondemos com o seu link da Kiwify no e-mail informado.</p>
-    <form class="contact" id="afForm">
+  <div class="ask">
+    <h3>Pedir meu link de afiliado</h3>
+    <p class="lede">Chega direto pra nós. Respondemos com o seu link da Kiwify no e-mail informado.</p>
+    <form id="afForm">
       <input type="text" id="afNome" placeholder="Seu nome" autocomplete="name">
       <input type="email" id="afEmail" placeholder="Seu e-mail (é por onde respondemos)" autocomplete="email">
       <input type="text" id="afArea" placeholder="Sua área (ex.: psicologia, direito de família, ONG)">
       <textarea id="afMsg" rows="3" placeholder="Como pretende indicar o SOS Farol (opcional)"></textarea>
-      <button class="btn" id="afBtn" type="submit">Pedir meu link de afiliado</button>
-      <p class="sub" id="afStatus" style="margin-top:12px;min-height:20px;"></p>
+      <button class="btn btn-primary" id="afBtn" type="submit">Pedir meu link de afiliado</button>
+      <p id="afStatus"></p>
     </form>
-    <noscript><p class="sub" style="margin-top:10px;">Sem JavaScript? Escreva pelo <a href="index.html#suporte" style="color:var(--cyan);">formulário de suporte</a> dizendo que é sobre <b>afiliação</b>.</p></noscript>
+    <noscript><p class="noscript-note">Sem JavaScript? Escreva pelo <a href="index.html#suporte">formulário de suporte</a> dizendo que é sobre <b>afiliação</b>.</p></noscript>
   </div>
-</div>
+</main>
+
+<footer>
+  <p>© SOS Farol · <a href="index.html">Voltar ao site</a> · <a href="termos.html">Termos</a> · <a href="privacidade.html">Privacidade</a></p>
+</footer>
 
 <script>
 (function(){
@@ -116,7 +193,7 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacin
     var area = document.getElementById('afArea').value.trim();
     var msg = document.getElementById('afMsg').value.trim();
     if (!nome || email.indexOf('@') < 0){
-      afStatus.style.color = "var(--red)";
+      afStatus.style.color = "var(--accent)";
       afStatus.textContent = "Preencha seu nome e um e-mail válido.";
       return;
     }
@@ -124,7 +201,7 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacin
       + "Area: " + (area || "(nao informada)") + "\n\n"
       + (msg || "(sem detalhes)");
     afBtn.disabled = true;
-    afStatus.style.color = "var(--muted)";
+    afStatus.style.color = "var(--ink-soft)";
     afStatus.textContent = "Enviando…";
     fetch(SUPORTE_URL, {
       method: "POST",
@@ -139,16 +216,16 @@ h1{font-family:'Manrope',sans-serif;font-size:clamp(30px,5vw,42px);letter-spacin
     }).then(function(res){
       afBtn.disabled = false;
       if (res.ok){
-        afStatus.style.color = "var(--cyan)";
+        afStatus.style.color = "var(--teal)";
         afStatus.textContent = "Pedido enviado! Respondemos no seu e-mail com o link da Kiwify.";
         afForm.reset();
       } else {
-        afStatus.style.color = "var(--red)";
+        afStatus.style.color = "var(--accent)";
         afStatus.textContent = res.txt || "Não foi possível enviar agora. Tente de novo em instantes.";
       }
     }).catch(function(){
       afBtn.disabled = false;
-      afStatus.style.color = "var(--red)";
+      afStatus.style.color = "var(--accent)";
       afStatus.textContent = "Falha de conexão. Verifique a internet e tente de novo.";
     });
   });
