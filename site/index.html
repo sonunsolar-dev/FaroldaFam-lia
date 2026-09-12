@@ -627,13 +627,6 @@
     });
   })();
 
-  function gerarCodigoTeste(){
-    var d = [];
-    for (var i=0;i<5;i++) d.push(Math.floor(Math.random()*10));
-    var checksum = d.reduce(function(a,b){return a+b;},0) % 10;
-    return 'FAROLT-' + d.join('') + checksum;
-  }
-
   document.getElementById('gerarBtn').addEventListener('click', function(){
     var nome = document.getElementById('nomeInput').value.trim() || "Interessado(a)";
     var whatsapp = document.getElementById('whatsInput').value.trim().replace(/\D/g,'');
@@ -641,22 +634,24 @@
     if (!whatsapp){ alert("Preencha seu WhatsApp antes de gerar o código."); return; }
     if (!email){ alert("Preencha seu e-mail antes de gerar o código."); return; }
     if (!document.getElementById('termosCheck').checked){ alert("Marque que você leu e concorda com os Termos de Uso e a Política de Privacidade."); return; }
-    var codigo = gerarCodigoTeste();
     var btn = document.getElementById('gerarBtn');
     btn.disabled = true; btn.textContent = 'Verificando…';
+    // O codigo agora e gerado pelo proprio servidor - o site so manda os
+    // dados do formulario e le o codigo de volta na resposta.
     fetch(REGISTRAR_TESTE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email, codigo:codigo })
+      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email })
     }).then(function(r){
       return r.text().then(function(txt){ return { ok:r.ok, txt:txt }; });
     }).then(function(res){
       btn.disabled = false; btn.textContent = 'Gerar código de teste';
       if (res.ok){
+        var codigo = JSON.parse(res.txt).codigo;
         document.getElementById('codeOut').textContent = codigo;
         document.getElementById('manualBtn').href = 'manual.html?c=' + encodeURIComponent(codigo);
         document.getElementById('codeResult').style.display = 'block';
-      } else if (res.txt && res.txt.indexOf('duplicate') !== -1){
+      } else if (res.txt && res.txt.indexOf('já pediu teste antes') !== -1){
         alert("Parece que este e-mail ou WhatsApp já testou o SOS Farol antes. Se quiser continuar usando, veja a assinatura anual mais abaixo.");
       } else if (res.txt && res.txt.indexOf('Muitas tentativas') !== -1){
         alert("Muitas tentativas em pouco tempo. Aguarde um pouco antes de tentar de novo.");
