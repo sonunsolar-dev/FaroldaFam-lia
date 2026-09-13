@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d2f3a">
+<title>Meu código — SOS Farol</title>
+<link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0d2f3a; --navy-2:#123f4d; --ink:#10242c; --muted:#66777e;
+    --soft:#f4f7f7; --white:#ffffff; --accent:#ff7a45; --accent-2:#ff9a6f;
+    --ok:#2a8b67; --coral:#c0392b; --line:#dfe7e8; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--soft);color:var(--ink);line-height:1.6;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  .wrap{max-width:520px;margin:0 auto;padding:44px 22px 70px}
+  h1{font-size:26px;margin:0 0 6px;color:var(--navy)}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 26px}
+  label{display:block;font-size:13px;font-weight:700;margin:14px 0 5px;color:var(--navy)}
+  input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;background:#fff;color:var(--ink);font-family:inherit}
+  button{width:100%;margin-top:16px;padding:14px 18px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 12px 30px rgba(255,122,69,.28);font-family:inherit}
+  button:disabled{opacity:.55;cursor:default}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-top:22px}
+  .code{font-size:30px;font-weight:900;letter-spacing:2px;color:var(--navy);text-align:center;margin:6px 0 4px;word-break:break-all}
+  .copy{display:block;margin:8px auto 0;width:auto;padding:9px 16px;font-size:13px;background:var(--ink);border-radius:999px;box-shadow:none}
+  .meta{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+  .msg{font-size:14px;margin-top:16px;min-height:20px}
+  .msg.err{color:var(--coral);font-weight:700}
+  .steps{font-size:13.5px;color:var(--muted);margin:16px 0 0;padding-left:20px}
+  .steps li{margin-bottom:6px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:22px}
+  a{color:var(--navy);font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Meu código de acesso</h1>
+    <p class="sub">Comprou o SOS Farol ou está no teste grátis? Digite o <b>e-mail usado na compra ou no cadastro</b> para ver o seu código de ativação (serve também para reabrir o manual).</p>
+
+    <label for="email">E-mail da compra ou do cadastro</label>
+    <input type="email" id="email" placeholder="voce@exemplo.com" autocomplete="email" inputmode="email">
+    <button id="btn" onclick="buscar()">Ver meu código</button>
+
+    <p style="font-size:13px;margin:12px 0 0;">Já tem o seu código em mãos? <a href="manual.html">Abrir o manual direto</a>.</p>
+
+    <div class="msg" id="msg"></div>
+
+    <div class="card" id="resultado" style="display:none;">
+      <div class="code" id="codigo"></div>
+      <button class="copy" onclick="copiar()">Copiar código</button>
+      <div class="meta" id="meta"></div>
+      <ol class="steps">
+        <li>Abra o app <b>SOS Farol</b> (ícone "Notas").</li>
+        <li>Toque em <b>"Trocar código de ativação"</b>.</li>
+        <li>Cole este código e toque em <b>Ativar</b>. Nenhuma configuração é perdida.</li>
+      </ol>
+      <p style="margin:16px 0 0;font-size:14px;"><a id="manualLink" href="#">📖 Abrir o manual completo (com vídeos)</a></p>
+    </div>
+
+    <p class="note">Acabou de comprar ou de se cadastrar? O código pode levar alguns minutos para aparecer — atualize a página e tente de novo. Código de teste ainda aguardando aprovação também não aparece aqui. Se não aparecer, use o <a href="contato.html">formulário de contato</a> no site. <a href="index.html">Voltar ao site</a></p>
+  </div>
+
+<script>
+  var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+  var URL_FN = SUPABASE_URL + "/functions/v1/farol-meu-codigo";
+
+  var msg = document.getElementById('msg');
+  var btn = document.getElementById('btn');
+  var box = document.getElementById('resultado');
+
+  function setMsg(t, err){ msg.textContent = t || ''; msg.className = 'msg' + (err ? ' err' : ''); }
+
+  async function buscar(){
+    var email = document.getElementById('email').value.trim();
+    if(!email || email.indexOf('@') < 0){ setMsg('Digite o e-mail da compra.', true); return; }
+    btn.disabled = true; setMsg('Consultando…'); box.style.display = 'none';
+    try{
+      var r = await fetch(URL_FN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({ email: email })
+      });
+      var txt = await r.text();
+      var data; try { data = JSON.parse(txt); } catch(_) { data = null; }
+
+      if(!r.ok){
+        setMsg(txt || 'Não foi possível consultar agora. Tente de novo em instantes.', true);
+        return;
+      }
+      if(!data || !data.encontrado){
+        setMsg((data && data.msg) || 'Nenhum código encontrado para esse e-mail.', true);
+        return;
+      }
+      setMsg('');
+      document.getElementById('codigo').textContent = data.codigo;
+      document.getElementById('manualLink').href = 'manual.html?c=' + encodeURIComponent(data.codigo);
+      var ehTeste = /^FAROLT-/i.test(data.codigo) || (data.plano && data.plano !== 'anual');
+      var meta = ehTeste ? 'Teste grátis' : 'Assinatura anual';
+      if(data.data_expiracao){
+        var d = new Date(data.data_expiracao);
+        if(!isNaN(d)) meta += (ehTeste ? ' — expira em ' : ' — vence em ') + d.toLocaleDateString('pt-BR');
+      }
+      document.getElementById('meta').textContent = meta;
+      box.style.display = 'block';
+    }catch(e){
+      setMsg('Falha de conexão. Verifique a internet e tente de novo.', true);
+    }finally{
+      btn.disabled = false;
+    }
+  }
+
+  function copiar(){
+    var c = document.getElementById('codigo').textContent;
+    navigator.clipboard && navigator.clipboard.writeText(c);
+    setMsg('Código copiado.');
+  }
+
+  document.getElementById('email').addEventListener('keydown', function(ev){
+    if(ev.key === 'Enter') buscar();
+  });
+
+  // Se a página foi aberta com ?email=... (ex.: redirecionamento da Kiwify),
+  // preenche e já busca.
+  (function(){
+    try{
+      var p = new URLSearchParams(location.search);
+      var e = (p.get('email') || p.get('customer_email') || p.get('e') || '').trim();
+      if(e && e.indexOf('@') > 0){
+        document.getElementById('email').value = e;
+        buscar();
+      }
+    }catch(_){}
+  })();
+</script>
+</body>
+</html>

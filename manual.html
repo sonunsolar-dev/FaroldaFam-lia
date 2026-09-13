@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d2f3a">
+<title>Manual — SOS Farol</title>
+<link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0d2f3a; --navy-2:#123f4d; --ink:#10242c; --muted:#66777e;
+    --soft:#f4f7f7; --white:#ffffff; --accent:#ff7a45; --accent-2:#ff9a6f;
+    --ok:#2a8b67; --coral:#c0392b; --line:#dfe7e8; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--soft);color:var(--ink);line-height:1.6;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
+  header.bar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+  header.bar .row{max-width:760px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;justify-content:space-between}
+  header.bar .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;color:var(--navy)}
+  header.bar .brand img{width:28px;height:28px;border-radius:8px}
+  header.bar a{font-size:13px;font-weight:700;color:var(--muted);text-decoration:none}
+
+  .gate{max-width:440px;margin:0 auto;padding:56px 22px 80px}
+  .gate h1{font-size:24px;margin:0 0 6px;color:var(--navy)}
+  .gate p{color:var(--muted);font-size:14px;margin:0 0 22px}
+  .gate label{display:block;font-size:13px;font-weight:700;margin:0 0 5px;color:var(--navy)}
+  .gate input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;letter-spacing:1px;text-transform:uppercase;background:#fff;color:var(--ink);font-family:inherit}
+  .gate button{width:100%;margin-top:14px;padding:14px 18px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 12px 30px rgba(255,122,69,.28);font-family:inherit}
+  .gate button:disabled{opacity:.55;cursor:default}
+  .gate .msg{font-size:14px;margin-top:16px;min-height:20px}
+  .gate .msg.err{color:var(--coral);font-weight:700}
+  .gate .note{font-size:12.5px;color:var(--muted);margin-top:24px}
+  .gate a{color:var(--navy);font-weight:700}
+
+  #conteudo{max-width:760px;margin:0 auto;padding:0 0 40px}
+</style>
+</head>
+<body>
+<a id="manual-top"></a>
+
+<header class="bar">
+  <div class="row">
+    <div class="brand">
+      <img src="assets/logo-sos-farol.webp" alt="" width="28" height="28">
+      <span>Manual do SOS Farol</span>
+    </div>
+    <a href="index.html">← Site</a>
+  </div>
+</header>
+
+<div class="gate" id="gate">
+  <h1>Abrir o manual</h1>
+  <p>O manual do SOS Farol é liberado com o <b>código de ativação</b> — o mesmo que você digita no aplicativo (<code>FAROL-…</code> ou <code>FAROLT-…</code>).</p>
+  <p><b>Este manual é privado, não aberto ao público.</b> Ele só abre com a sua senha (o código de ativação). Guarde bem ela.</p>
+  <label for="codigo">Código de ativação</label>
+  <input type="text" id="codigo" placeholder="FAROL-000000" autocomplete="off" autocapitalize="characters" spellcheck="false">
+  <button id="btn" type="button">Abrir manual</button>
+  <div class="msg" id="msg"></div>
+  <p class="note">Comprou e não sabe seu código? Veja em <a href="meu-codigo.html">"Meu código"</a>. Dúvidas: use o <a href="contato.html">formulário de contato</a> no site.</p>
+</div>
+
+<main id="conteudo" hidden></main>
+
+<script>
+  var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+  var URL_FN = SUPABASE_URL + "/functions/v1/farol-manual";
+
+  var gate = document.getElementById('gate');
+  var out  = document.getElementById('conteudo');
+  var inp  = document.getElementById('codigo');
+  var btn  = document.getElementById('btn');
+  var msg  = document.getElementById('msg');
+
+  function setMsg(t, err){ msg.textContent = t || ''; msg.className = 'msg' + (err ? ' err' : ''); }
+
+  // Normaliza: qualquer traço/hífen unicode -> '-', e joga fora tudo que não for
+  // letra/numero/traço (espaço invisível, aspas, NBSP, zero-width, etc.).
+  function normCodigo(s){
+    return (s || '').toUpperCase()
+      .replace(/[‐-―−﹘﹣－]/g, '-')
+      .replace(/[^A-Z0-9-]/g, '');
+  }
+
+  async function abrir(){
+    var codigo = normCodigo(inp.value);
+    if(codigo.length < 6){ setMsg('Digite o código de ativação.', true); return; }
+    btn.disabled = true; setMsg('Abrindo…');
+    try{
+      var r = await fetch(URL_FN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({ codigo: codigo })
+      });
+      var data; try { data = JSON.parse(await r.text()); } catch(_) { data = null; }
+
+      if(!data || !data.ok){
+        setMsg((data && data.msg) || 'Não foi possível abrir agora. Tente de novo em instantes.', true);
+        btn.disabled = false;
+        return;
+      }
+      out.innerHTML = data.html;
+      gate.hidden = true;
+      out.hidden = false;
+      document.title = 'Manual de uso — SOS Farol';
+      wireManual();
+      window.scrollTo(0, 0);
+    }catch(e){
+      setMsg('Falha de conexão. Verifique a internet e tente de novo.', true);
+      btn.disabled = false;
+    }
+  }
+
+  // Liga o que o conteudo injetado (innerHTML) nao consegue ligar sozinho:
+  // as caixinhas "Fiz" (progresso salvo no navegador) e o botao "voltar ao topo".
+  function wireManual(){
+    var KEY = 'sosfarol-manual-progress';
+    var boxes = [].slice.call(out.querySelectorAll('input[data-check]'));
+    var bar = document.getElementById('progBar');
+    var txt = document.getElementById('progTxt');
+
+    function loadState(){
+      try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }
+      catch(e){ return {}; }
+    }
+    function saveState(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} }
+    function render(s){
+      var n = 0;
+      boxes.forEach(function(b){
+        var k = b.getAttribute('data-check');
+        var on = !!s[k];
+        b.checked = on;
+        var card = document.getElementById('p' + k);
+        if (card) card.classList.toggle('is-done', on);
+        if (on) n++;
+      });
+      if (bar) bar.style.width = (boxes.length ? Math.round(n / boxes.length * 100) : 0) + '%';
+      if (txt) txt.textContent = n + ' de ' + boxes.length + ' passos';
+    }
+
+    var state = loadState();
+    render(state);
+    boxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        state[b.getAttribute('data-check')] = b.checked;
+        saveState(state);
+        render(state);
+      });
+    });
+
+    var toTop = document.getElementById('manualToTop');
+    if (toTop){
+      var onScroll = function(){ toTop.classList.toggle('show', window.scrollY > 600); };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+  }
+
+  btn.addEventListener('click', abrir);
+  inp.addEventListener('keydown', function(ev){ if(ev.key === 'Enter') abrir(); });
+
+  // ?c= / ?codigo= vindo do app ou da página "Meu código" -> preenche e abre.
+  (function(){
+    try{
+      var p = new URLSearchParams(location.search);
+      var c = (p.get('c') || p.get('codigo') || '').trim();
+      if(c){ inp.value = c.toUpperCase(); abrir(); }
+    }catch(_){}
+  })();
+</script>
+</body>
+</html>

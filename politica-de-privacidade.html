@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d2f3a">
+<title>Política de privacidade — SOS Farol</title>
+<link href="https://sosfarol.com.br/politica-de-privacidade.html" rel="canonical"/>
+<link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0d2f3a; --navy-2:#123f4d; --ink:#10242c; --muted:#66777e;
+    --soft:#f4f7f7; --white:#ffffff; --accent:#ff7a45; --accent-2:#ff9a6f;
+    --line:#dfe7e8; --radius:18px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--soft);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.7}
+  .wrap{max-width:680px;margin:0 auto;padding:50px 24px 70px}
+  a{color:var(--navy);font-weight:700}
+  h1{font-size:28px;margin-bottom:6px;color:var(--navy);letter-spacing:-.02em}
+  .updated{color:var(--muted);font-size:13px;margin-bottom:34px}
+  h2{font-size:18px;margin-top:36px;color:var(--navy)}
+  p,li{font-size:15px;color:var(--muted)}
+  .box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin:18px 0}
+  .back{display:inline-block;margin-top:40px;font-size:14px;font-weight:700}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Política de privacidade</h1>
+    <p class="updated">Última atualização: setembro de 2026</p>
+
+    <div class="box">
+      <p style="margin:0;color:var(--ink);font-weight:600;">Resumo direto: o SOS Farol é um aplicativo Android. No dia a dia ele não envia seus dados para lugar nenhum. Só quando um alerta é disparado o app grava alguns segundos de áudio, pega a localização e o nível de bateria do celular, e avisa os integrantes da sua rede de apoio dentro do próprio aplicativo. Na ativação, ele confere se o seu código de licença é válido; ao formar uma rede, ele guarda o nome da rede e quem faz parte dela.</p>
+    </div>
+
+    <h2>O que o app envia quando um alerta é disparado</h2>
+    <p>Ao acionar um alerta (por toque na tela, palavra-código ou gesto de agitar), o SOS Farol grava <b>alguns segundos de áudio</b> do ambiente e captura a <b>localização do celular (GPS)</b> e o <b>nível de bateria</b>. Essas informações são enviadas para o banco de dados do SOS Farol (hospedado no <b>Supabase</b>) e, de lá, um <b>aviso (notificação push)</b> é enviado para os aparelhos dos demais integrantes da <b>sua rede de apoio</b> — as pessoas que você mesmo convidou para dentro do aplicativo. O áudio gravado fica guardado por tempo limitado e é apagado automaticamente depois de um curto período.</p>
+
+    <h2>O que o app envia ao formar ou entrar numa rede de apoio</h2>
+    <p>Para juntar as pessoas que vão se ajudar, o SOS Farol cria uma <b>conta anônima</b> automaticamente (sem exigir e-mail ou senha) e guarda o <b>nome que você escolhe mostrar</b> aos demais integrantes, o <b>nome da rede</b> e a lista de quem faz parte dela. Quem entra numa rede usa um <b>código de convite</b> gerado por quem a criou. O aplicativo também guarda um identificador de notificações (usado pelo Firebase Cloud Messaging, do Google) em cada aparelho, para saber para onde enviar o aviso de um alerta.</p>
+
+    <h2>O que o app envia na ativação e no teste</h2>
+    <p>Quando você digita o código de ativação, o app envia para o <b>Supabase</b> o <b>código</b>, um <b>identificador do aparelho (device_id)</b> e a versão do aplicativo, apenas para conferir se o código é válido e quantos aparelhos já o utilizam. Ao pedir o teste grátis pelo site, você informa <b>nome, WhatsApp e e-mail</b>, usados só para gerar seu código e evitar pedidos de teste duplicados.</p>
+
+    <h2>O que o app NÃO coleta</h2>
+    <p>O SOS Farol não lê nem envia: o conteúdo que você digita em outros aplicativos, sua agenda de contatos, fotos, mensagens, ou qualquer informação sobre o uso do aparelho fora de um disparo de alerta.</p>
+
+    <h2>Serviços de terceiros envolvidos</h2>
+    <p>O funcionamento do app depende de alguns serviços de infraestrutura, cada um com sua própria política de privacidade: <b>Supabase</b> (banco de dados e envio dos alertas), <b>Firebase Cloud Messaging</b>, do Google (entrega das notificações push nos aparelhos), e, quando disponível no aparelho, o serviço <b>Play Integrity</b>, também do Google (usado apenas para conferir que o aplicativo instalado é original, sem ler nenhum dado pessoal adicional).</p>
+
+    <h2>Pagamentos</h2>
+    <p>A compra do acesso anual é processada pela <b>Kiwify</b>, uma plataforma de pagamentos independente. Os dados de pagamento (cartão, Pix, boleto) são tratados diretamente pela política de privacidade da Kiwify, não por nós.</p>
+
+    <h2>Hospedagem do site e do aplicativo</h2>
+    <p>Este site e o arquivo de instalação do app (APK) são hospedados no <b>GitHub</b>. Como qualquer site na internet, o GitHub pode registrar informações técnicas básicas de acesso (como o endereço IP), conforme a própria política de privacidade do GitHub.</p>
+
+    <h2>Retenção e exclusão de dados</h2>
+    <p>Os dados de ativação, de rede e as mensagens trocadas com o suporte ficam guardados pelo tempo necessário para validar a licença, manter sua rede funcionando e dar atendimento. O áudio de um alerta é apagado automaticamente após um curto período. Você pode pedir a exclusão dos seus dados a qualquer momento pelo <a href="contato.html">formulário de contato</a> no site.</p>
+
+    <h2>Dúvidas</h2>
+    <p>Qualquer pergunta sobre esta política, entre em contato pelo <a href="contato.html">formulário de contato</a> no site.</p>
+
+    <a class="back" href="index.html" onclick="if(document.referrer){history.back(); return false;}">← Voltar</a>
+  </div>
+</body>
+</html>
