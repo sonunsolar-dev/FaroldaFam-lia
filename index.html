@@ -177,6 +177,30 @@
       color:var(--navy);
     }
 
+    .btn-ok{
+      background:var(--ok);
+      color:#fff;
+    }
+
+    .store-mini-card{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+      background:#eaf6f0;
+      border:1px solid #bfe3d0;
+      border-radius:24px;
+      padding:22px 26px;
+    }
+
+    .store-mini-icon{font-size:34px;flex:0 0 auto}
+
+    .store-mini-text{flex:1 1 260px}
+    .store-mini-text h3{margin:0 0 4px;color:var(--navy);font-size:18px}
+    .store-mini-text p{margin:0;color:var(--muted);font-size:14px}
+
+    .store-mini-card .btn{flex:0 0 auto;padding:12px 20px;font-size:14px}
+
     .hero{
       position:relative;
       overflow:hidden;
@@ -809,6 +833,14 @@
         border-radius:28px;
       }
 
+      .store-mini-card{
+        padding:20px;
+        border-radius:20px;
+        justify-content:center;
+        text-align:center;
+      }
+      .store-mini-card .btn{width:100%}
+
       .hero-card{
         padding:18px;
         border-radius:28px;
@@ -1202,6 +1234,18 @@
 <details><summary>Funciona com a tela apagada?</summary><p>O funcionamento em segundo plano depende das permissões e configurações do aparelho. O aplicativo orienta o usuário sobre as configurações necessárias para os recursos habilitados.</p></details>
 <details><summary>O FAROL substitui polícia ou serviços de emergência?</summary><p>Não. O FAROL avisa sua rede de apoio. Dependendo da situação, um membro da rede pode decidir acionar os serviços públicos de emergência.</p></details>
 <details><summary>O teste de 15 dias tem compromisso?</summary><p>Não. A proposta é permitir que o usuário experimente a rede e avalie se ela faz sentido para sua realidade antes de assinar.</p></details>
+</div>
+</div>
+</section>
+<section id="loja-mini">
+<div class="wrap">
+<div class="store-mini-card">
+<span class="store-mini-icon">🛒</span>
+<div class="store-mini-text">
+<h3>Loja de Apoio</h3>
+<p>Produtos selecionados na Amazon para segurança, autonomia e cuidado no dia a dia.</p>
+</div>
+<a class="btn btn-ok" href="loja-de-apoio.html">Conhecer a loja</a>
 </div>
 </div>
 </section>
