@@ -110,6 +110,47 @@
       font-weight:650;
     }
 
+    .menu-toggle{
+      display:none;
+      flex-direction:column;
+      justify-content:center;
+      gap:5px;
+      width:38px;
+      height:38px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#fff;
+      cursor:pointer;
+      flex:0 0 auto;
+      padding:0;
+    }
+    .menu-toggle span{
+      display:block;
+      width:18px;
+      height:2px;
+      margin:0 auto;
+      background:var(--navy);
+      border-radius:2px;
+    }
+
+    .mobile-menu{
+      display:none;
+      flex-direction:column;
+      gap:2px;
+      padding:10px min(18px, calc((100% - 680px)/2 + 18px)) 18px;
+      border-top:1px solid var(--line);
+      background:#fff;
+    }
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{
+      padding:13px 4px;
+      color:#35525c;
+      font-size:15px;
+      font-weight:650;
+      border-bottom:1px solid var(--line);
+    }
+    .mobile-menu .btn{margin-top:12px}
+
     .btn{
       display:inline-flex;
       align-items:center;
@@ -662,6 +703,7 @@
       }
 
       .nav-links{display:none}
+      .menu-toggle{display:flex}
 
       .brand{
         gap:8px;
@@ -881,10 +923,23 @@
 <a href="#situacoes">Situações reais</a>
 <a href="#diferenciais">Diferenciais</a>
 <a href="#preco">Preço</a>
+<a href="loja-de-apoio.html">Loja Farol</a>
 <a href="#faq">Dúvidas</a>
 </nav>
 <a class="btn btn-primary" href="#teste">Testar grátis</a>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" id="menuToggle" type="button">
+<span></span><span></span><span></span>
+</button>
 </div>
+<nav class="mobile-menu" id="mobileMenu">
+<a href="#como-funciona">Como funciona</a>
+<a href="#situacoes">Situações reais</a>
+<a href="#diferenciais">Diferenciais</a>
+<a href="#preco">Preço</a>
+<a href="loja-de-apoio.html">Loja Farol</a>
+<a href="#faq">Dúvidas</a>
+<a class="btn btn-primary" href="#teste">Testar grátis</a>
+</nav>
 </header>
 <main id="inicio">
 <section class="hero">
@@ -1139,6 +1194,21 @@
   var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/uG4J81J";
   var comprarBtn = document.getElementById('comprarBtn');
   if (comprarBtn) comprarBtn.href = KIWIFY_CHECKOUT_URL;
+
+  var menuToggle = document.getElementById('menuToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', function(){
+      var open = mobileMenu.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(mobileMenu.querySelectorAll('a'), function(a){
+      a.addEventListener('click', function(){
+        mobileMenu.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
 </script>
 </body>
 </html>
