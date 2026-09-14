@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E6E66">
+<title>Redefinir senha — SOS Farol</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; max-width:460px; margin:40px auto; text-align:center; color:#10262B; padding:0 20px;}
+  button{padding:13px 20px; font-size:15px; border-radius:10px; border:none; color:#fff; cursor:pointer; width:100%; background:#0E6E66; margin-top:14px;}
+  .box{border:1px solid #ddd; border-radius:12px; padding:20px; margin-top:20px; text-align:left;}
+  label{display:block; font-size:13px; font-weight:600; margin:10px 0 4px;}
+  input{width:100%; padding:10px 12px; border:1.5px solid #ddd; border-radius:8px; font-size:15px; box-sizing:border-box;}
+  .status{font-size:13px; margin-top:10px; text-align:center; min-height:18px;}
+  .navlink{display:block; margin-top:18px; font-size:13px; color:#0E6E66; font-weight:600; text-decoration:none;}
+</style>
+</head>
+<body>
+  <h2>Redefinir senha — SOS Farol</h2>
+
+  <div id="formBox" class="box" style="display:none;">
+    <label for="senha1">Nova senha</label>
+    <div style="position:relative;">
+      <input type="password" id="senha1" placeholder="Nova senha" style="padding-right:44px;">
+      <button type="button" onclick="alternarPin('senha1', this)" style="position:absolute; right:4px; top:4px; width:36px; height:calc(100% - 8px); padding:0; margin:0; background:transparent; color:#666; font-size:16px;">👁</button>
+    </div>
+    <label for="senha2">Confirme a nova senha</label>
+    <input type="password" id="senha2" placeholder="Repita a senha">
+    <button onclick="trocarSenha()">Salvar nova senha</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div id="erroBox" class="box" style="display:none;">
+    <div class="status" style="color:#C94F4F;">
+      Este link de redefinição não é válido ou já expirou. Peça um novo
+      link em <strong>gerador.html</strong> ou <strong>clientes.html</strong>
+      (opção "Esqueci minha senha").
+    </div>
+  </div>
+
+  <a class="navlink" href="gerador.html">← Voltar pro gerador</a>
+
+<script>
+var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
+var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmanFucG1rdnVjbHplbXVhbXR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MzE5NTEsImV4cCI6MjEwMzEwNzk1MX0.xmMwQUzhbEHX19CXeG2TbMqZJnAiGLFtZXnqgtdgrGw";
+
+function alternarPin(id, btn){
+  var el = document.getElementById(id);
+  if(el.type === 'password'){ el.type = 'text'; btn.textContent = '🙈'; }
+  else { el.type = 'password'; btn.textContent = '👁'; }
+}
+
+// O Supabase manda o token de recuperacao no PEDACO da URL depois do #
+// (nao e' um parametro normal de query), tipo:
+// #access_token=...&refresh_token=...&type=recovery
+function pegarTokenDaUrl(){
+  var hash = window.location.hash.replace(/^#/, '');
+  var params = new URLSearchParams(hash);
+  return params.get('access_token');
+}
+
+var accessToken = pegarTokenDaUrl();
+if(accessToken){
+  document.getElementById('formBox').style.display = 'block';
+} else {
+  document.getElementById('erroBox').style.display = 'block';
+}
+
+function trocarSenha(){
+  var s1 = document.getElementById('senha1').value;
+  var s2 = document.getElementById('senha2').value;
+  var statusEl = document.getElementById('status');
+
+  if(!s1 || s1.length < 6){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'A senha precisa ter pelo menos 6 caracteres.';
+    return;
+  }
+  if(s1 !== s2){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'As duas senhas digitadas são diferentes.';
+    return;
+  }
+
+  statusEl.style.color = '#888';
+  statusEl.textContent = 'Salvando...';
+
+  fetch(SUPABASE_URL + '/auth/v1/user', {
+    method: 'PUT',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + accessToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ password: s1 })
+  })
+  .then(function(r){ return r.json().then(function(data){ return {ok:r.ok, data:data}; }); })
+  .then(function(res){
+    if(res.ok){
+      statusEl.style.color = '#0E6E66';
+      statusEl.textContent = '✓ Senha alterada! Já pode entrar no gerador/clientes com a senha nova.';
+      document.getElementById('senha1').value = '';
+      document.getElementById('senha2').value = '';
+    } else {
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'Erro: ' + (res.data.msg || res.data.error_description || JSON.stringify(res.data));
+    }
+  })
+  .catch(function(err){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Falha de conexão: ' + err;
+  });
+}
+</script>
+</body>
+</html>

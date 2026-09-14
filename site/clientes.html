@@ -46,6 +46,7 @@
     </div>
     <button onclick="login()">Entrar</button>
     <div class="status" id="loginStatus"></div>
+    <a href="#" class="navlink" onclick="esqueciSenha(); return false;">Esqueci minha senha</a>
   </div>
 
   <div id="appBox" style="display:none;">
@@ -125,6 +126,39 @@ function login(){
 function logout(){
   localStorage.removeItem('farol_admin_token');
   mostrarTelaCerta();
+}
+
+function esqueciSenha(){
+  var email = document.getElementById('loginEmail').value.trim();
+  var statusEl = document.getElementById('loginStatus');
+  if(!email){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Digite seu e-mail no campo acima primeiro.';
+    return;
+  }
+  statusEl.style.color = '#888';
+  statusEl.textContent = 'Enviando link de redefinição...';
+
+  var redirectTo = window.location.origin + window.location.pathname.replace(/clientes\.html$/, 'resetar-senha.html');
+
+  fetch(SUPABASE_URL + '/auth/v1/recover?redirect_to=' + encodeURIComponent(redirectTo), {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email })
+  })
+  .then(function(r){
+    if(r.ok){
+      statusEl.style.color = '#0E6E66';
+      statusEl.textContent = 'Link enviado! Confira seu e-mail (' + email + ').';
+    } else {
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = 'Não consegui enviar o link. Tente de novo em instantes.';
+    }
+  })
+  .catch(function(err){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Falha de conexão: ' + err;
+  });
 }
 
 function escapeHtml(texto){
