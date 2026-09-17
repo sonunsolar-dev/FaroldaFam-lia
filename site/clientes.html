@@ -205,9 +205,11 @@ function listar(){
           acaoHtml = '<button class="btn-aprovar" onclick="aprovar(\'' + codigoSeguro + '\', this)">Aprovar</button>' +
                      '<button class="btn-reprovar" onclick="reprovar(\'' + codigoSeguro + '\', this)">Reprovar</button>';
         } else if(c.status === 'ativo'){
-          acaoHtml = '<button class="btn-cancelar" onclick="cancelar(\'' + codigoSeguro + '\', this)">Cancelar</button>';
+          acaoHtml = '<button class="btn-cancelar" onclick="cancelar(\'' + codigoSeguro + '\', this)">Cancelar</button>' +
+                     '<button class="btn-reprovar" onclick="reprovar(\'' + codigoSeguro + '\', this)">Apagar</button>';
         } else if(c.status === 'cancelado'){
-          acaoHtml = '<button class="btn-reativar" onclick="reativar(\'' + codigoSeguro + '\', this)">Reativar</button>';
+          acaoHtml = '<button class="btn-reativar" onclick="reativar(\'' + codigoSeguro + '\', this)">Reativar</button>' +
+                     '<button class="btn-reprovar" onclick="reprovar(\'' + codigoSeguro + '\', this)">Apagar</button>';
         }
         tr.innerHTML =
           '<td>'+escapeHtml(c.nome)+'</td>'+
@@ -328,7 +330,8 @@ function reativar(codigo, btn){
 }
 
 function reprovar(codigo, btn){
-  if(!confirm('Reprovar e apagar este cadastro? Essa ação não pode ser desfeita.')) return;
+  if(!confirm('Apagar este cadastro? Essa ação não pode ser desfeita.')) return;
+  var rotuloOriginal = btn.textContent;
   btn.disabled = true;
   btn.textContent = '...';
   fetch(APROVAR_URL, {
@@ -341,20 +344,20 @@ function reprovar(codigo, btn){
     if(res.status === 401){
       alert('Não autorizado (401): ' + res.txt);
       btn.disabled = false;
-      btn.textContent = 'Reprovar';
+      btn.textContent = rotuloOriginal;
       return;
     }
     if(res.ok){ listar(); }
     else {
-      alert('Erro ao reprovar: ' + res.txt);
+      alert('Erro ao apagar: ' + res.txt);
       btn.disabled = false;
-      btn.textContent = 'Reprovar';
+      btn.textContent = rotuloOriginal;
     }
   })
   .catch(function(err){
     alert('Falha de conexão: ' + err);
     btn.disabled = false;
-    btn.textContent = 'Reprovar';
+    btn.textContent = rotuloOriginal;
   });
 }
 </script>
