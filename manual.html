@@ -113,12 +113,29 @@
       gate.hidden = true;
       out.hidden = false;
       document.title = 'Manual de uso — SOS Farol';
+      executarScripts(out);
       wireManual();
       window.scrollTo(0, 0);
     }catch(e){
       setMsg('Falha de conexão. Verifique a internet e tente de novo.', true);
       btn.disabled = false;
     }
+  }
+
+  // innerHTML nunca executa <script> (comportamento padrao do navegador,
+  // por seguranca) - qualquer script embutido no conteudo do manual
+  // (docs/manual/conteudo.html, repo audio_monitor) precisa ser recriado
+  // manualmente pra rodar de verdade. Generico: nao importa o que o
+  // conteudo do manual passe a ter no futuro, isto sempre religa.
+  function executarScripts(container){
+    [].slice.call(container.querySelectorAll('script')).forEach(function(old){
+      var novo = document.createElement('script');
+      [].slice.call(old.attributes).forEach(function(attr){
+        novo.setAttribute(attr.name, attr.value);
+      });
+      novo.textContent = old.textContent;
+      old.parentNode.replaceChild(novo, old);
+    });
   }
 
   // Liga o que o conteudo injetado (innerHTML) nao consegue ligar sozinho:
