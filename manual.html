@@ -37,6 +37,14 @@
   .gate .msg.err{color:var(--coral);font-weight:700}
   .gate .note{font-size:12.5px;color:var(--muted);margin-top:24px}
   .gate a{color:var(--navy);font-weight:700}
+  .gate .lead{font-size:15px;line-height:1.65;margin-bottom:14px}
+  .gate .same-code{background:#eaf6f0;border:1px solid #bfe3d0;border-radius:12px;padding:12px 14px;margin:0 0 20px;color:#285b4a;font-size:13.5px;font-weight:650}
+  .gate .android-note{background:#fff8f4;border:1px solid #ffd9c4;border-radius:12px;padding:12px 14px;margin:0 0 22px;color:#6d4a3c;font-size:13.5px}
+  .gate .help-box{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .gate .help-title{font-size:13px;font-weight:800;color:var(--navy);margin:0 0 10px}
+  .gate .help-links{display:grid;gap:8px}
+  .gate .help-links a{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px;text-decoration:none;font-size:13.5px}
+  .gate .help-links a:hover{border-color:#b9c9cc}
 
   #conteudo{max-width:760px;margin:0 auto;padding:0 0 40px}
 </style>
@@ -55,14 +63,28 @@
 </header>
 
 <div class="gate" id="gate">
-  <h1>Abrir o manual</h1>
-  <p>O manual do SOS Farol é liberado com o <b>código de ativação</b> — o mesmo que você digita no aplicativo (<code>FAROL-…</code> ou <code>FAROLT-…</code>).</p>
-  <p><b>Este manual é privado, não aberto ao público.</b> Ele só abre com a sua senha (o código de ativação). Guarde bem ela.</p>
+  <h1>Instale e configure seu SOS Farol</h1>
+  <p class="lead">Digite seu <b>código de ativação</b> para acessar o passo a passo de instalação, configuração do aplicativo e criação da sua rede de apoio.</p>
+
+  <div class="same-code">✓ Você usará o mesmo código aqui no manual e no aplicativo (<code>FAROL-…</code> ou <code>FAROLT-…</code>).</div>
+
+  <div class="android-note"><b>Instalação no Android:</b> o guia também explica as confirmações e avisos de segurança que podem aparecer durante a instalação.</div>
+
   <label for="codigo">Código de ativação</label>
   <input type="text" id="codigo" placeholder="FAROL-000000" autocomplete="off" autocapitalize="characters" spellcheck="false">
-  <button id="btn" type="button">Abrir manual</button>
+  <button id="btn" type="button">Continuar para instalação</button>
   <div class="msg" id="msg"></div>
-  <p class="note">Comprou e não sabe seu código? Veja em <a href="meu-codigo.html">"Meu código"</a>. Dúvidas: use o <a href="contato.html">formulário de contato</a> no site.</p>
+
+  <div class="help-box">
+    <p class="help-title">Ainda não tem seu código?</p>
+    <div class="help-links">
+      <a href="index.html#teste">→ Estou iniciando meu teste grátis</a>
+      <a href="meu-codigo.html">→ Já comprei e quero encontrar meu código</a>
+      <a href="contato.html">→ Preciso de ajuda</a>
+    </div>
+  </div>
+
+  <p class="note">O acesso ao manual é exclusivo para usuários com código de ativação válido.</p>
 </div>
 
 <main id="conteudo" hidden></main>
@@ -91,7 +113,7 @@
   async function abrir(){
     var codigo = normCodigo(inp.value);
     if(codigo.length < 6){ setMsg('Digite o código de ativação.', true); return; }
-    btn.disabled = true; setMsg('Abrindo…');
+    btn.disabled = true; setMsg('Validando código…');
     try{
       var r = await fetch(URL_FN, {
         method: 'POST',
