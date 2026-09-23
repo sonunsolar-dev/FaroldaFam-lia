@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d2f3a">
+<title>Status do app — SOS Farol</title>
+<link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0d2f3a; --navy-2:#123f4d; --ink:#10242c; --muted:#66777e;
+    --soft:#f4f7f7; --white:#ffffff; --accent:#ff7a45; --accent-2:#ff9a6f;
+    --ok:#2a8b67; --coral:#c0392b; --line:#dfe7e8; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--soft);color:var(--ink);line-height:1.6;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
+  header.bar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+  header.bar .row{max-width:640px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;justify-content:space-between}
+  header.bar .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;color:var(--navy)}
+  header.bar .brand img{width:28px;height:28px;border-radius:8px}
+  header.bar a{font-size:13px;font-weight:700;color:var(--muted);text-decoration:none}
+
+  .wrap{max-width:640px;margin:0 auto;padding:40px 22px 70px}
+  h1{font-size:24px;margin:0 0 6px;color:var(--navy)}
+  .wrap > p.lead{color:var(--muted);font-size:14px;margin:0 0 26px}
+
+  .alert{display:none;background:#fff4e5;border:1.5px solid #f0c987;border-radius:12px;padding:14px 16px;margin:0 0 22px;color:#7a5410;font-size:14px}
+  .alert.show{display:block}
+  .alert b{color:#5c3f0a}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin:0 0 16px}
+  .card .label{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:800;color:var(--muted);margin:0 0 6px}
+  .card .value{font-size:19px;font-weight:800;color:var(--navy)}
+  .card .sub{font-size:13px;color:var(--muted);margin-top:4px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:520px){ .grid{grid-template-columns:1fr} }
+
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:999px}
+  .pill.ok{background:#eaf6f0;color:#1f6b4f}
+  .pill.wait{background:#fff4e5;color:#8a5a10}
+
+  .note{font-size:12.5px;color:var(--muted);margin-top:26px}
+  .note a{color:var(--navy);font-weight:700}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="row">
+    <div class="brand">
+      <img src="assets/logo-sos-farol.webp" alt="" width="28" height="28">
+      <span>Status do app</span>
+    </div>
+    <a href="index.html">← Site</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Status do SOS Farol</h1>
+  <p class="lead">Informações sobre a versão atual do aplicativo Android.</p>
+
+  <!-- Alerta manual: pra avisar sobre um problema numa versao especifica sem
+       mexer no manual inteiro. Pra ativar: tirar "display:none" da regra
+       .alert acima ou trocar a classe do div abaixo pra "alert show", editar
+       o texto, publicar. Pra desativar de novo: tirar a classe "show". -->
+  <div class="alert" id="statusAlert"><b>Aviso:</b> texto do alerta aqui quando houver um problema conhecido.</div>
+
+  <div class="grid">
+    <div class="card">
+      <p class="label">Versão atual</p>
+      <p class="value" id="stVersao">—</p>
+      <p class="sub" id="stData"></p>
+    </div>
+    <div class="card">
+      <p class="label">Android mínimo</p>
+      <p class="value">Android 11+</p>
+      <p class="sub">(API 30 ou superior)</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="label">Distribuição</p>
+    <p class="value" style="font-size:15px;">Instalação direta (fora da Play Store)</p>
+    <p class="sub"><span class="pill wait">Google Play: em análise</span></p>
+  </div>
+
+  <p class="note">Como instalar ou atualizar: veja o <a href="manual.html">manual do SOS Farol</a>. Problema não listado aqui? Use o <a href="contato.html">formulário de contato</a>.</p>
+</div>
+
+<script>
+  // Versao/data buscadas direto da GitHub Releases API publica do repo -
+  // mesmo endpoint que ja serve o download do APK, sem backend proprio.
+  // Falha silenciosa: se a API estiver fora do ar, os campos ficam com "—".
+  fetch('https://api.github.com/repos/sonunsolar-dev/FaroldaFam-lia/releases/latest')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(rel){
+      if (!rel || !rel.tag_name) return;
+      var versaoEl = document.getElementById('stVersao');
+      var dataEl = document.getElementById('stData');
+      if (versaoEl) versaoEl.textContent = String(rel.tag_name).replace(/^v/i, '');
+      if (dataEl && rel.published_at) {
+        var d = new Date(rel.published_at);
+        if (!isNaN(d.getTime())) {
+          dataEl.textContent = 'Atualizada em ' + d.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+        }
+      }
+    })
+    .catch(function(){ /* silencioso - ver comentario acima */ });
+</script>
+</body>
+</html>
