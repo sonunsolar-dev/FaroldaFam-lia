@@ -10,6 +10,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Google tag (gtag.js) - propriedade GA4 dedicada do SOS Farol -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z89YGFG8XW');
+</script>
+
 <style>
   :root{
     --navy:#0d2f3a; --navy-2:#123f4d; --ink:#10242c; --muted:#66777e;
@@ -131,6 +141,7 @@
         btn.disabled = false;
         return;
       }
+      gtag('event', 'manual_aberto');
       out.innerHTML = data.html;
       gate.hidden = true;
       out.hidden = false;

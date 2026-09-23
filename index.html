@@ -28,6 +28,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+<!-- Google tag (gtag.js) - propriedade GA4 dedicada do SOS Farol -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z89YGFG8XW');
+</script>
+
 <style>
     :root{
       --navy:#0d2f3a;
@@ -1051,7 +1060,7 @@
 <a href="#conteudos">Conteúdos</a>
 <a href="#preco">Preço</a>
 <a href="#faq">Dúvidas</a>
-<a href="loja-de-apoio.html">Os 10 Mais</a>
+<a href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Os 10 Mais</a>
 </nav>
 <a class="btn btn-primary" href="#teste">Testar grátis</a>
 <button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" id="menuToggle" type="button">
@@ -1068,7 +1077,7 @@
 <a href="#convidado">Fui convidado</a>
 <a href="manual.html" target="_blank" rel="noopener">Manual</a>
 <a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
-<a href="loja-de-apoio.html">Os 10 Mais</a>
+<a href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Os 10 Mais</a>
 <a class="btn btn-primary" href="#teste">Testar grátis</a>
 </nav>
 </header>
@@ -1080,7 +1089,7 @@
 <h1>Proteja quem você ama de 3 formas rápidas.</h1><p class="hero-seo-line">O Aplicativo SOS FAROL envia um pedido de AJUDA pelo celular ANDROID para SUA REDE de amigos e familiares que você cadastra.</p>
 <p>O pedido de ajuda pode ser acionado de três formas: agitando o celular, falando uma palavra de segurança ou tocando no botão de ajuda.</p>
 <div class="hero-actions">
-<a class="btn btn-primary" href="abertura.html">Testar por 15 dias grátis</a>
+<a class="btn btn-primary" href="abertura.html" onclick="gtag('event','click_testar')">Testar por 15 dias grátis</a>
 <a class="btn btn-secondary" href="#como-funciona">Entender como funciona</a>
 </div>
 <div class="microcopy">Sem compromisso. Experimente sua própria rede antes de decidir.</div>
@@ -1239,7 +1248,7 @@
             Instale, configure sua rede, faça testes reais e descubra com tranquilidade
             se o FAROL faz sentido para você e para quem você quer proteger.
           </p>
-<a class="btn btn-primary" href="abertura.html">Criar minha rede grátis</a>
+<a class="btn btn-primary" href="abertura.html" onclick="gtag('event','click_testar')">Criar minha rede grátis</a>
 <div style="margin-top:14px;font-size:13px;color:rgba(255,255,255,.64)">Sem compromisso durante o período de experiência.</div>
 </div>
 </div>
@@ -1262,7 +1271,7 @@
 <li>Sem cartão de crédito</li>
 <li>Sem renovação automática</li>
 </ul>
-<a href="abertura.html" class="btn btn-secondary">Gerar meu código</a>
+<a href="abertura.html" class="btn btn-secondary" onclick="gtag('event','click_testar')">Gerar meu código</a>
 </div>
 <div class="price-card feature">
 <span class="price-tag">Assinatura anual</span>
@@ -1274,7 +1283,7 @@
 <li>Suporte e atualizações incluídos</li>
 <li>Renovação simples, sem reconfigurar o app</li>
 </ul>
-<a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" rel="noopener">Assinar o acesso anual</a>
+<a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" rel="noopener" onclick="gtag('event','click_assinar')">Assinar o acesso anual</a>
 </div>
 </div>
 <p class="price-note">Pagamento processado pela Kiwify. <b>Já comprou?</b> <a href="https://sosfarol.com.br/meu-codigo.html" target="_blank" rel="noopener"><b style="font-size:16px;">Clique aqui</b> e pegue seu código de ativação</a> com o e-mail da compra.</p>
@@ -1326,7 +1335,7 @@
 <span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32)">Programa de Afiliados</span>
 <h2>Indique o SOS Farol e ganhe comissão por venda.</h2>
 <p>Cuidadores, gerontólogos, fisioterapeutas, enfermeiros, profissionais de home care, criadores de conteúdo e outros parceiros podem indicar o SOS Farol. Programa por convite.</p>
-<a class="btn" style="background:#fff;color:var(--navy)" href="afiliados.html" target="_blank" rel="noopener">Conhecer a Área de Afiliados</a>
+<a class="btn" style="background:#fff;color:var(--navy)" href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Conhecer a Área de Afiliados</a>
 </div>
 </div>
 </section>
@@ -1358,7 +1367,7 @@
 <span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32)">Loja de Apoio</span>
 <h2>Os 10 Mais SOS Farol.</h2>
 <p>Produtos selecionados para segurança, autonomia e cuidado no dia a dia de idosos e pessoas vulneráveis.</p>
-<a class="btn" style="background:#fff;color:var(--navy)" href="loja-de-apoio.html">Conhecer os 10 Mais</a>
+<a class="btn" style="background:#fff;color:var(--navy)" href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Conhecer os 10 Mais</a>
 </div>
 </div>
 </section>
@@ -1371,8 +1380,8 @@
 <span>SOS FAROL — Rede de Apoio</span>
 </div>
 <div class="footer-links">
-<a href="loja-de-apoio.html">Os 10 Mais SOS Farol</a>
-<a href="afiliados.html" target="_blank" rel="noopener">Afiliados</a>
+<a href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Os 10 Mais SOS Farol</a>
+<a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a>
 <a href="conteudos/index.html">Conteúdos</a>
 <a href="manual.html" target="_blank" rel="noopener">Manual</a>
 <a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
