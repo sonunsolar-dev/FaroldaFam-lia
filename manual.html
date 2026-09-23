@@ -213,11 +213,21 @@
   inp.addEventListener('keydown', function(ev){ if(ev.key === 'Enter') abrir(); });
 
   // ?c= / ?codigo= vindo do app ou da página "Meu código" -> preenche e abre.
+  // O codigo de ativacao destrava o manual completo (que explica o disfarce
+  // "Notas" e os gatilhos) - deixar ele na barra de enderecos fica no
+  // historico do navegador, em prints e em possiveis logs. Como o publico
+  // do app inclui pessoas em situacao de risco de abuso (alguem com acesso
+  // fisico ao aparelho podendo checar o historico), limpamos a URL na hora,
+  // antes mesmo de a resposta da rede chegar.
   (function(){
     try{
       var p = new URLSearchParams(location.search);
       var c = (p.get('c') || p.get('codigo') || '').trim();
-      if(c){ inp.value = c.toUpperCase(); abrir(); }
+      if(c){
+        history.replaceState(null, '', location.pathname);
+        inp.value = c.toUpperCase();
+        abrir();
+      }
     }catch(_){}
   })();
 </script>
