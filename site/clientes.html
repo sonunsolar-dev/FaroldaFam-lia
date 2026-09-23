@@ -164,7 +164,15 @@ function esqueciSenha(){
 function escapeHtml(texto){
   var div = document.createElement('div');
   div.textContent = texto == null ? '' : String(texto);
-  return div.innerHTML;
+  // innerHTML ja escapa & < > sozinho, mas NAO escapa aspas - preciso
+  // escapar tambem porque este valor e' reinserido dentro de atributos
+  // onclick="...'valor'..." (ver uso em codigoSeguro/nomeSeguro abaixo).
+  // Sem isso, um "nome" de cliente contendo uma aspa dupla (campo vindo
+  // do formulario publico de teste gratis, sem filtro de caracteres)
+  // quebra o atributo e injeta um handler de evento arbitrario, que roda
+  // no painel admin autenticado - inclusive conseguindo ler
+  // localStorage['farol_admin_token'] e assumir a sessao do admin.
+  return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function fmtData(iso){
@@ -199,8 +207,8 @@ function listar(){
       body.innerHTML = '';
       lista.forEach(function(c){
         var tr = document.createElement('tr');
-        var codigoSeguro = escapeHtml(c.codigo).replace(/'/g, '&#39;');
-        var nomeSeguro = escapeHtml(c.nome).replace(/'/g, '&#39;');
+        var codigoSeguro = escapeHtml(c.codigo);
+        var nomeSeguro = escapeHtml(c.nome);
         var acaoHtml = '—';
         if(c.status === 'pendente'){
           acaoHtml = '<button class="btn-aprovar" onclick="aprovar(\'' + codigoSeguro + '\', this)">Aprovar</button>' +
