@@ -181,31 +181,6 @@
       color:#fff;
     }
 
-    .store-mini-card{
-      display:flex;
-      align-items:center;
-      gap:20px;
-      flex-wrap:wrap;
-      background:#eaf6f0;
-      border:1px solid #bfe3d0;
-      border-radius:24px;
-      padding:22px 26px;
-    }
-
-    .store-mini-card.orange{
-      background:linear-gradient(180deg,#fff8f4,#fff);
-      border-color:#ffd9c4;
-      box-shadow:0 18px 50px rgba(255,122,69,.14);
-    }
-
-    .store-mini-icon{font-size:34px;flex:0 0 auto}
-
-    .store-mini-text{flex:1 1 260px}
-    .store-mini-text h3{margin:0 0 4px;color:var(--navy);font-size:18px}
-    .store-mini-text p{margin:0;color:var(--muted);font-size:14px}
-
-    .store-mini-card .btn{flex:0 0 auto;padding:12px 20px;font-size:14px}
-
     .hero{
       position:relative;
       overflow:hidden;
@@ -625,6 +600,72 @@
       color:rgba(255,255,255,.92);
     }
 
+    .affiliate-box{
+      position:relative;
+      overflow:hidden;
+      border-radius:36px;
+      background:linear-gradient(145deg,#1f5c46,#2a8b67 60%,#3aa67d);
+      color:#fff;
+      padding:52px 40px;
+      text-align:center;
+      box-shadow:0 22px 60px rgba(42,139,103,.25);
+    }
+
+    .affiliate-box:before{
+      content:"";
+      position:absolute;
+      width:340px;height:340px;border-radius:50%;
+      right:-120px;top:-160px;background:rgba(255,255,255,.08);
+    }
+
+    .affiliate-box h2{
+      font-size:clamp(30px,4vw,44px);
+      line-height:1.05;
+      letter-spacing:-.03em;
+      margin:14px 0 12px;
+      color:#fff;
+    }
+
+    .affiliate-box p{
+      max-width:640px;
+      margin:0 auto 24px;
+      font-size:16px;
+      color:rgba(255,255,255,.92);
+    }
+
+    .store-box{
+      position:relative;
+      overflow:hidden;
+      border-radius:36px;
+      background:linear-gradient(145deg,#c85e2d,#ff7a45 55%,#ff9a6f);
+      color:#fff;
+      padding:52px 40px;
+      text-align:center;
+      box-shadow:0 22px 60px rgba(255,122,69,.28);
+    }
+
+    .store-box:before{
+      content:"";
+      position:absolute;
+      width:340px;height:340px;border-radius:50%;
+      right:-120px;top:-160px;background:rgba(255,255,255,.1);
+    }
+
+    .store-box h2{
+      font-size:clamp(30px,4vw,44px);
+      line-height:1.05;
+      letter-spacing:-.03em;
+      margin:14px 0 12px;
+      color:#fff;
+    }
+
+    .store-box p{
+      max-width:640px;
+      margin:0 auto 24px;
+      font-size:16px;
+      color:rgba(255,255,255,.94);
+    }
+
     .price-card{
       border:1px solid var(--line);
       background:#fff;
@@ -840,13 +881,15 @@
         border-radius:28px;
       }
 
-      .store-mini-card{
-        padding:20px;
-        border-radius:20px;
-        justify-content:center;
-        text-align:center;
+      .affiliate-box{
+        padding:36px 18px;
+        border-radius:28px;
       }
-      .store-mini-card .btn{width:100%}
+
+      .store-box{
+        padding:36px 18px;
+        border-radius:28px;
+      }
 
       .hero-card{
         padding:18px;
@@ -1277,6 +1320,16 @@
 <div class="guide-cta"><a class="btn btn-secondary" href="conteudos/index.html">Ver todos os conteúdos</a></div>
 </div>
 </section>
+<section id="afiliados">
+<div class="wrap">
+<div class="affiliate-box">
+<span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32)">Programa de Afiliados</span>
+<h2>Indique o SOS Farol e ganhe comissão por venda.</h2>
+<p>Cuidadores, gerontólogos, fisioterapeutas, enfermeiros, profissionais de home care, criadores de conteúdo e outros parceiros podem indicar o SOS Farol. Programa por convite.</p>
+<a class="btn" style="background:#fff;color:var(--navy)" href="afiliados.html" target="_blank" rel="noopener">Conhecer a Área de Afiliados</a>
+</div>
+</div>
+</section>
 <section id="faq">
 <div class="wrap">
 <div class="section-head">
@@ -1299,23 +1352,13 @@
 </div>
 </div>
 </section>
-<section id="loja-mini" style="padding-bottom:16px">
-<div class="wrap" style="display:grid;gap:16px">
-<div class="store-mini-card orange">
-<span class="store-mini-icon">🛒</span>
-<div class="store-mini-text">
-<h3>Os 10 Mais SOS Farol</h3>
+<section id="loja-mini">
+<div class="wrap">
+<div class="store-box">
+<span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32)">Loja de Apoio</span>
+<h2>Os 10 Mais SOS Farol.</h2>
 <p>Produtos selecionados para segurança, autonomia e cuidado no dia a dia de idosos e pessoas vulneráveis.</p>
-</div>
-<a class="btn btn-primary" href="loja-de-apoio.html">Conhecer os 10 Mais</a>
-</div>
-<div class="store-mini-card" id="afiliados">
-<span class="store-mini-icon">🤝</span>
-<div class="store-mini-text">
-<h3>Programa de Afiliados</h3>
-<p>Cuidadores, gerontólogos, fisioterapeutas, enfermeiros, profissionais de home care, criadores de conteúdo e outros parceiros podem indicar o SOS Farol com comissão por venda. Programa por convite.</p>
-</div>
-<a class="btn btn-ok" href="afiliados.html" target="_blank" rel="noopener">Área de Afiliados</a>
+<a class="btn" style="background:#fff;color:var(--navy)" href="loja-de-apoio.html">Conhecer os 10 Mais</a>
 </div>
 </div>
 </section>
