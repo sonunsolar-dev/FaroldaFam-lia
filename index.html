@@ -159,6 +159,28 @@
     }
     .mobile-menu .btn{margin-top:12px}
 
+    .nav-drop{position:relative}
+    .nav-drop-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      background:none;border:0;padding:0;cursor:pointer;
+      font:inherit;color:inherit;
+    }
+    .nav-drop-btn::after{
+      content:"";width:7px;height:7px;margin-top:-4px;
+      border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+      transform:rotate(45deg);transition:transform .15s ease;
+    }
+    .nav-drop-btn[aria-expanded="true"]::after{transform:rotate(-135deg);margin-top:3px}
+    .nav-drop-menu{
+      position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
+      min-width:220px;display:flex;flex-direction:column;
+      background:#fff;border:1px solid var(--line);border-radius:14px;
+      box-shadow:0 18px 40px rgba(13,47,58,.14);padding:6px;z-index:60;
+    }
+    .nav-drop-menu[hidden]{display:none}
+    .nav-drop-menu a{padding:10px 12px;border-radius:9px;white-space:nowrap}
+    .nav-drop-menu a:hover,.nav-drop-menu a:focus-visible{background:var(--soft);color:var(--navy)}
+
     .btn{
       display:inline-flex;
       align-items:center;
@@ -1059,7 +1081,16 @@
 <a href="#como-funciona">Como funciona</a>
 <a href="#publicos">Para quem é</a>
 <a href="#situacoes">Histórias</a>
-<a href="#conteudos">Conteúdos</a>
+<div class="nav-drop">
+<button aria-controls="clienteMenu" aria-expanded="false" class="nav-drop-btn" id="clienteToggle" type="button">Área do Cliente</button>
+<div class="nav-drop-menu" hidden id="clienteMenu">
+<a href="manual.html" target="_blank" rel="noopener">Manual</a>
+<a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
+<a href="#convidado">Convidado, baixe o app</a>
+<a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a>
+<a href="contato.html">Contato</a>
+</div>
+</div>
 <a href="#preco">Preço</a>
 <a href="#faq">Dúvidas</a>
 <a href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Os 10 Mais</a>
@@ -1420,6 +1451,28 @@
         mobileMenu.classList.remove('open');
         menuToggle.setAttribute('aria-expanded', 'false');
       });
+    });
+  }
+
+  var clienteToggle = document.getElementById('clienteToggle');
+  var clienteMenu = document.getElementById('clienteMenu');
+  if (clienteToggle && clienteMenu) {
+    var setCliente = function(open){
+      clienteMenu.hidden = !open;
+      clienteToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    clienteToggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      setCliente(clienteMenu.hidden);
+    });
+    clienteMenu.addEventListener('click', function(e){
+      if (e.target.closest('a')) setCliente(false);
+    });
+    document.addEventListener('click', function(e){
+      if (!clienteMenu.hidden && !clienteMenu.contains(e.target)) setCliente(false);
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !clienteMenu.hidden) { setCliente(false); clienteToggle.focus(); }
     });
   }
 </script>
