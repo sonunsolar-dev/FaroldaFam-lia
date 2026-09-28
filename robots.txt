@@ -3,5 +3,6 @@ Allow: /
 Disallow: /site/
 Disallow: /afiliados.html
 Disallow: /teste-site.html
+Disallow: /teste-venda.html
 
 Sitemap: https://sosfarol.com.br/sitemap.xml
