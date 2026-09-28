@@ -1035,6 +1035,7 @@
     .audiences-compact .card h3{font-size:17px;margin-bottom:4px}
     .audiences-compact .card p{font-size:14.5px}
     .more-section{padding-top:0}
+    .mobile-menu-label{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.6;padding:10px 4px 2px}
     .more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
     .more-card{display:block;border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff;text-decoration:none;color:var(--navy)}
     .more-card b{display:block;margin-bottom:4px}
@@ -1103,8 +1104,16 @@
 <a href="#como-funciona">Como funciona</a>
 <a href="#preco">Preço</a>
 <a href="#faq">Dúvidas</a>
-<a href="manual.html" target="_blank" rel="noopener">Manual</a>
 <a href="#convidado">Fui convidado</a>
+<div class="nav-drop">
+<button aria-controls="clienteMenu" aria-expanded="false" class="nav-drop-btn" id="clienteToggle" type="button">Área do Cliente</button>
+<div class="nav-drop-menu" hidden id="clienteMenu">
+<a href="manual.html" target="_blank" rel="noopener">Manual</a>
+<a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
+<a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a>
+<a href="contato.html">Contato</a>
+</div>
+</div>
 </nav>
 <a class="btn btn-primary" href="abertura.html" onclick="gtag('event','click_testar')">Testar grátis</a>
 <button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" id="menuToggle" type="button">
@@ -1117,8 +1126,11 @@
 <a href="#preco">Preço</a>
 <a href="#faq">Dúvidas</a>
 <a href="#convidado">Fui convidado</a>
+<span class="mobile-menu-label">Área do Cliente</span>
 <a href="manual.html" target="_blank" rel="noopener">Manual</a>
 <a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
+<a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a>
+<a href="contato.html">Contato</a>
 <a class="btn btn-primary" href="abertura.html" onclick="gtag('event','click_testar')">Testar grátis</a>
 </nav>
 </header>
