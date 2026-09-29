@@ -435,6 +435,48 @@
     #diferenciais .card h3{color:#fff}
     #diferenciais .card p{color:rgba(255,255,255,.78)}
     #diferenciais .icon{background:#2A7F61;box-shadow:0 6px 16px rgba(0,0,0,.18)}  /* verde medio: os icones aparecem no fundo verde-petroleo */
+    /* ---- Comparativo dentro de "Por que FAROL?" (fundo verde-petroleo) ---- */
+    .farol-comparativo{margin:0 0 56px}
+    .fc-cabecalho{max-width:780px;margin:0 auto 38px;text-align:center}
+    .fc-cabecalho h2{margin:14px 0 14px;color:#fff;font-size:clamp(30px,4vw,48px);line-height:1.08;letter-spacing:-.035em}
+    .fc-cabecalho p{margin:0 auto;color:rgba(255,255,255,.8);font-size:18px;line-height:1.6}
+    .fc-tabela-wrap{border-radius:24px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.22)}
+    .fc-tabela{width:100%;border-collapse:separate;border-spacing:0;background:#fff;color:var(--ink)}
+    .fc-tabela th,.fc-tabela td{padding:22px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);vertical-align:middle;line-height:1.5;text-align:left;font-size:15px}
+    .fc-tabela th:last-child,.fc-tabela td:last-child{border-right:none}
+    .fc-tabela tbody tr:last-child td{border-bottom:none}
+    .fc-tabela thead th{background:#EEF4F6;color:var(--navy);font-weight:800}
+    .fc-tabela thead th:nth-child(1){width:30%}.fc-tabela thead th:nth-child(2){width:32%}.fc-tabela thead th:nth-child(3){width:38%}
+    .fc-tabela td.fc-outros{color:var(--muted)}
+    .fc-tabela .fc-farol{background:#E8F5F0;color:var(--navy)}
+    .fc-tabela thead .fc-farol{background:var(--navy);color:#fff;font-size:16px}
+    .fc-criterio{font-size:16px!important;color:var(--navy)}
+    .fc-numero{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-right:10px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:800;vertical-align:middle}
+    .fc-check{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin-right:8px;border-radius:50%;background:#2A7F61;color:#fff;font-weight:900;vertical-align:middle}
+    .fc-mensagem{max-width:900px;margin:44px auto 0;text-align:center}
+    .fc-mensagem h3{margin:0 0 10px;color:#fff;font-size:clamp(24px,3vw,34px);line-height:1.25}
+    .fc-mensagem > p{margin:0;color:rgba(255,255,255,.92);font-size:19px}
+    .fc-mensagem > p strong{color:#fff}
+    .fc-frase{margin-top:24px;color:rgba(255,255,255,.72);font-size:16px}
+    .fc-pilares{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px}
+    .fc-pilares span{padding:10px 18px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-weight:800}
+    /* celular: tabela vira cartoes empilhados (sem rolagem lateral) */
+    @media (max-width:760px){
+      .fc-cabecalho{text-align:left;margin-bottom:26px}
+      .fc-cabecalho p{font-size:16px}
+      .fc-tabela-wrap{border-radius:0;overflow:visible;box-shadow:none}
+      .fc-tabela,.fc-tabela tbody,.fc-tabela tr,.fc-tabela td{display:block;width:100%}
+      .fc-tabela{background:transparent}
+      .fc-tabela thead{display:none}
+      .fc-tabela tr{background:#fff;border-radius:18px;overflow:hidden;margin-bottom:14px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+      .fc-tabela td{border-right:none!important;border-bottom:1px solid var(--line)!important;padding:14px 16px}
+      .fc-tabela tr td:last-child{border-bottom:none!important}
+      .fc-tabela td[data-label]::before{content:attr(data-label);display:block;margin-bottom:4px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+      .fc-tabela td.fc-farol[data-label]::before{color:#2A7F61}
+      .fc-mensagem{text-align:left;margin-top:32px}
+      .fc-mensagem > p{font-size:17px}
+      .fc-pilares{justify-content:flex-start}
+    }
     .stories.how{background:var(--navy)}  /* fundo azul-escuro do antigo "Como funciona" */
 
     .story{
@@ -1242,10 +1284,51 @@
 </section>
 <section id="diferenciais">
 <div class="wrap">
-<div class="section-head">
-<span class="eyebrow" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">Por que FAROL?</span>
-<h2>Abrir a tela, clicar no ícone, abrir contatos, procurar alguém e explicar é perder um tempo que não se tem.</h2>
-<p>O SOS Farol foi pensado para reduzir passos justamente quando a pessoa pode estar assustada, caída, com dor ou em situação de risco.</p>
+<!-- COMPARATIVO (2026-09-29, conteudo enviado pelo usuario, estilo adaptado ao site) -->
+<div class="farol-comparativo">
+<div class="fc-cabecalho">
+<span class="eyebrow" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">COMPARATIVO</span>
+<h2>Por que depender de apenas um botão?</h2>
+<p>Em uma emergência, cada segundo importa. Veja como o Aplicativo SOS Farol se diferencia de soluções que dependem de botões ou acessórios.</p>
+</div>
+<div class="fc-tabela-wrap">
+<table class="fc-tabela">
+<thead><tr><th>O que importa numa emergência</th><th>Botões e acessórios de emergência</th><th class="fc-farol">Aplicativo SOS Farol</th></tr></thead>
+<tbody>
+<tr>
+<td class="fc-criterio"><span class="fc-numero">1</span><strong>Pedir ajuda sem precisar mexer na tela</strong></td>
+<td class="fc-outros" data-label="Botões e acessórios de emergência">Normalmente exige alcançar e apertar um botão</td>
+<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Uso simples com voz e agitar sem precisar ligar a tela</strong></td>
+</tr>
+<tr>
+<td class="fc-criterio"><span class="fc-numero">2</span><strong>Não depender de outro aparelho</strong></td>
+<td class="fc-outros" data-label="Botões e acessórios de emergência">Pode exigir usar, lembrar e manter um acessório adicional</td>
+<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Só o celular — sem relógio, colar ou botão extra</strong></td>
+</tr>
+<tr>
+<td class="fc-criterio"><span class="fc-numero">3</span><strong>Estar disponível na vida real</strong></td>
+<td class="fc-outros" data-label="Botões e acessórios de emergência">Pode ser esquecido, retirado, descarregado ou simplesmente não estar sendo usado naquele momento</td>
+<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Não depende de um acessório vestido ou carregado separadamente</strong></td>
+</tr>
+<tr>
+<td class="fc-criterio"><span class="fc-numero">4</span><strong>Não apenas avisar — mobilizar uma rede</strong></td>
+<td class="fc-outros" data-label="Botões e acessórios de emergência">Muitos sistemas focam no acionamento de um SOS ou de uma central</td>
+<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Alerta a rede, envia localização e áudio contextual de 20 s para sua família</strong></td>
+</tr>
+<tr>
+<td class="fc-criterio"><span class="fc-numero">5</span><strong>Mais autonomia de bateria</strong></td>
+<td class="fc-outros" data-label="Botões e acessórios de emergência">Acessórios pequenos possuem bateria própria e acrescentam mais um dispositivo para manter carregado</td>
+<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Uma única bateria para acompanhar + avisos preventivos de bateria baixa</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fc-mensagem">
+<h3>Um botão pode ser suficiente quando você consegue alcançá-lo.</h3>
+<p>O <strong>Aplicativo SOS Farol</strong> foi pensado também para quando você não consegue.</p>
+<div class="fc-frase">Sem acessórios obrigatórios. Sem depender de uma única forma de pedir ajuda.</div>
+<div class="fc-pilares"><span>Voz</span><span>Movimento</span><span>Toque</span><span>Rede de apoio</span></div>
+</div>
 </div>
 <div class="feature-grid">
 <article class="card"><div class="icon">🗣️</div><h3>Voz com tela apagada</h3><p>Com a proteção ativa, a palavra código pode ser reconhecida mesmo sem a tela aberta a uma distância de até 03 metros.</p></article>
