@@ -113,6 +113,7 @@
       display:flex;
       align-items:center;
       gap:24px;
+      white-space:nowrap;
       color:#35525c;
       font-size:14px;
       font-weight:650;
@@ -159,6 +160,10 @@
     }
     .mobile-menu .btn{margin-top:12px}
 
+    /* telas medias (notebook pequeno): menu mais compacto, sem quebrar linha */
+    @media (max-width:1180px){ .nav-links{gap:14px;font-size:13px} .nav > .btn{padding:12px 16px;font-size:14px} }
+    /* tablet: menu completo nao cabe -> usa o menu sanduiche do celular */
+    @media (max-width:960px){ .nav-links{display:none} .menu-toggle{display:flex} .nav > .btn{margin-left:auto;margin-right:10px} }
     .nav-drop{position:relative}
     .nav-drop-btn{
       display:inline-flex;align-items:center;gap:6px;
@@ -429,7 +434,7 @@
     #diferenciais .card{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);box-shadow:none}
     #diferenciais .card h3{color:#fff}
     #diferenciais .card p{color:rgba(255,255,255,.78)}
-    #diferenciais .icon{background:#4FB38F;box-shadow:0 6px 16px rgba(0,0,0,.18)}  /* verde medio: os icones aparecem no fundo verde-petroleo */
+    #diferenciais .icon{background:#3A9A78;box-shadow:0 6px 16px rgba(0,0,0,.18)}  /* verde medio: os icones aparecem no fundo verde-petroleo */
     .stories.how{background:var(--navy)}  /* fundo azul-escuro do antigo "Como funciona" */
 
     .story{
@@ -1088,6 +1093,7 @@
 <nav class="nav-links">
 <a href="#como-funciona">Como funciona</a>
 <a href="#resposta-em-rede">Entenda a Rede</a>
+<a href="#diferenciais">Por que Farol</a>
 <div class="nav-drop">
 <button aria-controls="clienteMenu" aria-expanded="false" class="nav-drop-btn" id="clienteToggle" type="button">Área do Cliente</button>
 <div class="nav-drop-menu" hidden id="clienteMenu">
