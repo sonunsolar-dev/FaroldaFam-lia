@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="#14163a" name="theme-color"/>
+<meta content="#CFE0FF" name="theme-color"/>
 <title>SOS FAROL | Rede de Apoio para Idosos e Pessoas Vulneráveis</title>
 <meta content="Crie uma rede de familiares e amigos para ajudar idosos e pessoas vulneráveis. Peça ajuda pelo celular usando voz, movimento ou botão com o SOS FAROL." name="description"/>
-<link href="https://sosfarol.com.br/" rel="canonical"/>
+<link href="" rel="canonical"/>
 <meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>
 <meta content="SOS FAROL" name="author"/>
 <meta content="SOS FAROL" name="application-name"/>
@@ -16,18 +15,15 @@
 <meta content="SOS FAROL" property="og:site_name"/>
 <meta content="SOS FAROL | Rede de Apoio para Idosos e Pessoas Vulneráveis" property="og:title"/>
 <meta content="Peça ajuda de três formas: agitando o celular, por palavra falada ou pelo botão de ajuda. Sua rede de apoio recebe o alerta e pode agir rapidamente." property="og:description"/>
-<meta content="https://sosfarol.com.br/" property="og:url"/>
-<meta content="https://sosfarol.com.br/assets/resposta-em-rede.webp" property="og:image"/>
+<meta content="" property="og:url"/>
+<meta content="assets/resposta-em-rede.webp" property="og:image"/>
 <meta content="Como funciona a resposta em rede do SOS FAROL" property="og:image:alt"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="SOS FAROL | Rede de Apoio para Idosos e Pessoas Vulneráveis" name="twitter:title"/>
 <meta content="Agite o celular, fale uma palavra de segurança ou toque no botão de ajuda para avisar sua rede." name="twitter:description"/>
-<meta content="https://sosfarol.com.br/assets/resposta-em-rede.webp" name="twitter:image"/>
+<meta content="assets/resposta-em-rede.webp" name="twitter:image"/>
 <link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+<link rel="preload" href="assets/fontes/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Google tag (gtag.js) - propriedade GA4 dedicada do SOS Farol -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW"></script>
 <script>
@@ -37,27 +33,26 @@
   gtag('config', 'G-Z89YGFG8XW');
 </script>
 
-<link rel="stylesheet" href="novo.css?v=20261001">
-
+<link rel="stylesheet" href="vidro.css?v=20261002">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://sosfarol.com.br/#organization",
+      "@id": "#organization",
       "name": "SOS FAROL",
-      "url": "https://sosfarol.com.br/",
-      "logo": "https://sosfarol.com.br/assets/logo-sos-farol.webp"
+      "url": "",
+      "logo": "assets/logo-sos-farol.webp"
     },
     {
       "@type": "SoftwareApplication",
-      "@id": "https://sosfarol.com.br/#app",
+      "@id": "#app",
       "name": "SOS FAROL",
-      "url": "https://sosfarol.com.br/",
+      "url": "",
       "applicationCategory": "LifestyleApplication",
       "description": "Aplicativo de alerta e rede de apoio para idosos, pessoas vulneráveis e suas famílias, com acionamento por movimento, palavra falada ou botão de ajuda.",
-      "publisher": {"@id": "https://sosfarol.com.br/#organization"},
+      "publisher": {"@id": "#organization"},
       "featureList": [
         "Acionamento ao agitar o celular",
         "Acionamento por palavra falada",
@@ -67,7 +62,7 @@
     },
     {
       "@type": "FAQPage",
-      "@id": "https://sosfarol.com.br/#faq",
+      "@id": "#faq",
       "mainEntity": [
         {"@type":"Question","name":"O que é o FAROL?","acceptedAnswer":{"@type":"Answer","text":"O SOS FAROL é um aplicativo de alerta e rede privada de apoio que permite avisar rapidamente pessoas de confiança quando você precisa de ajuda."}},
         {"@type":"Question","name":"Quem pode fazer parte da rede?","acceptedAnswer":{"@type":"Answer","text":"Familiares, amigos, vizinhos, cuidadores, colegas de trabalho ou outras pessoas previamente convidadas."}},
@@ -84,455 +79,229 @@
 </script>
 </head>
 <body>
-<header>
-<div class="wrap nav">
-<a aria-label="SOS FAROL" class="brand" href="#inicio">
-<img alt="Logo SOS FAROL" class="brand-logo-img" decoding="async" fetchpriority="high" src="assets/logo-sos-farol.webp"/>
-<!--<span>Crie uma rede de apoio</span> -->
-</a>
-<nav class="nav-links">
-<a href="#resposta-em-rede">Entenda a Rede</a>
-<a href="#diferenciais">Por que Farol</a>
-<a href="#como-funciona">Como funciona</a>
-<a href="#videos">Vídeos</a>
-<div class="nav-drop">
-<button aria-controls="clienteMenu" aria-expanded="false" class="nav-drop-btn" id="clienteToggle" type="button">Área do Cliente</button>
-<div class="nav-drop-menu" hidden id="clienteMenu">
-<a href="manual.html" target="_blank" rel="noopener">Manual</a>
-<a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
-<a href="#convidado">Convidado, baixe o app</a>
-<a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a>
-<a href="contato.html">Contato</a>
-</div>
-</div>
-<a href="#preco">Preço</a>
-<a href="#faq">Dúvidas</a>
-<!-- LOJA DESATIVADA 2026-09-30 (Amazon encerrou a afiliacao por inatividade) - para reativar, remova este comentario
-<a href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Os 10 Mais</a>
--->
-</nav>
-<a class="btn btn-primary" href="#teste">Testar grátis</a>
-<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu" class="menu-toggle" id="menuToggle" type="button">
-<span></span><span></span><span></span>
-</button>
-</div>
-<nav class="mobile-menu" id="mobileMenu">
-<a href="#resposta-em-rede">Entenda a Rede</a>
-<a href="#diferenciais">Por que Farol</a>
-<a href="#como-funciona">Como funciona</a>
-<a href="#videos">Vídeos</a>
-<a href="#preco">Preço</a>
-<a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a>
-<a href="#convidado">Fui convidado</a>
-<a href="manual.html" target="_blank" rel="noopener">Manual</a>
-<a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
-<!-- LOJA DESATIVADA 2026-09-30 (Amazon encerrou a afiliacao por inatividade) - para reativar, remova este comentario
-<a href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Os 10 Mais</a>
--->
-<a href="#faq">Dúvidas</a>
-<a class="btn btn-primary" href="#teste">Testar grátis</a>
-</nav>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="SOS FAROL, início"><img src="assets/logo-sos-farol.webp" alt="Logo SOS FAROL" width="256" height="256"></a>
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        <li><a href="#resposta-em-rede">Entenda a Rede</a></li>
+        <li><a href="#diferenciais">Por que Farol</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#videos">Vídeos</a></li>
+        <li><details><summary>Área do Cliente</summary><ul class="submenu vidro">
+          <li><a href="manual.html" target="_blank" rel="noopener">Manual</a></li>
+          <li><a href="https://sosfarol.com.br/meu-codigo.html" target="_blank" rel="noopener">Meu código</a></li>
+          <li><a href="#convidado">Convidado, baixe o app</a></li>
+          <li><a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a></li>
+          <li><a href="contato.html">Contato</a></li>
+        </ul></details></li>
+        <li><a href="#preco">Preço</a></li>
+        <li><a href="#faq">Dúvidas</a></li>
+      </ul>
+    </nav>
+    <div class="topo-acoes">
+      <a class="btn btn-sol btn-p" href="#preco">Testar grátis</a>
+      <button class="abre-menu vidro" type="button" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
 </header>
-<main id="inicio">
-<section class="hero">
-<div class="wrap hero-grid">
-<div>
-<span class="eyebrow">Crie sua própria Rede de Proteção</span>
-<h1>Proteja quem você ama! Conheça o APP SOS Farol.</h1><p class="hero-seo-line"><strong>Emergência ou risco? Cada minuto importa.</strong></p>
-<p>Com o SOS Farol o alerta pode ser acionado por voz, movimento ou botão e chegar à sua rede familiar e amigos rapidamente com a localização e um áudio contextual de 20 segundos.</p>
-<div class="hero-actions">
-<a class="btn btn-primary" href="abertura.html" onclick="gtag('event','click_testar')">Testar por 15 dias grátis</a>
-<a class="btn btn-secondary" href="#como-funciona">Entender como funciona</a>
-</div>
-<div class="microcopy">Apenas para celulares ANDROID 11 ou superior! Sem compromisso. Experimente sua própria rede antes de decidir.</div>
-</div>
-<div aria-label="Exemplo de alerta FAROL" class="hero-card">
-<div style="font-weight:800;opacity:.86">Um pedido. Toda a rede avisada.</div>
-<div class="phone">
-<div class="phone-top"><div class="notch"></div></div>
-<div class="phone-screen">
-<span class="status-pill">● Rede conectada</span>
-<div class="alert-card">
-<strong>🚨 Pedido de ajuda</strong>
-<div class="alert-line">Maria acionou o FAROL às 22:41.</div>
-<div class="alert-line">📍 Localização disponível</div>
-<div class="alert-line">🔋 Bateria do aparelho: 18%</div>
-<div class="alert-line">🎤 Áudio contextual disponível</div>
-<div class="alert-actions">
-<div class="fake-btn hot">ESTOU INDO</div>
-<div class="fake-btn">LIGAR</div>
-<div class="fake-btn">CHAMAR POLÍCIA</div>
-<div class="fake-btn">RESOLVIDO</div>
-</div>
-</div>
-<div class="alert-card alert-resposta" style="margin-top:12px">
-<strong style="font-size:15px">✅ Carlos respondeu</strong>
-<div class="alert-line">Está indo até o local.</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section class="network-band" id="resposta-em-rede">
-<div class="wrap">
-<div class="network-copy network-copy-centered">
-<span class="eyebrow">Entenda a Rede</span>
-<h2>Uma pessoa chama ajuda. Outra chega rápido!</h2>
-<p>Quando todos recebem o mesmo alerta, cada membro pode assumir uma parte da resposta. O SOS FAROL conecta famílias, condomínios, vizinhanças e grupos de comerciantes em uma rede privada de apoio.</p>
-</div>
-<div class="network-illustration">
-<picture>
-<source media="(max-width: 720px)" srcset="assets/resposta-em-rede-vertical.webp">
-<img alt="Ilustração em três quadrinhos mostrando uma pessoa acionando o FAROL ao agitar o celular, a rede recebendo o alerta e a ajuda chegando." decoding="async" loading="lazy" src="assets/resposta-em-rede.webp">
-</picture>
-</div><p class="network-seo-copy">O alerta pode começar de três maneiras: <strong>agitar o celular, falar uma palavra código ou tocar no botão de ajuda</strong> — nessa ordem de rapidez: agitar é o mais rápido; agitar e palavra código funcionam com a tela apagada; o botão fica como terceira opção. A rede recebe o pedido e as pessoas de confiança podem coordenar a resposta conforme a situação.</p>
-</div>
-</section>
-<section id="diferenciais">
-<div class="wrap">
-<!-- COMPARATIVO (2026-09-29, conteudo enviado pelo usuario, estilo adaptado ao site) -->
-<div class="farol-comparativo">
-<div class="fc-cabecalho">
-<span class="eyebrow" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">Por que FAROL?</span>
-<h2>Cinco razões inovadoras</h2>
-<p>Em uma emergência, cada segundo importa. Veja como o Aplicativo SOS Farol se diferencia de soluções que dependem de botões ou acessórios.</p>
-</div>
-<div class="fc-tabela-wrap">
-<table class="fc-tabela">
-<thead><tr><th>O que importa numa emergência</th><th>Botões e acessórios de emergência</th><th class="fc-farol">Aplicativo SOS Farol</th></tr></thead>
-<tbody>
-<tr>
-<td class="fc-criterio"><span class="fc-numero">1</span><strong>Pedir ajuda sem precisar mexer na tela</strong></td>
-<td class="fc-outros" data-label="Botões e acessórios de emergência">Normalmente exige alcançar e apertar um botão</td>
-<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Uso simples com voz e agitar sem precisar ligar a tela</strong></td>
-</tr>
-<tr>
-<td class="fc-criterio"><span class="fc-numero">2</span><strong>Não depender de outro aparelho</strong></td>
-<td class="fc-outros" data-label="Botões e acessórios de emergência">Pode exigir usar, lembrar e manter um acessório adicional</td>
-<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Só o celular — sem relógio, colar ou botão extra</strong></td>
-</tr>
-<tr>
-<td class="fc-criterio"><span class="fc-numero">3</span><strong>Estar disponível na vida real</strong></td>
-<td class="fc-outros" data-label="Botões e acessórios de emergência">Pode ser esquecido, retirado, descarregado ou simplesmente não estar sendo usado naquele momento</td>
-<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Não depende de um acessório vestido ou carregado separadamente</strong></td>
-</tr>
-<tr>
-<td class="fc-criterio"><span class="fc-numero">4</span><strong>Não apenas avisar — mobilizar uma rede</strong></td>
-<td class="fc-outros" data-label="Botões e acessórios de emergência">Muitos sistemas focam no acionamento de um SOS ou de uma central</td>
-<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Alerta a rede, envia localização e áudio contextual de 20 s para sua família</strong></td>
-</tr>
-<tr>
-<td class="fc-criterio"><span class="fc-numero">5</span><strong>Mais autonomia de bateria</strong></td>
-<td class="fc-outros" data-label="Botões e acessórios de emergência">Acessórios pequenos possuem bateria própria e acrescentam mais um dispositivo para manter carregado</td>
-<td class="fc-farol" data-label="Aplicativo SOS Farol"><span class="fc-check">✓</span><strong>Uma única bateria para acompanhar + avisos preventivos de bateria baixa</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="fc-mensagem">
-<h3>O Aplicativo SOS Farol foi pensado para quando você não consegue apertar um botão a tempo.</h3>
-<div class="fc-frase">Sem acessórios obrigatórios. Sem depender de uma única forma de pedir ajuda.</div>
-<div class="fc-pilares"><span>Voz</span><span>Movimento</span><span>Toque</span><span>Rede de apoio</span></div>
-<p class="fc-discreto">🕶️ Para quem pode ter o celular vigiado: o <strong>Modo discreto</strong> disfarça o app de bloco de notas.</p>
-</div>
-</div>
-</div>
-</section>
-<section class="stories how" id="como-funciona">
-<div class="wrap">
-<div class="section-head">
-<span class="eyebrow" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.12)">COMO FUNCIONA</span>
-<h2>Três cenários. A mesma rede de apoio.</h2>
-<p>As três tirinhas abaixo mostram, de forma visual e humana, como o FAROL pode agir em situações reais.</p>
-</div>
-<article class="story">
-<div class="story-media">
-<img alt="Tirinha: pessoa vulnerável pedindo ajuda dentro de casa" decoding="async" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" src="assets/situacao-1.webp"/>
-<div class="placeholder" style="display:none">📚 Coloque aqui a imagem <strong>tirinha-casa.png</strong></div>
-</div>
-<div class="story-copy">
-<div class="story-tag">Basta agitar</div>
-<h3>Quando um vulnerável precisa pedir ajuda discretamente dentro de casa.</h3>
-<p>Em uma situação de assédio ou pressão dentro de casa, agitar o celular pode ser a forma mais rápida e discreta de acionar a rede de apoio.</p>
-<ul>
-<li>Agitar o aparelho mesmo com a tela fechada</li>
-<li>Funciona rapidamente em ambiente doméstico</li>
-<li>Rede avisada imediatamente</li>
-</ul>
-</div>
-</article>
-<article class="story reverse">
-<div class="story-media">
-<img alt="Tirinha: pessoa vulnerável em situação de pressão dentro de casa" decoding="async" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" src="assets/situacao-2.webp"/>
-<div class="placeholder" style="display:none">📚 Coloque aqui a imagem <strong>tirinha-pressao.png</strong></div>
-</div>
-<div class="story-copy">
-<div class="story-tag">Basta uma palavra</div>
-<h3>Quando um acidente acontece e o celular está longe da pessoa.</h3>
-<p>Se a pessoa caiu, está sozinha e não consegue alcançar o telefone, a voz pode ser o caminho mais importante para pedir ajuda.</p>
-<ul>
-<li>Palavra código com tela apagada</li>
-<li>Ideal quando o celular caiu a certa distância</li>
-<li>Rede avisada sem depender do toque no aparelho</li>
-</ul>
-</div>
-</article>
-<article class="story">
-<div class="story-media">
-<img alt="Tirinha: mulher sendo seguida na rua e acionando sua rede" decoding="async" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" src="assets/situacao-3.webp"/>
-<div class="placeholder" style="display:none">📚 Coloque aqui a imagem <strong>tirinha-rua.png</strong></div>
-</div>
-<div class="story-copy">
-<div class="story-tag">Na rua</div>
-<h3>Quando alguém percebe um risco no trajeto ou na rua.</h3>
-<p>Uma adolescente ou mulher pode perceber que está sendo seguida, falar sua palavra de segurança e, se necessário, apertar o botão para reforçar o pedido de ajuda.</p>
-<ul>
-<li>Ideal para crianças, adolescentes e mulheres</li>
-<li>Útil em perseguição, medo, assédio ou ameaça</li>
-<li>A rede pode receber localização e áudio ambiente</li>
-</ul>
-</div>
-</article>
-</div>
-</section>
-<section class="videos" id="videos">
-<div class="wrap">
-<div class="section-head">
-<span class="eyebrow">Veja em vídeo</span>
-<h2>Veja como pedir ajuda na prática.</h2>
-<p>Dois vídeos curtos para cada forma de acionar o SOS Farol. Assista quando quiser.</p>
-</div>
-<div class="vid-grid"><div class="vid-grupo"><h3><i>📳</i>Agitar</h3><p>O jeito mais rápido. Funciona com a tela apagada.</p><div class="vid-lista"><button class="vid-btn vid-link" type="button" data-video="videos/SOS-Farol-video1-cozinha.mp4"><b>▶</b><span>Assistir: na cozinha</span></button><button class="vid-btn vid-link" type="button" data-video="videos/SOS-Farol-video5-chao.mp4"><b>▶</b><span>Assistir: no chão da sala</span></button></div></div><div class="vid-grupo"><h3><i>🗣️</i>Palavra-código</h3><p>Sem tocar no celular, até 3 metros. Também com a tela apagada.</p><div class="vid-lista"><button class="vid-btn vid-link" type="button" data-video="videos/SOS-Farol-video2-sofa.mp4"><b>▶</b><span>Assistir: no sofá</span></button><button class="vid-btn vid-link" type="button" data-video="videos/SOS-Farol-video3-rua.mp4"><b>▶</b><span>Assistir: na rua</span></button></div></div><div class="vid-grupo"><h3><i>👆</i>Botão</h3><p>Com a tela acesa: abrir o app e tocar 3 vezes no botão.</p><div class="vid-lista"><button class="vid-btn vid-link" type="button" data-video="videos/SOS-Farol-video4-botao.mp4"><b>▶</b><span>Assistir: intruso no quintal</span></button><button class="vid-btn vid-link" type="button" data-video="videos/SOS-Farol-video7-discreto.mp4"><b>▶</b><span>Assistir: no Modo discreto</span></button></div></div></div>
-<p class="vid-nota">O alerta pode falhar. Em emergência, ligue 192 ou 190.</p>
-</div>
-</section>
-<section class="trial" id="teste">
-<div class="wrap">
-<div class="trial-box">
-<h2>Teste sua própria Rede FAROL por 15 dias.</h2>
-<p>
-            Instale, configure sua rede, faça testes reais e descubra com tranquilidade
-            se o FAROL faz sentido para você e para quem você quer proteger.
-          </p>
-<a class="btn btn-primary" href="abertura.html" onclick="gtag('event','click_testar')">Criar minha rede grátis</a>
-<div style="margin-top:14px;font-size:13px;color:rgba(255,255,255,.64)">Sem compromisso durante o período de experiência. Apenas para celulares Android 11 ou superior.</div>
-</div>
-</div>
-</section>
-<section id="preco">
-<div class="wrap">
-<div class="section-head">
-<span class="eyebrow">Depois do teste</span>
-<h2>Testou e gostou? Continue com o acesso completo.</h2>
-<p>Terminou o teste grátis? Compre a assinatura anual. Apenas para celulares Android 11 ou superior.</p>
-</div>
-<div class="price-grid">
-<div class="price-card">
-<span class="price-tag">Teste grátis</span>
-<h3>15 dias completos</h3>
-<div class="price-big">R$ 0</div>
-<ul>
-<li>Todos os recursos liberados</li>
-<li>Inclui a pessoa protegida + 1 convidado</li>
-<li>Sem cartão de crédito</li>
-<li>Sem renovação automática</li>
-</ul>
-<a href="abertura.html" class="btn btn-secondary" onclick="gtag('event','click_testar')">Gerar meu código</a>
-</div>
-<div class="price-card feature">
-<span class="price-tag">Assinatura anual</span>
-<h3>Acesso completo</h3>
-<div class="price-big">12x R$ 19,90<span> no cartão</span></div>
-<div class="price-total-note">ou R$ 189,00 à vista no ano</div>
-<ul>
-<li><b>3 licenças inclusas</b> — você + 2 convidados</li>
-<li>Suporte e atualizações incluídos</li>
-<li>Renovação simples, sem reconfigurar o app</li>
-</ul>
-<a href="#" class="btn btn-primary" id="comprarBtn" target="_blank" rel="noopener" onclick="gtag('event','click_assinar')">Assinar o acesso anual</a>
-<p class="inpi-note" style="margin:10px 0 0;font-size:11px;line-height:1.4;color:var(--muted);text-align:center">App SOS Farol com Certificado de Registro de Programa de Computador no INPI</p>
-</div>
-</div>
-<p class="price-note">Pagamento processado pela Kiwify. <b>Já comprou?</b> <a href="https://sosfarol.com.br/meu-codigo.html" target="_blank" rel="noopener"><b style="font-size:16px;">Clique aqui</b> e pegue seu código de ativação</a> com o e-mail da compra.</p>
-</div>
-</section>
-<section id="convidado">
-<div class="wrap">
-<div class="invite-box">
-<span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32)">Para quem foi convidado</span>
-<h2>Foi convidado para uma Rede FAROL?</h2>
-<p>O teste grátis inclui a pessoa protegida + <b>1 convidado</b>, e o plano anual inclui a pessoa protegida + <b>2 convidados</b> — eles também recebem acesso completo, sem pagar nada a mais. Baixe o app e ative com o <b>mesmo código</b> de quem te convidou.</p>
-<a class="btn" style="background:#fff;color:var(--navy)" href="https://sosfarol.com.br/download/sos-farol.apk">Baixar o app do convidado</a>
-</div>
-</div>
-</section>
-<section class="guide-section" id="conteudos">
-<div class="wrap">
-<div class="section-head">
-<span class="eyebrow">Guia SOS Farol</span>
-<h2>Informação para proteger sem tirar a independência.</h2>
-<p>Conteúdos práticos sobre segurança, autonomia, tecnologia e rede de apoio para idosos, pessoas vulneráveis e suas famílias.</p>
-</div>
-<div class="guide-grid">
-<article class="guide-card">
-<div class="guide-tag">Idosos e autonomia</div>
-<h3>Idoso mora sozinho: como aumentar a segurança sem tirar sua independência</h3>
-<p>Um guia para familiares organizarem apoio, rotina e tecnologia sem transformar cuidado em vigilância.</p>
-<a href="conteudos/idoso-mora-sozinho.html">Ler o guia →</a>
-</article>
-<article class="guide-card">
-<div class="guide-tag">Rede de apoio</div>
-<h3>Como criar uma rede de apoio para um idoso</h3>
-<p>Quem convidar, como dividir responsabilidades e por que uma rede funciona melhor quando todos sabem como agir.</p>
-<a href="conteudos/rede-de-apoio-para-idosos.html">Ler o guia →</a>
-</article>
-<article class="guide-card">
-<div class="guide-tag">Família à distância</div>
-<h3>Como cuidar dos pais idosos mesmo morando longe</h3>
-<p>Ideias para manter proximidade, combinar respostas e reduzir o tempo até alguém da rede conseguir ajudar.</p>
-<a href="conteudos/como-cuidar-dos-pais-a-distancia.html">Ler o guia →</a>
-</article>
-</div>
-</div>
-</section>
-<section id="afiliados">
-<div class="wrap">
-<div class="affiliate-box">
-<span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32)">Programa de Afiliados</span>
-<h2>Indique o SOS Farol e ganhe comissão por venda.</h2>
-<p>Cuidadores, gerontólogos, fisioterapeutas, enfermeiros, profissionais de home care, criadores de conteúdo e outros parceiros podem indicar o SOS Farol. Programa por convite.</p>
-<a class="btn" style="background:#fff;color:var(--navy)" href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Conhecer a Área de Afiliados</a>
-</div>
-</div>
-</section>
-<!-- LOJA DESATIVADA 2026-09-30 (Amazon encerrou a afiliacao por inatividade) - para reativar, remova este comentario
-<section id="loja-mini">
-<div class="wrap">
-<div class="store-box">
-<span class="eyebrow" style="background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32)">Loja de Apoio</span>
-<h2>Os 10 Mais SOS Farol.</h2>
-<p>Produtos selecionados para segurança, autonomia e cuidado no dia a dia de idosos e pessoas vulneráveis.</p>
-<a class="btn" style="background:#fff;color:var(--navy)" href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Conhecer os 10 Mais</a>
-</div>
-</div>
-</section>
--->
-<section id="faq">
-<div class="wrap">
-<div class="section-head">
-<span class="eyebrow">Dúvidas frequentes</span>
-<h2>Entenda o essencial antes de testar.</h2>
-</div>
-<div class="faq">
-<details><summary>O que é o FAROL?</summary><p>O SOS FAROL é um aplicativo de alerta e uma rede privada de apoio que permite avisar rapidamente pessoas de confiança quando você precisar de ajuda.</p></details>
-<details><summary>Quem pode fazer parte da rede?</summary><p>Familiares, amigos, vizinhos, cuidadores, colegas de trabalho ou outras pessoas previamente convidadas.</p></details>
-<details><summary>Como o pedido de ajuda pode ser acionado?</summary><p>O pedido de ajuda pode ser acionado de três formas: agitando o celular, falando uma palavra de segurança ou tocando no botão de ajuda.</p></details>
-<details><summary>Em quais celulares o SOS FAROL funciona?</summary><p>Apenas em celulares Android 11 ou superior. Não funciona em iPhone. Para ver a versão, abra Configurações → Sobre o telefone → Versão do Android. Se o aplicativo não instalar no seu aparelho, fale com o suporte.</p></details>
-<details><summary>Funciona com a tela apagada?</summary><p>Sim. Com a proteção ligada, agitar o celular e falar a palavra código funcionam com a tela apagada, sem abrir o app. Na primeira abertura, o próprio app pede as permissões necessárias e testa cada forma de pedir ajuda.</p></details>
-<details><summary>O FAROL substitui polícia ou serviços de emergência?</summary><p>Não. O FAROL avisa sua rede de apoio. Dependendo da situação, um membro da rede pode decidir acionar os serviços públicos de emergência.</p></details>
-<details><summary>O teste de 15 dias tem compromisso?</summary><p>Não. A proposta é permitir que o usuário experimente a rede e avalie se ela faz sentido para sua realidade antes de assinar.</p></details>
-<details><summary>Já tenho meu próprio plano anual. Posso entrar na rede de outra pessoa também?</summary><p>Sim. Quem já assina o plano anual pode entrar na rede de apoio de outra pessoa usando o próprio código, sem abrir mão da própria licença. Nesse caso, os convidados grátis do seu código ficam guardados — eles só valem para a rede que você mesmo criar, não para a rede que você está entrando.</p></details>
-<details><summary>Preciso deixar o aplicativo aberto o tempo inteiro?</summary><p>Não necessariamente. Alguns recursos funcionam em segundo plano, desde que as permissões e configurações de bateria do Android estejam ajustadas conforme as orientações do aplicativo.</p></details>
-<details><summary>Desliguei ou reiniciei o celular. Preciso fazer alguma coisa?</summary><p>Sim: abra o SOS FAROL uma vez. Por regra de privacidade do Android, nenhum app pode ligar o microfone sozinho quando o celular liga. Depois de desligar ou reiniciar, o próprio app mostra um aviso: é só tocar nele e a proteção volta completa, com palavra código, áudio e localização.</p></details>
-<details><summary>Quem recebe o alerta precisa instalar o SOS FAROL?</summary><p>Os membros convidados da rede usam o aplicativo para receber e responder aos alertas vinculados ao mesmo código da rede.</p></details>
-<details><summary>A localização fica visível o tempo inteiro?</summary><p>O SOS FAROL foi pensado para compartilhar contexto quando existe um pedido de ajuda. Consulte a Política de Privacidade e as configurações do aplicativo para entender exatamente quais dados são usados em cada recurso.</p></details>
-<details><summary>Posso trocar as pessoas da minha rede?</summary><p>Sim. A proposta da rede é permitir que você organize pessoas de confiança de acordo com sua realidade e atualize essa composição quando necessário.</p></details>
-<details><summary>Qual forma de pedir ajuda funciona melhor?</summary><p>Use nesta ordem: <strong>1º agitar o celular</strong> (o mais rápido, funciona com a tela apagada), <strong>2º falar a palavra código</strong> (também com a tela apagada, sem tocar no celular, até 3 metros) e <strong>3º o botão de ajuda</strong>, que exige desbloquear a tela, abrir o app e dar 3 toques. Com o modo <strong>Na rua</strong> ligado, o agitar fica pausado para os passos não causarem alarme falso: comece pela palavra código.</p></details>
-<details><summary>Preciso usar os três gatilhos?</summary><p>Não. Voz, movimento e botão são formas diferentes de acionar o pedido de ajuda. A configuração pode ser adaptada conforme o perfil e a situação de uso.</p></details>
-</div>
-</div>
-</section>
-</main>
-<footer>
-<div class="wrap">
-<div class="footer-grid">
-<div class="brand" style="color:#fff">
-<img alt="Logo SOS FAROL" class="brand-logo-img" src="assets/logo-sos-farol.webp"/>
-<span>SOS FAROL — Rede de Apoio</span>
-</div>
-<div class="footer-links">
-<!-- LOJA DESATIVADA 2026-09-30 (Amazon encerrou a afiliacao por inatividade) - para reativar, remova este comentario
-<a href="loja-de-apoio.html" onclick="gtag('event','click_os_10_mais')">Os 10 Mais SOS Farol</a>
--->
-<a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a>
-<a href="conteudos/idoso-mora-sozinho.html">Conteúdos</a>
-<a href="manual.html" target="_blank" rel="noopener">Manual</a>
-<a href="meu-codigo.html" target="_blank" rel="noopener">Meu código</a>
-<a href="status.html" target="_blank" rel="noopener">Status do app</a>
-<a href="#convidado">Fui convidado, baixar o app</a>
-<a href="politica-de-privacidade.html">Política de Privacidade</a>
-<a href="termos-de-uso.html">Termos de Uso</a>
-<a href="contato.html">Contato</a>
-<a href="https://www.instagram.com/redesosfarol" target="_blank" rel="noopener" onclick="gtag('event','click_instagram')">Instagram</a>
-</div>
-</div>
-<div class="note">
-        O FAROL é uma ferramenta de rede de apoio e não substitui serviços oficiais de emergência.
-        Em situações de risco imediato, procure os serviços públicos competentes.
-        <br>Software com Certificado de Registro no INPI.
+
+<main id="conteudo">
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <div class="hero-grade">
+      <div class="hero-txt">
+        <span class="olho" style="display:block">Crie sua própria Rede de Proteção</span>
+        <h1>Proteja quem você ama! <b>Conheça o APP SOS Farol.</b></h1>
+        <p class="lead"><strong class="forte">Emergência ou risco? Cada minuto importa.</strong>Com o SOS Farol o alerta pode ser acionado por voz, movimento ou botão e chegar à sua rede familiar e amigos rapidamente com a localização e um áudio contextual de 20 segundos.</p>
+        <div class="acoes">
+          <a class="btn btn-sol" href="abertura.html" onclick="gtag('event','click_testar')">Testar por 15 dias grátis <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-vidro vidro" href="#como-funciona">Entender como funciona</a>
+        </div>
+        <p class="micro">Apenas para celulares ANDROID 11 ou superior! Sem compromisso. Experimente sua própria rede antes de decidir.</p>
       </div>
-</div>
+      <div class="alerta-demo vidro" aria-label="Exemplo de alerta FAROL">
+        <span class="pill"><i></i>Rede conectada · Um pedido. Toda a rede avisada.</span>
+        <strong>🚨 Pedido de ajuda</strong>
+        <div class="linha">Maria acionou o FAROL às 22:41.</div>
+        <div class="linha">📍 Localização disponível</div>
+        <div class="linha">🔋 Bateria do aparelho: 18%</div>
+        <div class="linha">🎤 Áudio contextual disponível</div>
+        <div class="bts"><span class="quente">ESTOU INDO</span><span>LIGAR</span><span>CHAMAR POLÍCIA</span><span>RESOLVIDO</span></div>
+        <div class="resp">✅ <b>Carlos respondeu</b> · Está indo até o local.</div>
+      </div>
+    </div>
+    <nav class="faixa g3x vidro" aria-label="Formas de pedir ajuda">
+      <a href="#videos"><small>01 · <span class="ico-f">📳</span></small><h2>Agitar</h2><p>O jeito mais rápido. Funciona com a tela apagada.</p></a>
+      <a href="#videos"><small>02 · <span class="ico-f">🗣️</span></small><h2>Palavra-código</h2><p>Sem tocar no celular, até 3 metros. Também com a tela apagada.</p></a>
+      <a href="#videos"><small>03 · <span class="ico-f">👆</span></small><h2>Botão</h2><p>Com a tela acesa: abrir o app e tocar 3 vezes no botão.</p></a>
+    </nav>
+  </div>
+</section>
+
+<section class="secao" id="resposta-em-rede"><div class="wrap">
+  <div class="titulo-sec reveal"><span class="olho">Entenda a Rede</span><h2>Uma pessoa chama ajuda. <b>Outra chega rápido!</b></h2><p>Quando todos recebem o mesmo alerta, cada membro pode assumir uma parte da resposta. O SOS FAROL conecta famílias, condomínios, vizinhanças e grupos de comerciantes em uma rede privada de apoio.</p></div>
+  <div class="moldura reveal"><picture>
+    <source media="(max-width: 720px)" srcset="assets/resposta-em-rede-vertical.webp">
+    <img src="assets/resposta-em-rede.webp" alt="Ilustração em três quadrinhos mostrando uma pessoa acionando o FAROL ao agitar o celular, a rede recebendo o alerta e a ajuda chegando." loading="lazy" decoding="async">
+  </picture></div>
+  <p class="texto reveal" style="margin-top:22px">O alerta pode começar de três maneiras: <strong>agitar o celular, falar uma palavra código ou tocar no botão de ajuda</strong> — nessa ordem de rapidez: agitar é o mais rápido; agitar e palavra código funcionam com a tela apagada; o botão fica como terceira opção. A rede recebe o pedido e as pessoas de confiança podem coordenar a resposta conforme a situação.</p>
+</div></section>
+
+<section class="secao" id="diferenciais"><div class="wrap">
+  <div class="titulo-sec reveal"><span class="olho">Por que FAROL?</span><h2>Cinco razões <b>inovadoras</b></h2><p>Em uma emergência, cada segundo importa. Veja como o Aplicativo SOS Farol se diferencia de soluções que dependem de botões ou acessórios.</p></div>
+  <div class="tabela-vidro vidro reveal"><table>
+    <thead><tr><th>O que importa numa emergência</th><th>Botões e acessórios de emergência</th><th class="f">Aplicativo SOS Farol</th></tr></thead>
+    <tbody>
+      <tr><td><span class="n">1</span>Pedir ajuda sem precisar mexer na tela</td><td class="o">Normalmente exige alcançar e apertar um botão</td><td class="f">Uso simples com voz e agitar sem precisar ligar a tela</td></tr>
+      <tr><td><span class="n">2</span>Não depender de outro aparelho</td><td class="o">Pode exigir usar, lembrar e manter um acessório adicional</td><td class="f">Só o celular — sem relógio, colar ou botão extra</td></tr>
+      <tr><td><span class="n">3</span>Estar disponível na vida real</td><td class="o">Pode ser esquecido, retirado, descarregado ou simplesmente não estar sendo usado naquele momento</td><td class="f">Não depende de um acessório vestido ou carregado separadamente</td></tr>
+      <tr><td><span class="n">4</span>Não apenas avisar — mobilizar uma rede</td><td class="o">Muitos sistemas focam no acionamento de um SOS ou de uma central</td><td class="f">Alerta a rede, envia localização e áudio contextual de 20 s para sua família</td></tr>
+      <tr><td><span class="n">5</span>Mais autonomia de bateria</td><td class="o">Acessórios pequenos possuem bateria própria e acrescentam mais um dispositivo para manter carregado</td><td class="f">Uma única bateria para acompanhar + avisos preventivos de bateria baixa</td></tr>
+    </tbody>
+  </table></div>
+  <div class="mensagem reveal">
+    <h3>O Aplicativo SOS Farol foi pensado para quando você <b>não consegue apertar um botão a tempo.</b></h3>
+    <p class="texto" style="margin:0 auto">Sem acessórios obrigatórios. Sem depender de uma única forma de pedir ajuda.</p>
+    <div class="pilulas"><span class="pilula vidro">Voz</span><span class="pilula vidro">Movimento</span><span class="pilula vidro">Toque</span><span class="pilula vidro">Rede de apoio</span></div>
+    <p class="texto" style="margin:0 auto">🕶️ Para quem pode ter o celular vigiado: o <strong>Modo discreto</strong> disfarça o app de bloco de notas.</p>
+  </div>
+</div></section>
+
+<section class="secao" id="como-funciona"><div class="wrap">
+  <div class="titulo-sec reveal"><span class="olho">Como funciona</span><h2>Três cenários. <b>A mesma rede de apoio.</b></h2><p>As três tirinhas abaixo mostram, de forma visual e humana, como o FAROL pode agir em situações reais.</p></div>
+  <article class="duo cenario reveal">
+    <div class="moldura"><img src="assets/situacao-1.webp" alt="Tirinha: pessoa vulnerável pedindo ajuda dentro de casa" loading="lazy" decoding="async"></div>
+    <div><span class="olho">Basta agitar</span><h3>Quando um vulnerável precisa pedir ajuda discretamente dentro de casa.</h3><p class="texto">Em uma situação de assédio ou pressão dentro de casa, agitar o celular pode ser a forma mais rápida e discreta de acionar a rede de apoio.</p>
+      <ul class="check"><li>Agitar o aparelho mesmo com a tela fechada</li><li>Funciona rapidamente em ambiente doméstico</li><li>Rede avisada imediatamente</li></ul></div>
+  </article>
+  <article class="duo cenario inv reveal">
+    <div class="moldura"><img src="assets/situacao-2.webp" alt="Tirinha: pessoa vulnerável em situação de pressão dentro de casa" loading="lazy" decoding="async"></div>
+    <div><span class="olho">Basta uma palavra</span><h3>Quando um acidente acontece e o celular está longe da pessoa.</h3><p class="texto">Se a pessoa caiu, está sozinha e não consegue alcançar o telefone, a voz pode ser o caminho mais importante para pedir ajuda.</p>
+      <ul class="check"><li>Palavra código com tela apagada</li><li>Ideal quando o celular caiu a certa distância</li><li>Rede avisada sem depender do toque no aparelho</li></ul></div>
+  </article>
+  <article class="duo cenario reveal">
+    <div class="moldura"><img src="assets/situacao-3.webp" alt="Tirinha: mulher sendo seguida na rua e acionando sua rede" loading="lazy" decoding="async"></div>
+    <div><span class="olho">Na rua</span><h3>Quando alguém percebe um risco no trajeto ou na rua.</h3><p class="texto">Uma adolescente ou mulher pode perceber que está sendo seguida, falar sua palavra de segurança e, se necessário, apertar o botão para reforçar o pedido de ajuda.</p>
+      <ul class="check"><li>Ideal para crianças, adolescentes e mulheres</li><li>Útil em perseguição, medo, assédio ou ameaça</li><li>A rede pode receber localização e áudio ambiente</li></ul></div>
+  </article>
+</div></section>
+
+<section class="secao" id="videos"><div class="wrap">
+  <div class="titulo-sec reveal"><span class="olho">Veja em vídeo</span><h2>Veja como pedir ajuda <b>na prática.</b></h2><p>Dois vídeos curtos para cada forma de acionar o SOS Farol. Assista quando quiser.</p></div>
+  <div class="grade g3">
+    <div class="card vidro vid-grupo reveal"><h3><span>📳</span>Agitar</h3><p>O jeito mais rápido. Funciona com a tela apagada.</p><div class="vid-lista">
+      <button class="vid-btn" type="button" data-video="videos/SOS-Farol-video1-cozinha.mp4"><b>▶</b><span>Assistir: na cozinha</span></button>
+      <button class="vid-btn" type="button" data-video="videos/SOS-Farol-video5-chao.mp4"><b>▶</b><span>Assistir: no chão da sala</span></button></div></div>
+    <div class="card vidro vid-grupo reveal"><h3><span>🗣️</span>Palavra-código</h3><p>Sem tocar no celular, até 3 metros. Também com a tela apagada.</p><div class="vid-lista">
+      <button class="vid-btn" type="button" data-video="videos/SOS-Farol-video2-sofa.mp4"><b>▶</b><span>Assistir: no sofá</span></button>
+      <button class="vid-btn" type="button" data-video="videos/SOS-Farol-video3-rua.mp4"><b>▶</b><span>Assistir: na rua</span></button></div></div>
+    <div class="card vidro vid-grupo reveal"><h3><span>👆</span>Botão</h3><p>Com a tela acesa: abrir o app e tocar 3 vezes no botão.</p><div class="vid-lista">
+      <button class="vid-btn" type="button" data-video="videos/SOS-Farol-video4-botao.mp4"><b>▶</b><span>Assistir: intruso no quintal</span></button>
+      <button class="vid-btn" type="button" data-video="videos/SOS-Farol-video7-discreto.mp4"><b>▶</b><span>Assistir: no Modo discreto</span></button></div></div>
+  </div>
+  <p class="vid-nota">O alerta pode falhar. Em emergência, ligue 192 ou 190.</p>
+</div></section>
+
+<section class="secao" id="preco"><div class="wrap">
+  <div class="titulo-sec reveal"><span class="olho">Teste grátis</span><h2>Teste e se gostar, <b>continue com o acesso completo.</b></h2><p>Terminou o teste grátis? Compre a assinatura anual. Apenas para celulares Android 11 ou superior.</p></div>
+  <div class="grade g2">
+    <div class="preco vidro reveal">
+      <span class="olho">Teste grátis</span><h3>15 dias completos</h3>
+      <div class="valor">R$ 0</div>
+      <ul class="check"><li>Todos os recursos liberados</li><li>Inclui a pessoa protegida + 1 convidado</li><li>Sem cartão de crédito</li><li>Sem renovação automática</li></ul>
+      <a class="btn btn-vidro vidro" href="abertura.html" onclick="gtag('event','click_testar')">Gerar meu código</a>
+    </div>
+    <div class="preco destaque vidro reveal">
+      <span class="olho">Assinatura anual</span><h3>Acesso completo</h3>
+      <div class="valor">12x R$ 19,90 <small>no cartão</small></div>
+      <div class="total">ou R$ 189,00 à vista no ano</div>
+      <ul class="check"><li><span><b>3 licenças inclusas</b> — você + 2 convidados</span></li><li>Suporte e atualizações incluídos</li><li>Renovação simples, sem reconfigurar o app</li></ul>
+      <a class="btn btn-sol" href="#" id="comprarBtn" target="_blank" rel="noopener" onclick="gtag('event','click_assinar')">Assinar o acesso anual</a>
+      <p class="inpi">App SOS Farol com Certificado de Registro de Programa de Computador no INPI</p>
+    </div>
+  </div>
+  <p class="nota-preco">Pagamento processado pela Kiwify. <b>Já comprou?</b> <a href="https://sosfarol.com.br/meu-codigo.html" target="_blank" rel="noopener"><b>Clique aqui</b> e pegue seu código de ativação</a> com o e-mail da compra.</p>
+</div></section>
+
+<section class="secao" id="convidado"><div class="wrap"><div class="caixa vidro reveal">
+  <span class="olho">Para quem foi convidado</span>
+  <h2>Foi convidado para uma <b>Rede FAROL?</b></h2>
+  <p>O teste grátis inclui a pessoa protegida + <b>1 convidado</b>, e o plano anual inclui a pessoa protegida + <b>2 convidados</b> — eles também recebem acesso completo, sem pagar nada a mais. Baixe o app e ative com o <b>mesmo código</b> de quem te convidou.</p>
+  <div class="acoes"><a class="btn btn-sol" href="https://sosfarol.com.br/download/sos-farol.apk">Baixar o app do convidado</a></div>
+</div></div></section>
+
+<section class="secao" id="conteudos"><div class="wrap">
+  <div class="titulo-sec reveal"><span class="olho">Guia SOS Farol</span><h2>Informação para proteger <b>sem tirar a independência.</b></h2><p>Conteúdos práticos sobre segurança, autonomia, tecnologia e rede de apoio para idosos, pessoas vulneráveis e suas famílias.</p></div>
+  <div class="grade g3">
+    <div class="card vidro vid-grupo reveal"><span class="guia-tag">Idosos e autonomia</span><h3>Idoso mora sozinho: como aumentar a segurança sem tirar sua independência</h3><p>Um guia para familiares organizarem apoio, rotina e tecnologia sem transformar cuidado em vigilância.</p><div class="vid-lista"><a class="vid-btn" href="conteudos/idoso-mora-sozinho.html"><b>→</b><span>Ler o guia</span></a></div></div>
+    <div class="card vidro vid-grupo reveal"><span class="guia-tag">Rede de apoio</span><h3>Como criar uma rede de apoio para um idoso</h3><p>Quem convidar, como dividir responsabilidades e por que uma rede funciona melhor quando todos sabem como agir.</p><div class="vid-lista"><a class="vid-btn" href="conteudos/rede-de-apoio-para-idosos.html"><b>→</b><span>Ler o guia</span></a></div></div>
+    <div class="card vidro vid-grupo reveal"><span class="guia-tag">Família à distância</span><h3>Como cuidar dos pais idosos mesmo morando longe</h3><p>Ideias para manter proximidade, combinar respostas e reduzir o tempo até alguém da rede conseguir ajudar.</p><div class="vid-lista"><a class="vid-btn" href="conteudos/como-cuidar-dos-pais-a-distancia.html"><b>→</b><span>Ler o guia</span></a></div></div>
+  </div>
+</div></section>
+
+<section class="secao" id="afiliados"><div class="wrap"><div class="caixa vidro reveal">
+  <span class="olho">Programa de Afiliados</span>
+  <h2>Indique o SOS Farol e <b>ganhe comissão por venda.</b></h2>
+  <p>Cuidadores, gerontólogos, fisioterapeutas, enfermeiros, profissionais de home care, criadores de conteúdo e outros parceiros podem indicar o SOS Farol. Programa por convite.</p>
+  <div class="acoes"><a class="btn btn-vidro vidro" href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Conhecer a Área de Afiliados</a></div>
+</div></div></section>
+
+<section class="secao" id="faq"><div class="wrap">
+  <div class="titulo-sec reveal"><span class="olho">Dúvidas frequentes</span><h2>Entenda o essencial <b>antes de testar.</b></h2></div>
+  <div class="faq">
+    <details class="vidro"><summary><h3>O que é o FAROL?</h3></summary><p>O SOS FAROL é um aplicativo de alerta e uma rede privada de apoio que permite avisar rapidamente pessoas de confiança quando você precisar de ajuda.</p></details>
+    <details class="vidro"><summary><h3>Quem pode fazer parte da rede?</h3></summary><p>Familiares, amigos, vizinhos, cuidadores, colegas de trabalho ou outras pessoas previamente convidadas.</p></details>
+    <details class="vidro"><summary><h3>Como o pedido de ajuda pode ser acionado?</h3></summary><p>O pedido de ajuda pode ser acionado de três formas: agitando o celular, falando uma palavra de segurança ou tocando no botão de ajuda.</p></details>
+    <details class="vidro"><summary><h3>Em quais celulares o SOS FAROL funciona?</h3></summary><p>Apenas em celulares Android 11 ou superior. Não funciona em iPhone. Para ver a versão, abra Configurações → Sobre o telefone → Versão do Android. Se o aplicativo não instalar no seu aparelho, fale com o suporte.</p></details>
+    <details class="vidro"><summary><h3>Funciona com a tela apagada?</h3></summary><p>Sim. Com a proteção ligada, agitar o celular e falar a palavra código funcionam com a tela apagada, sem abrir o app. Na primeira abertura, o próprio app pede as permissões necessárias e testa cada forma de pedir ajuda.</p></details>
+    <details class="vidro"><summary><h3>O FAROL substitui polícia ou serviços de emergência?</h3></summary><p>Não. O FAROL avisa sua rede de apoio. Dependendo da situação, um membro da rede pode decidir acionar os serviços públicos de emergência.</p></details>
+    <details class="vidro"><summary><h3>O teste de 15 dias tem compromisso?</h3></summary><p>Não. A proposta é permitir que o usuário experimente a rede e avalie se ela faz sentido para sua realidade antes de assinar.</p></details>
+    <details class="vidro"><summary><h3>Já tenho meu próprio plano anual. Posso entrar na rede de outra pessoa também?</h3></summary><p>Sim. Quem já assina o plano anual pode entrar na rede de apoio de outra pessoa usando o próprio código, sem abrir mão da própria licença. Nesse caso, os convidados grátis do seu código ficam guardados — eles só valem para a rede que você mesmo criar, não para a rede que você está entrando.</p></details>
+    <details class="vidro"><summary><h3>Preciso deixar o aplicativo aberto o tempo inteiro?</h3></summary><p>Não necessariamente. Alguns recursos funcionam em segundo plano, desde que as permissões e configurações de bateria do Android estejam ajustadas conforme as orientações do aplicativo.</p></details>
+    <details class="vidro"><summary><h3>Desliguei ou reiniciei o celular. Preciso fazer alguma coisa?</h3></summary><p>Sim: abra o SOS FAROL uma vez. Por regra de privacidade do Android, nenhum app pode ligar o microfone sozinho quando o celular liga. Depois de desligar ou reiniciar, o próprio app mostra um aviso: é só tocar nele e a proteção volta completa, com palavra código, áudio e localização.</p></details>
+    <details class="vidro"><summary><h3>Quem recebe o alerta precisa instalar o SOS FAROL?</h3></summary><p>Os membros convidados da rede usam o aplicativo para receber e responder aos alertas vinculados ao mesmo código da rede.</p></details>
+    <details class="vidro"><summary><h3>A localização fica visível o tempo inteiro?</h3></summary><p>O SOS FAROL foi pensado para compartilhar contexto quando existe um pedido de ajuda. Consulte a Política de Privacidade e as configurações do aplicativo para entender exatamente quais dados são usados em cada recurso.</p></details>
+    <details class="vidro"><summary><h3>Posso trocar as pessoas da minha rede?</h3></summary><p>Sim. A proposta da rede é permitir que você organize pessoas de confiança de acordo com sua realidade e atualize essa composição quando necessário.</p></details>
+    <details class="vidro"><summary><h3>Qual forma de pedir ajuda funciona melhor?</h3></summary><p>Use nesta ordem: <strong>1º agitar o celular</strong> (o mais rápido, funciona com a tela apagada), <strong>2º falar a palavra código</strong> (também com a tela apagada, sem tocar no celular, até 3 metros) e <strong>3º o botão de ajuda</strong>, que exige desbloquear a tela, abrir o app e dar 3 toques. Com o modo <strong>Na rua</strong> ligado, o agitar fica pausado para os passos não causarem alarme falso: comece pela palavra código.</p></details>
+    <details class="vidro"><summary><h3>Preciso usar os três gatilhos?</h3></summary><p>Não. Voz, movimento e botão são formas diferentes de acionar o pedido de ajuda. A configuração pode ser adaptada conforme o perfil e a situação de uso.</p></details>
+  </div>
+</div></section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <div class="rod-grade">
+      <div>
+        <a class="logo" href="#inicio" aria-label="SOS FAROL, início"><img src="assets/logo-sos-farol.webp" alt="Logo SOS FAROL" width="256" height="256" loading="lazy"></a>
+        <p style="margin-top:16px">SOS FAROL — Rede de Apoio</p>
+      </div>
+      <div><h2>Área do Cliente</h2><ul>
+        <li><a href="manual.html" target="_blank" rel="noopener">Manual</a></li>
+        <li><a href="https://sosfarol.com.br/meu-codigo.html" target="_blank" rel="noopener">Meu código</a></li>
+        <li><a href="status.html" target="_blank" rel="noopener">Status do app</a></li>
+        <li><a href="#convidado">Fui convidado, baixar o app</a></li>
+      </ul></div>
+      <div><h2>SOS Farol</h2><ul>
+        <li><a href="afiliados.html" target="_blank" rel="noopener" onclick="gtag('event','click_afiliados')">Afiliados</a></li>
+        <li><a href="conteudos/idoso-mora-sozinho.html">Conteúdos</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="https://www.instagram.com/redesosfarol" target="_blank" rel="noopener" onclick="gtag('event','click_instagram')">Instagram</a></li>
+      </ul></div>
+      <div><h2>Legal</h2><ul>
+        <li><a href="politica-de-privacidade.html">Política de Privacidade</a></li>
+        <li><a href="termos-de-uso.html">Termos de Uso</a></li>
+      </ul></div>
+    </div>
+    <p class="aviso-rod">O FAROL é uma ferramenta de rede de apoio e não substitui serviços oficiais de emergência. Em situações de risco imediato, procure os serviços públicos competentes.<br>Software com Certificado de Registro no INPI.</p>
+  </div>
 </footer>
-<script>
-  var KIWIFY_CHECKOUT_URL = "https://pay.kiwify.com.br/eUBIZVh";
-  var comprarBtn = document.getElementById('comprarBtn');
-  if (comprarBtn) comprarBtn.href = KIWIFY_CHECKOUT_URL;
 
-  var menuToggle = document.getElementById('menuToggle');
-  var mobileMenu = document.getElementById('mobileMenu');
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', function(){
-      var open = mobileMenu.classList.toggle('open');
-      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    Array.prototype.forEach.call(mobileMenu.querySelectorAll('a'), function(a){
-      a.addEventListener('click', function(){
-        mobileMenu.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-  }
-
-  var clienteToggle = document.getElementById('clienteToggle');
-  var clienteMenu = document.getElementById('clienteMenu');
-  if (clienteToggle && clienteMenu) {
-    var setCliente = function(open){
-      clienteMenu.hidden = !open;
-      clienteToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    };
-    clienteToggle.addEventListener('click', function(e){
-      e.stopPropagation();
-      setCliente(clienteMenu.hidden);
-    });
-    clienteMenu.addEventListener('click', function(e){
-      if (e.target.closest('a')) setCliente(false);
-    });
-    document.addEventListener('click', function(e){
-      if (!clienteMenu.hidden && !clienteMenu.contains(e.target)) setCliente(false);
-    });
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape' && !clienteMenu.hidden) { setCliente(false); clienteToggle.focus(); }
-    });
-  }
-</script>
 <div class="vid-modal" id="vidModal" role="dialog" aria-modal="true" aria-label="Vídeo">
-<button class="vid-fechar" type="button" aria-label="Fechar">✕</button>
-<video id="vidPlayer" controls playsinline preload="none"></video>
+  <button class="vid-fechar" type="button" aria-label="Fechar">✕</button>
+  <video id="vidPlayer" controls playsinline preload="none"></video>
 </div>
-<script>
-(function(){
-  var m=document.getElementById('vidModal'), v=document.getElementById('vidPlayer');
-  function fechar(){ v.pause(); v.removeAttribute('src'); v.load(); m.classList.remove('open'); }
-  Array.prototype.forEach.call(document.querySelectorAll('.vid-btn'), function(b){
-    b.addEventListener('click', function(){
-      v.src=b.getAttribute('data-video'); m.classList.add('open'); v.play();
-      if (typeof gtag==='function') gtag('event','play_video',{video:b.getAttribute('data-video')});
-    });
-  });
-  m.addEventListener('click', function(e){ if(e.target===m || e.target.closest('.vid-fechar')) fechar(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && m.classList.contains('open')) fechar(); });
-})();
-</script>
+<script src="vidro.js?v=20261002" defer></script>
 </body>
 </html>
