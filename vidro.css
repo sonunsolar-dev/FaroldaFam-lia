@@ -690,3 +690,17 @@ body {
 .caixa.convite { background: linear-gradient(135deg, #2c3ea8, #14163a); }
 .caixa.convite b { color: #fff; }
 .caixa.convite .btn-sol { background: #fff; color: #00005C; box-shadow: 0 12px 28px -12px rgba(0, 0, 0, .5); }
+
+/* ===== 2026-10-02: padrao final — card do plano anual e rodape no degrade azul (#2c3ea8 -> #14163a) ===== */
+.preco.destaque { background: linear-gradient(135deg, #2c3ea8, #14163a) !important; border-color: rgba(255, 255, 255, .18) !important; color: #fff; box-shadow: 0 30px 60px -30px rgba(0, 0, 60, .6) !important; }
+.preco.destaque h3, .preco.destaque .valor { color: #fff; }
+.preco.destaque .olho { color: #ffb48a; }
+.preco.destaque .valor small, .preco.destaque .total, .preco.destaque .inpi { color: rgba(255, 255, 255, .72); }
+.preco.destaque .check li { color: rgba(255, 255, 255, .85); }
+.preco.destaque .check li b { color: #fff; }
+.preco.destaque .check li::before { background-color: rgba(61, 220, 132, .22); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddc84' stroke-width='3'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); border-color: #3ddc84; }
+.rodape { background: linear-gradient(180deg, #2c3ea8 0%, #14163a 100%) !important; border-top: 0; margin-top: 80px; }
+.rodape h2 { color: #ffb48a; }
+.rodape p, .rodape li, .rodape .aviso-rod { color: rgba(255, 255, 255, .72); }
+.rodape a { color: rgba(255, 255, 255, .85); }
+.rodape a:hover { color: #fff; }

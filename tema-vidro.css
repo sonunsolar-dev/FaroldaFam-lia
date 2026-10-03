@@ -63,3 +63,13 @@ footer a{color:#00005C!important}
 footer a:hover{color:#d4561a!important}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== 2026-10-02: padrao final do site — destaques e rodape no degrade azul (#2c3ea8 -> #14163a) ===== */
+.hero-card,.price-card.feature{background:linear-gradient(135deg,#2c3ea8,#14163a)!important;border:0!important;color:#fff!important;box-shadow:0 30px 60px -30px rgba(0,0,60,.6)!important}
+.hero-card *,.price-card.feature *{color:inherit}
+footer{background:linear-gradient(180deg,#2c3ea8 0%,#14163a 100%)!important;margin-top:60px}
+footer>.wrap,footer .footer-grid{background:transparent!important;border:0!important;box-shadow:none!important;color:rgba(255,255,255,.75)}
+footer,footer *{color:rgba(255,255,255,.75)}
+footer a{color:rgba(255,255,255,.9)!important}
+footer a:hover{color:#fff!important}
+footer h2,footer h3,footer h4{color:#ffb48a!important}
