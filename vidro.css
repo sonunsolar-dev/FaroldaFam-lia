@@ -682,3 +682,7 @@ body {
   .porque .tabela-vidro td.f::before { left: 16px; top: 13px; }
   .porque .tabela-vidro td.o::before { color: rgba(255, 255, 255, .45); }
 }
+/* Programa de Afiliados no mesmo bloco azul-escuro do "Por que FAROL?" (2026-10-02) */
+.caixa.porque h2, .caixa.porque h2 b { color: #fff; }
+.caixa.porque p { color: rgba(255, 255, 255, .78); }
+.caixa.porque .btn-vidro { background: #fff; color: #00005C; }
