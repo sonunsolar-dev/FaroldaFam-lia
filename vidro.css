@@ -652,7 +652,7 @@ body {
 /* ===== "Por que FAROL?" — mescla (2026-10-02): bloco azul-escuro do site anterior
    (faixas separadas, coluna do Farol realcada, mensagem dentro do bloco) com a letra
    Outfit, o check em bolinha verde e as cores do Por do sol ===== */
-.porque { background: linear-gradient(160deg, #0b1046 0%, #16185a 60%, #2a1f5e 100%); color: #fff; border-radius: 28px; padding: clamp(24px, 4vw, 52px); box-shadow: 0 30px 60px -30px rgba(0, 0, 60, .55); }
+.porque { background: linear-gradient(135deg, #2c3ea8, #14163a); /* 2026-10-02: mesmo degrade do card do convidado (antes #0b1046 -> #2a1f5e) */ color: #fff; border-radius: 28px; padding: clamp(24px, 4vw, 52px); box-shadow: 0 30px 60px -30px rgba(0, 0, 60, .55); }
 .porque .titulo-sec h2, .porque .titulo-sec h2 b { color: #fff; }
 .porque .titulo-sec p { color: rgba(255, 255, 255, .74); }
 .porque .olho { color: #ffb48a; }
