@@ -729,3 +729,14 @@ body {
   .alerta-demo strong { color: #C8323A; }
   .alerta-demo .bts span { background: #fff; border-color: rgba(0, 0, 138, .08); font-size: 12.5px; }
 }
+
+/* 2026-10-02: no smartphone tambem o alerta vira tela de celular (mesma moldura do computador), centralizado */
+@media (max-width: 1080px) {
+  .alerta-demo { position: relative; width: min(320px, 100%); max-width: 320px; justify-self: center; margin: 4px auto 0; background: #0b0c22 !important; border: 0 !important; border-radius: 42px; padding: 34px 12px 14px; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; box-shadow: 0 40px 70px -25px rgba(0, 0, 60, .55), inset 0 0 0 2px rgba(255, 255, 255, .06) !important; }
+  .alerta-demo::before { display: none; }
+  .alerta-demo::after { content: ""; position: absolute; top: 9px; left: 50%; width: 92px; height: 20px; margin-left: -46px; background: #000; border-radius: 0 0 14px 14px; }
+  .alerta-demo .tela { background: linear-gradient(180deg, #F2F7FF, #FBEFF3); border-radius: 30px; padding: 16px 14px 18px; }
+  .alerta-demo .pill { background: #E3F4EA; color: #0B7A47; border-radius: 99px; padding: 5px 10px; font-size: 12px; }
+  .alerta-demo strong { color: #C8323A; }
+  .alerta-demo .bts span { background: #fff; border-color: rgba(0, 0, 138, .08); font-size: 12.5px; }
+}
