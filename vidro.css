@@ -704,3 +704,28 @@ body {
 .rodape p, .rodape li, .rodape .aviso-rod { color: rgba(255, 255, 255, .72); }
 .rodape a { color: rgba(255, 255, 255, .85); }
 .rodape a:hover { color: #fff; }
+
+/* ===== 2026-10-02: SO' NO COMPUTADOR (>1080px) — menu na barra branca do site anterior
+   e o alerta como tela de celular ao lado do H1. No celular nada muda. ===== */
+@media (min-width: 1081px) {
+  .topo { padding-top: 10px; }
+  .topo.rolou { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .topo .wrap { height: 64px; background: #fff; border-radius: 22px; padding: 8px 10px 8px 16px; box-shadow: 0 1px 2px rgba(20, 22, 58, .04), 0 10px 30px rgba(20, 22, 58, .08); max-width: calc(var(--largura) - 2 * var(--lado)); }
+  .topo .logo { background: none; box-shadow: none; padding: 0; border-radius: 0; }
+  .topo .logo img { height: 46px; }
+  .menu { gap: 4px; margin-left: auto; }
+  .menu a, .menu summary { font-weight: 400; font-size: 15px; color: #4A5870; padding: 9px 12px; border-radius: 12px; }
+  .menu a:hover, .menu summary:hover { background: #F2F4FA; color: #00005C; }
+  .topo-acoes .btn-sol { box-shadow: none; }
+  .submenu { top: calc(100% + 14px); background: #fff; }
+
+  .hero-grade { align-items: start; }
+  .alerta-demo { order: 0; background: none !important; border: 0 !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; padding: 0; max-width: 330px; margin-top: 150px; }
+  .alerta-demo::before { display: none; }
+  .alerta-demo { position: relative; width: 320px; background: #0b0c22 !important; border-radius: 42px; padding: 34px 12px 14px; box-shadow: 0 40px 70px -25px rgba(0, 0, 60, .55), inset 0 0 0 2px rgba(255, 255, 255, .06) !important; }
+  .alerta-demo::after { content: ""; position: absolute; top: 9px; left: 50%; width: 92px; height: 20px; margin-left: -46px; background: #000; border-radius: 0 0 14px 14px; }
+  .alerta-demo .tela { background: linear-gradient(180deg, #F2F7FF, #FBEFF3); border-radius: 30px; padding: 16px 14px 18px; }
+  .alerta-demo .pill { background: #E3F4EA; color: #0B7A47; border-radius: 99px; padding: 5px 10px; font-size: 12px; }
+  .alerta-demo strong { color: #C8323A; }
+  .alerta-demo .bts span { background: #fff; border-color: rgba(0, 0, 138, .08); font-size: 12.5px; }
+}
