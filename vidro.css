@@ -660,12 +660,12 @@ body {
 .porque .tabela-vidro::before { display: none; }
 .porque .tabela-vidro table { border-collapse: separate; border-spacing: 0 8px; }
 .porque .tabela-vidro th { color: rgba(255, 255, 255, .55); border: 0; padding: 4px 18px; background: none !important; }
-.porque .tabela-vidro th.f { color: #ffb48a; }
+.porque .tabela-vidro th.f { color: #8ee8b4; }
 .porque .tabela-vidro td { border: 0; background: rgba(255, 255, 255, .06); color: rgba(255, 255, 255, .62); }
 .porque .tabela-vidro td:first-child { color: #fff; font-weight: 400; border-radius: 16px 0 0 16px; }
 .porque .tabela-vidro td:last-child { border-radius: 0 16px 16px 0; }
-.porque .tabela-vidro td.f { background: rgba(255, 122, 60, .16); color: #fff; }
-.porque .tabela-vidro td.f::before { background-color: rgba(61, 220, 132, .16); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddc84' stroke-width='3'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); border-color: rgba(61, 220, 132, .45); }
+.porque .tabela-vidro td.f { background: #0d5c3c; color: #fff; } /* verde-escuro = diferencial do app (2026-10-02) */
+.porque .tabela-vidro td.f::before { background-color: rgba(61, 220, 132, .22); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddc84' stroke-width='3'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); border-color: rgba(61, 220, 132, .45); }
 .porque .tabela-vidro .n { color: #ffb48a; border-color: rgba(255, 180, 138, .45); }
 .porque .mensagem { margin: 22px 0 0; max-width: none; text-align: left; background: rgba(255, 255, 255, .07); border-radius: 22px; padding: 26px; }
 .porque .mensagem h3, .porque .mensagem h3 b { color: #fff; }
@@ -678,7 +678,7 @@ body {
   .porque .tabela-vidro tr { display: block; margin-bottom: 10px; border-radius: 18px; overflow: hidden; padding: 0; border: 0; background: rgba(255, 255, 255, .06); }
   .porque .tabela-vidro td { border-radius: 0 !important; background: none; padding: 10px 16px; }
   .porque .tabela-vidro td:first-child { padding-top: 16px; }
-  .porque .tabela-vidro td.f { background: rgba(255, 122, 60, .16); padding: 12px 16px 14px 46px; }
+  .porque .tabela-vidro td.f { background: #0d5c3c !important; padding: 12px 16px 14px 46px; }
   .porque .tabela-vidro td.f::before { left: 16px; top: 13px; }
   .porque .tabela-vidro td.o::before { color: rgba(255, 255, 255, .45); }
 }
