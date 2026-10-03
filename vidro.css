@@ -648,3 +648,37 @@ body {
 .rodape { background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 233, 218, .7) 100%); }
 .rodape a:hover { color: var(--azul); }
 
+
+/* ===== "Por que FAROL?" — mescla (2026-10-02): bloco azul-escuro do site anterior
+   (faixas separadas, coluna do Farol realcada, mensagem dentro do bloco) com a letra
+   Outfit, o check em bolinha verde e as cores do Por do sol ===== */
+.porque { background: linear-gradient(160deg, #0b1046 0%, #16185a 60%, #2a1f5e 100%); color: #fff; border-radius: 28px; padding: clamp(24px, 4vw, 52px); box-shadow: 0 30px 60px -30px rgba(0, 0, 60, .55); }
+.porque .titulo-sec h2, .porque .titulo-sec h2 b { color: #fff; }
+.porque .titulo-sec p { color: rgba(255, 255, 255, .74); }
+.porque .olho { color: #ffb48a; }
+.porque .tabela-vidro { background: none; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: 0; overflow: visible; }
+.porque .tabela-vidro::before { display: none; }
+.porque .tabela-vidro table { border-collapse: separate; border-spacing: 0 8px; }
+.porque .tabela-vidro th { color: rgba(255, 255, 255, .55); border: 0; padding: 4px 18px; background: none !important; }
+.porque .tabela-vidro th.f { color: #ffb48a; }
+.porque .tabela-vidro td { border: 0; background: rgba(255, 255, 255, .06); color: rgba(255, 255, 255, .62); }
+.porque .tabela-vidro td:first-child { color: #fff; font-weight: 400; border-radius: 16px 0 0 16px; }
+.porque .tabela-vidro td:last-child { border-radius: 0 16px 16px 0; }
+.porque .tabela-vidro td.f { background: rgba(255, 122, 60, .16); color: #fff; }
+.porque .tabela-vidro td.f::before { background-color: rgba(61, 220, 132, .16); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddc84' stroke-width='3'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); border-color: rgba(61, 220, 132, .45); }
+.porque .tabela-vidro .n { color: #ffb48a; border-color: rgba(255, 180, 138, .45); }
+.porque .mensagem { margin: 22px 0 0; max-width: none; text-align: left; background: rgba(255, 255, 255, .07); border-radius: 22px; padding: 26px; }
+.porque .mensagem h3, .porque .mensagem h3 b { color: #fff; }
+.porque .mensagem .texto { color: rgba(255, 255, 255, .78); margin: 0 !important; }
+.porque .mensagem .texto strong { color: #fff; }
+.porque .mensagem .pilulas { justify-content: flex-start; margin: 14px 0; }
+.porque .pilula { background: #fff; color: #00005C; border: 0; font-weight: 400; }
+@media (max-width: 760px) {
+  .porque .tabela-vidro table, .porque .tabela-vidro tbody { display: block; }
+  .porque .tabela-vidro tr { display: block; margin-bottom: 10px; border-radius: 18px; overflow: hidden; padding: 0; border: 0; background: rgba(255, 255, 255, .06); }
+  .porque .tabela-vidro td { border-radius: 0 !important; background: none; padding: 10px 16px; }
+  .porque .tabela-vidro td:first-child { padding-top: 16px; }
+  .porque .tabela-vidro td.f { background: rgba(255, 122, 60, .16); padding: 12px 16px 14px 46px; }
+  .porque .tabela-vidro td.f::before { left: 16px; top: 13px; }
+  .porque .tabela-vidro td.o::before { color: rgba(255, 255, 255, .45); }
+}
