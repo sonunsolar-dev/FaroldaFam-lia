@@ -632,7 +632,9 @@ body {
 /* comparativo */
 .tabela-vidro td:first-child, .tabela-vidro td.f { color: var(--tinta); }
 .tabela-vidro th.f, .tabela-vidro td.f { background: rgba(255, 122, 60, .08); }
-.tabela-vidro td.f::before { color: var(--verde-texto); }
+.tabela-vidro td.f { position: relative; padding-left: 52px; }
+.tabela-vidro td.f::before { content: ""; position: absolute; left: 20px; top: 21px; width: 20px; height: 20px; margin: 0; border-radius: 50%; background: rgba(18, 183, 106, .12) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230B7A47' stroke-width='3'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center/12px no-repeat; border: 1px solid rgba(11, 122, 71, .35); }
+@media (max-width: 760px) { .tabela-vidro td.f { padding-left: 30px; } .tabela-vidro td.f::before { left: 0; top: 8px; } }
 .tabela-vidro .n { border-color: rgba(212, 86, 26, .35); }
 
 /* videos e guias */
