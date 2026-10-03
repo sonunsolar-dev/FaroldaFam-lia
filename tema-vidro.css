@@ -73,3 +73,14 @@ footer,footer *{color:rgba(255,255,255,.75)}
 footer a{color:rgba(255,255,255,.9)!important}
 footer a:hover{color:#fff!important}
 footer h2,footer h3,footer h4{color:#ffb48a!important}
+
+/* ===== 2026-10-03: topo igual ao da home — barra de vidro fosco translucida, flutuando,
+   e logo sem cartao branco. Vale para todas as paginas internas. ===== */
+header:not(.hero),header.bar{background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:10px 12px 0!important}
+header .nav,header .bar,header.bar .row{background:rgba(255,255,255,.6)!important;-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);border:1px solid rgba(255,255,255,.75)!important;border-radius:22px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 10px 30px -12px rgba(20,22,58,.18)!important;padding-left:16px!important;padding-right:10px!important;transition:background .4s ease,box-shadow .4s ease}
+header .brand,header .brand img{background:none!important;box-shadow:none!important;border-radius:0!important}
+header .mobile-menu{background:rgba(255,255,255,.88)!important;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-radius:18px;margin-top:8px;border:1px solid rgba(255,255,255,.75)!important}
+header .menu-toggle{background:rgba(255,255,255,.7)!important}
+header:not(.hero),header.bar{padding:10px 0 0!important}
+header .bar,header.bar .row{box-sizing:border-box;width:calc(100% - 24px);margin-left:auto!important;margin-right:auto!important}
+header .nav{box-sizing:border-box}
