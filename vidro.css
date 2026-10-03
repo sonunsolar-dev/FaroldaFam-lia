@@ -686,3 +686,7 @@ body {
 .caixa.porque h2, .caixa.porque h2 b { color: #fff; }
 .caixa.porque p { color: rgba(255, 255, 255, .78); }
 .caixa.porque .btn-vidro { background: #fff; color: #00005C; }
+/* "Para quem foi convidado": o degrade azul do card do site anterior (invite-box, 2026-10-01) */
+.caixa.convite { background: linear-gradient(135deg, #2c3ea8, #14163a); }
+.caixa.convite b { color: #fff; }
+.caixa.convite .btn-sol { background: #fff; color: #00005C; box-shadow: 0 12px 28px -12px rgba(0, 0, 0, .5); }
