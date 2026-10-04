@@ -6,7 +6,7 @@
 <meta content="#CFE0FF" name="theme-color"/>
 <title>SOS FAROL | Rede de Apoio para Idosos e Pessoas Vulneráveis</title>
 <meta content="Crie uma rede de familiares e amigos para ajudar idosos e pessoas vulneráveis. Peça ajuda pelo celular usando voz, movimento ou botão com o SOS FAROL." name="description"/>
-<link href="" rel="canonical"/>
+<link href="https://sosfarol.com.br/" rel="canonical"/>
 <meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>
 <meta content="SOS FAROL" name="author"/>
 <meta content="SOS FAROL" name="application-name"/>
@@ -15,13 +15,16 @@
 <meta content="SOS FAROL" property="og:site_name"/>
 <meta content="SOS FAROL | Rede de Apoio para Idosos e Pessoas Vulneráveis" property="og:title"/>
 <meta content="Peça ajuda de três formas: agitando o celular, por palavra falada ou pelo botão de ajuda. Sua rede de apoio recebe o alerta e pode agir rapidamente." property="og:description"/>
-<meta content="" property="og:url"/>
-<meta content="assets/resposta-em-rede.webp" property="og:image"/>
+<meta content="https://sosfarol.com.br/" property="og:url"/>
+<meta content="https://sosfarol.com.br/assets/resposta-em-rede.webp" property="og:image"/>
+<meta content="image/webp" property="og:image:type"/>
+<meta content="2048" property="og:image:width"/>
+<meta content="682" property="og:image:height"/>
 <meta content="Como funciona a resposta em rede do SOS FAROL" property="og:image:alt"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="SOS FAROL | Rede de Apoio para Idosos e Pessoas Vulneráveis" name="twitter:title"/>
 <meta content="Agite o celular, fale uma palavra de segurança ou toque no botão de ajuda para avisar sua rede." name="twitter:description"/>
-<meta content="assets/resposta-em-rede.webp" name="twitter:image"/>
+<meta content="https://sosfarol.com.br/assets/resposta-em-rede.webp" name="twitter:image"/>
 <link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
 <link rel="preload" href="assets/fontes/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Google tag (gtag.js) - propriedade GA4 dedicada do SOS Farol -->
@@ -40,19 +43,24 @@
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "#organization",
+      "@id": "https://sosfarol.com.br/#organization",
       "name": "SOS FAROL",
-      "url": "",
-      "logo": "assets/logo-sos-farol.webp"
+      "url": "https://sosfarol.com.br/",
+      "logo": "https://sosfarol.com.br/assets/logo-sos-farol.webp",
+      "sameAs": ["https://www.instagram.com/redesosfarol"]
     },
     {
       "@type": "SoftwareApplication",
-      "@id": "#app",
+      "@id": "https://sosfarol.com.br/#app",
       "name": "SOS FAROL",
-      "url": "",
+      "url": "https://sosfarol.com.br/",
       "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Android 11 ou superior",
+      "inLanguage": "pt-BR",
+      "image": "https://sosfarol.com.br/assets/resposta-em-rede.webp",
+      "downloadUrl": "https://sosfarol.com.br/download/sos-farol.apk",
       "description": "Aplicativo de alerta e rede de apoio para idosos, pessoas vulneráveis e suas famílias, com acionamento por movimento, palavra falada ou botão de ajuda.",
-      "publisher": {"@id": "#organization"},
+      "publisher": {"@id": "https://sosfarol.com.br/#organization"},
       "featureList": [
         "Acionamento ao agitar o celular",
         "Acionamento por palavra falada",
@@ -62,7 +70,7 @@
     },
     {
       "@type": "FAQPage",
-      "@id": "#faq",
+      "@id": "https://sosfarol.com.br/#faq",
       "mainEntity": [
         {"@type":"Question","name":"O que é o FAROL?","acceptedAnswer":{"@type":"Answer","text":"O SOS FAROL é um aplicativo de alerta e rede privada de apoio que permite avisar rapidamente pessoas de confiança quando você precisa de ajuda."}},
         {"@type":"Question","name":"Quem pode fazer parte da rede?","acceptedAnswer":{"@type":"Answer","text":"Familiares, amigos, vizinhos, cuidadores, colegas de trabalho ou outras pessoas previamente convidadas."}},
