@@ -30,8 +30,20 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-Z89YGFG8XW');
-// 2026-10-03: Analytics carrega apos a pagina (eventos anteriores ficam na fila dataLayer).
-window.addEventListener('load',function(){var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW';document.head.appendChild(g);});
+(function () {
+  // 2026-10-03: o Google Analytics so' carrega na 1a interacao (rolar, tocar, clicar, tecla)
+  // ou depois de 8 s - deixa a pagina rapida. Eventos anteriores ficam na fila dataLayer.
+  var carregou = false, evs = ['scroll', 'pointerdown', 'touchstart', 'keydown'];
+  function carregaGA() {
+    if (carregou) return; carregou = true;
+    evs.forEach(function (e) { window.removeEventListener(e, carregaGA, { passive: true }); });
+    var g = document.createElement('script'); g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW';
+    document.head.appendChild(g);
+  }
+  evs.forEach(function (e) { window.addEventListener(e, carregaGA, { passive: true }); });
+  setTimeout(carregaGA, 8000);
+})();
 </script>
 <style>
 :root{
