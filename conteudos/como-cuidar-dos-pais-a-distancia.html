@@ -24,17 +24,15 @@
 <meta name="twitter:image" content="https://sosfarol.com.br/assets/resposta-em-rede.webp"/>
 
 <link href="../assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW"></script>
+
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-Z89YGFG8XW');
+// 2026-10-03: Analytics carrega apos a pagina (eventos anteriores ficam na fila dataLayer).
+window.addEventListener('load',function(){var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW';document.head.appendChild(g);});
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
 <style>
 :root{
   --navy:#0d2f3a; --navy-2:#123f4d; --ink:#10242c; --muted:#66777e;
@@ -205,14 +203,15 @@ footer{background:#081f27;color:#d6e0e2;padding:42px 0}
   ]
 }
 </script>
-<link rel="stylesheet" href="../tema-vidro.css?v=20261003b">
+<link rel="preload" href="/assets/fontes/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../tema-vidro.css?v=20261003c">
 </head>
 
 <body id="top">
 <header>
   <div class="wrap nav">
     <a class="brand" href="../index.html" aria-label="SOS Farol">
-      <img src="../assets/logo-sos-farol.webp" alt="Logo SOS Farol">
+      <img src="../assets/logo-sos-farol-128.webp" alt="Logo SOS Farol" width="128" height="128">
       <span>SOS FAROL</span>
     </a>
 
@@ -276,7 +275,7 @@ footer{background:#081f27;color:#d6e0e2;padding:42px 0}
 <div class="wrap article-layout">
   <article class="article">
 
-    <figure class="hero-figure"><img src="imagens/como-cuidar-dos-pais-hero.webp" alt="Ilustração SOS Farol: mesmo morando longe, a filha acompanha por videochamada e recebe o alerta pelo app, enquanto a pessoa próxima vai até o local."></figure>
+    <figure class="hero-figure"><img src="imagens/como-cuidar-dos-pais-hero-800.webp" srcset="imagens/como-cuidar-dos-pais-hero-800.webp 800w, imagens/como-cuidar-dos-pais-hero.webp 1122w" sizes="(max-width: 460px) 100vw, 420px" width="1122" height="1402" fetchpriority="high" alt="Ilustração SOS Farol: mesmo morando longe, a filha acompanha por videochamada e recebe o alerta pelo app, enquanto a pessoa próxima vai até o local."></figure>
 
     <h2>Cuidar de longe começa com organização, não com vigilância</h2>
     <p>Morar em outra cidade ou até em outro estado pode trazer insegurança para filhos e familiares. É natural pensar: “e se acontecer alguma coisa e eu não estiver perto?”.</p>
@@ -476,7 +475,7 @@ footer{background:#081f27;color:#d6e0e2;padding:42px 0}
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="../assets/logo-sos-farol.webp" alt="Logo SOS Farol">
+        <img src="../assets/logo-sos-farol-128.webp" alt="Logo SOS Farol" width="128" height="128">
         <span>SOS FAROL — Rede de Proteção e Apoio</span>
       </div>
       <div class="footer-links">

@@ -28,12 +28,18 @@
 <link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
 <link rel="preload" href="assets/fontes/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Google tag (gtag.js) - propriedade GA4 dedicada do SOS Farol -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-Z89YGFG8XW');
+  // 2026-10-03: o script do Google Analytics carrega logo apos a pagina (nao atrasa o texto);
+  // eventos disparados antes ficam na fila dataLayer e sao enviados quando ele chega.
+  window.addEventListener('load', function () {
+    var g = document.createElement('script'); g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW';
+    document.head.appendChild(g);
+  });
 </script>
 
 <link rel="stylesheet" href="vidro.css?v=20261003c">
@@ -90,7 +96,7 @@
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 <header class="topo">
   <div class="wrap">
-    <a class="logo" href="#inicio" aria-label="SOS FAROL, início"><img src="assets/logo-sos-farol.webp" alt="Logo SOS FAROL" width="256" height="256"></a>
+    <a class="logo" href="#inicio" aria-label="SOS FAROL, início"><img src="assets/logo-sos-farol-128.webp" alt="Logo SOS FAROL" width="128" height="128"></a>
     <nav aria-label="Principal">
       <ul class="menu" id="menu">
         <li><a href="#resposta-em-rede">Entenda a Rede</a></li>
@@ -153,8 +159,8 @@
 <section class="secao" id="resposta-em-rede"><div class="wrap">
   <div class="titulo-sec reveal"><span class="olho">Entenda a Rede</span><h2>Uma pessoa chama ajuda. <b>Outra chega rápido!</b></h2><p>Quando todos recebem o mesmo alerta, cada membro pode assumir uma parte da resposta. O SOS FAROL conecta famílias, condomínios, vizinhanças e grupos de comerciantes em uma rede privada de apoio.</p></div>
   <div class="moldura reveal"><picture>
-    <source media="(max-width: 720px)" srcset="assets/resposta-em-rede-vertical.webp">
-    <img src="assets/resposta-em-rede.webp" alt="Ilustração em três quadrinhos mostrando uma pessoa acionando o FAROL ao agitar o celular, a rede recebendo o alerta e a ajuda chegando." loading="lazy" decoding="async">
+    <source media="(max-width: 720px)" srcset="assets/resposta-em-rede-vertical-720.webp 720w, assets/resposta-em-rede-vertical.webp 941w" sizes="100vw" width="720" height="1279">
+    <img src="assets/resposta-em-rede-1200.webp" srcset="assets/resposta-em-rede-1200.webp 1200w, assets/resposta-em-rede.webp 2048w" sizes="(max-width: 1240px) 100vw, 1180px" width="1200" height="400" alt="Ilustração em três quadrinhos mostrando uma pessoa acionando o FAROL ao agitar o celular, a rede recebendo o alerta e a ajuda chegando." loading="lazy" decoding="async">
   </picture></div>
   <p class="texto reveal" style="margin-top:22px">O alerta pode começar de três maneiras: <strong>agitar o celular, falar uma palavra código ou tocar no botão de ajuda</strong> — nessa ordem de rapidez: agitar é o mais rápido; agitar e palavra código funcionam com a tela apagada; o botão fica como terceira opção. A rede recebe o pedido e as pessoas de confiança podem coordenar a resposta conforme a situação.</p>
 </div></section>
@@ -200,17 +206,17 @@
 <section class="secao" id="como-funciona"><div class="wrap">
   <div class="titulo-sec reveal"><span class="olho">Como funciona</span><h2>Três cenários. <b>A mesma rede de apoio.</b></h2><p>As três tirinhas abaixo mostram, de forma visual e humana, como o FAROL pode agir em situações reais.</p></div>
   <article class="duo cenario reveal">
-    <div class="moldura"><img src="assets/situacao-1.webp" alt="Tirinha: pessoa vulnerável pedindo ajuda dentro de casa" loading="lazy" decoding="async"></div>
+    <div class="moldura"><img src="assets/situacao-1-800.webp" srcset="assets/situacao-1-800.webp 800w, assets/situacao-1.webp 1800w" sizes="(max-width: 760px) 100vw, 50vw" width="1800" height="672" alt="Tirinha: pessoa vulnerável pedindo ajuda dentro de casa" loading="lazy" decoding="async"></div>
     <div><span class="olho">Basta agitar</span><h3>Quando um vulnerável precisa pedir ajuda discretamente dentro de casa.</h3><p class="texto">Em uma situação de assédio ou pressão dentro de casa, agitar o celular pode ser a forma mais rápida e discreta de acionar a rede de apoio.</p>
       <ul class="check"><li>Agitar o aparelho mesmo com a tela fechada</li><li>Funciona rapidamente em ambiente doméstico</li><li>Rede avisada imediatamente</li></ul></div>
   </article>
   <article class="duo cenario inv reveal">
-    <div class="moldura"><img src="assets/situacao-2.webp" alt="Tirinha: pessoa vulnerável em situação de pressão dentro de casa" loading="lazy" decoding="async"></div>
+    <div class="moldura"><img src="assets/situacao-2-800.webp" srcset="assets/situacao-2-800.webp 800w, assets/situacao-2.webp 1800w" sizes="(max-width: 760px) 100vw, 50vw" width="1800" height="672" alt="Tirinha: pessoa vulnerável em situação de pressão dentro de casa" loading="lazy" decoding="async"></div>
     <div><span class="olho">Basta uma palavra</span><h3>Quando um acidente acontece e o celular está longe da pessoa.</h3><p class="texto">Se a pessoa caiu, está sozinha e não consegue alcançar o telefone, a voz pode ser o caminho mais importante para pedir ajuda.</p>
       <ul class="check"><li>Palavra código com tela apagada</li><li>Ideal quando o celular caiu a certa distância</li><li>Rede avisada sem depender do toque no aparelho</li></ul></div>
   </article>
   <article class="duo cenario reveal">
-    <div class="moldura"><img src="assets/situacao-3.webp" alt="Tirinha: mulher sendo seguida na rua e acionando sua rede" loading="lazy" decoding="async"></div>
+    <div class="moldura"><img src="assets/situacao-3-800.webp" srcset="assets/situacao-3-800.webp 800w, assets/situacao-3.webp 1800w" sizes="(max-width: 760px) 100vw, 50vw" width="1800" height="704" alt="Tirinha: mulher sendo seguida na rua e acionando sua rede" loading="lazy" decoding="async"></div>
     <div><span class="olho">Na rua</span><h3>Quando alguém percebe um risco no trajeto ou na rua.</h3><p class="texto">Uma adolescente ou mulher pode perceber que está sendo seguida, falar sua palavra de segurança e, se necessário, apertar o botão para reforçar o pedido de ajuda.</p>
       <ul class="check"><li>Ideal para crianças, adolescentes e mulheres</li><li>Útil em perseguição, medo, assédio ou ameaça</li><li>A rede pode receber localização e áudio ambiente</li></ul></div>
   </article>
@@ -286,7 +292,7 @@
   <div class="wrap">
     <div class="rod-grade">
       <div>
-        <a class="logo" href="#inicio" aria-label="SOS FAROL, início"><img src="assets/logo-sos-farol.webp" alt="Logo SOS FAROL" width="256" height="256" loading="lazy"></a>
+        <a class="logo" href="#inicio" aria-label="SOS FAROL, início"><img src="assets/logo-sos-farol-128.webp" alt="Logo SOS FAROL" width="128" height="128" loading="lazy"></a>
         <p style="margin-top:16px">SOS FAROL — Rede de Apoio</p>
       </div>
       <div><h2>Área do Cliente</h2><ul>
