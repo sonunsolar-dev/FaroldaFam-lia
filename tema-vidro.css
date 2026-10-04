@@ -86,3 +86,6 @@ header .bar,header.bar .row{box-sizing:border-box;width:calc(100% - 24px);margin
 header .nav{box-sizing:border-box}
 /* 2026-10-03: imagens com width/height (evita salto de layout) mantem a proporcao */
 img[width][height]{height:auto}
+/* 2026-10-03: contraste (acessibilidade/SEO) — textos pequenos em laranja um tom mais escuro */
+.eyebrow{color:#a8420f!important}
+.mini{color:#b8480f!important}

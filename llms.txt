@@ -1,0 +1,31 @@
+# SOS FAROL
+
+> SOS FAROL é um aplicativo Android brasileiro de rede privada de apoio. A pessoa protegida (por exemplo, um idoso que mora sozinho) pede ajuda pelo celular e o alerta chega ao mesmo tempo a familiares, amigos e vizinhos que ela mesma convidou.
+
+## Como funciona
+- O pedido de ajuda pode ser feito de três formas: agitando o celular, falando uma palavra-código escolhida pela pessoa, ou tocando no botão PEDIR AJUDA do app.
+- Agitar e a palavra-código funcionam com a tela apagada; o botão precisa da tela acesa.
+- A rede recebe o alerta com a localização e um áudio de 20 segundos do ambiente, e combina quem vai ajudar ("Estou indo", "Tentando contato", "Liguei 192/190").
+- Detecção de quedas opcional: o celular pergunta "Você está bem?" e só avisa a rede se não houver resposta.
+- Modo discreto: o app aparece como um simples bloco de notas, para quem pode ter o celular vigiado; quem pede ajuda não recebe avisos visíveis.
+- Modo NA RUA: a localização é compartilhada com a rede durante o trajeto.
+
+## Para quem é
+Idosos que moram sozinhos, pessoas vulneráveis, mulheres e adolescentes que se sentem inseguras na rua, e as famílias que cuidam delas, inclusive à distância.
+
+## Requisitos e acesso
+- Celulares Android 11 ou superior (64 bits). Ainda não há versão para iPhone.
+- Teste grátis de 15 dias, sem cartão. Convidados da rede também usam o app.
+- Download no site oficial: https://sosfarol.com.br
+
+## Importante
+O SOS FAROL avisa a rede de apoio da pessoa. Ele não substitui a polícia (190), o SAMU (192) ou outros serviços de emergência, e o alerta pode falhar (sem internet, celular desligado, etc.).
+
+## Páginas
+- [Página inicial](https://sosfarol.com.br/): o que é, como funciona, vídeos, perguntas frequentes
+- [Guia: idoso mora sozinho](https://sosfarol.com.br/conteudos/idoso-mora-sozinho.html)
+- [Guia: como criar uma rede de apoio para um idoso](https://sosfarol.com.br/conteudos/rede-de-apoio-para-idosos.html)
+- [Guia: como cuidar dos pais idosos morando longe](https://sosfarol.com.br/conteudos/como-cuidar-dos-pais-a-distancia.html)
+- [Contato e suporte](https://sosfarol.com.br/contato.html)
+- [Política de privacidade](https://sosfarol.com.br/politica-de-privacidade.html)
+- [Termos de uso](https://sosfarol.com.br/termos-de-uso.html)
