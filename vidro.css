@@ -767,3 +767,6 @@ body {
   .topo-acoes .btn-sol { box-shadow: none; padding: 10px 14px; font-size: 14px; white-space: nowrap; }
   .submenu { position: absolute; top: calc(100% + 14px); background: rgba(255, 255, 255, .92); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
 }
+
+/* 2026-10-06: no menu do celular, "Área do Cliente" em negrito (pedido do usuario) */
+.topo.aberto .menu summary { font-weight: 700; }
