@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SOS Farol em 30 segundos</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;600&display=swap">
+<style>
+/* Layout: um palco vertical 9:16 (o "filme") com cenas que entram por tempo, e controles simples embaixo. */
+:root {
+  /* página */
+  --page-bg: #EDF3FF;
+  --page-fg: #0E1B3D;
+  --page-muted: #4F5F85;
+  --page-line: #BFD0F2;
+  --ctl-bg: #0E1B3D;
+  --ctl-fg: #EDF3FF;
+  --acc: #B86E00;
+  /* filme: noite azul, luz do farol em âmbar, alerta em coral */
+  --night: #0B1B3A;
+  --night-2: #14295A;
+  --sky: #CFE0FF;
+  --beam: #FFC247;
+  --alert: #FF5A4E;
+  --ok: #3DDC97;
+  --info: #6EA8FF;
+  --ink: #EAF1FF;
+  --ink-muted: #A5B8E3;
+  --card: #F3F7FF;
+  --card-ink: #0B1B3A;
+  --card-muted: #566890;
+  --card-line: #D3DEF5;
+  --ok-ink: #12875A;
+  /* tipos */
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page-bg: #060D1E;
+    --page-fg: #E6EEFF;
+    --page-muted: #9DB0DC;
+    --page-line: #22335F;
+    --ctl-bg: #CFE0FF;
+    --ctl-fg: #0B1B3A;
+    --acc: #FFC247;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page-bg: #060D1E;
+  --page-fg: #E6EEFF;
+  --page-muted: #9DB0DC;
+  --page-line: #22335F;
+  --ctl-bg: #CFE0FF;
+  --ctl-fg: #0B1B3A;
+  --acc: #FFC247;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--page-fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-inline: 16px;
+  padding-block: 22px 32px;
+}
+.wrap { max-width: 420px; margin: 0 auto; display: grid; gap: 18px; }
+.head { display: grid; gap: 6px; }
+.eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--page-muted); }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 30px; line-height: 1.05; letter-spacing: -.02em; text-wrap: balance; }
+.lede { margin: 0; color: var(--page-muted); max-width: 40ch; }
+
+/* ---------- palco ---------- */
+.stage {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: 20px;
+  color: var(--ink);
+  background: radial-gradient(120% 70% at 50% 16%, var(--night-2), var(--night) 68%);
+  font-family: var(--font-body);
+}
+.stage * { box-sizing: border-box; }
+.stage.paused * { animation-play-state: paused !important; }
+
+.bar { position: absolute; z-index: 5; top: 4.6cqw; left: 5.5cqw; right: 5.5cqw; display: flex; justify-content: space-between; align-items: center; font-size: 3.3cqw; font-weight: 600; letter-spacing: .16em; }
+.mark { display: flex; align-items: center; gap: 2cqw; }
+.mark .dot { width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--beam); box-shadow: 0 0 0 0 color-mix(in srgb, var(--beam) 70%, transparent); animation: glow 2.4s ease-out infinite; }
+.clock { display: flex; gap: 2cqw; align-items: baseline; padding: 1.2cqw 3cqw; border-radius: 99px; border: .3cqw solid color-mix(in srgb, var(--sky) 35%, transparent); letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+.clock .lbl { font-size: 2.6cqw; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); }
+.clock b { font-size: 3.8cqw; color: var(--beam); font-weight: 600; }
+
+.scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s linear .6s; }
+.scene.active { opacity: 1; visibility: visible; transition: opacity .6s ease; }
+
+.in { opacity: 0; transform: translateY(3cqw); transition: opacity .55s ease, transform .55s ease; }
+.in.on { opacity: 1; transform: none; }
+.fade { opacity: 0; transition: opacity .4s ease; }
+.fade.on { opacity: 1; }
+
+.hd { position: absolute; left: 7cqw; right: 7cqw; top: 17cqw; margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 8.6cqw; line-height: 1.03; letter-spacing: -.02em; text-wrap: balance; }
+.accent { color: var(--beam); }
+
+/* farol */
+.lh { --w: 40cqw; position: absolute; left: 50%; top: 22cqw; width: var(--w); transform: translateX(-50%); }
+.lh.sm { --w: 30cqw; top: 18cqw; }
+.lhsvg { display: block; width: 100%; height: auto; }
+.beam { position: absolute; left: calc(var(--w) * .5); top: calc(var(--w) * .36); width: 130cqw; height: 46cqw; margin-top: -23cqw; transform-origin: 0 50%; clip-path: polygon(0 50%, 100% 0, 100% 100%); background: linear-gradient(90deg, color-mix(in srgb, var(--beam) 72%, transparent), transparent 85%); animation: sweep 4s ease-in-out infinite; }
+.beam.bl { transform: scaleX(-1); animation-delay: -2s; }
+
+/* cena A */
+.a1 { position: absolute; left: 7cqw; right: 7cqw; top: 100cqw; margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 12cqw; line-height: 1; letter-spacing: -.025em; }
+.a2 { position: absolute; left: 7cqw; right: 7cqw; top: 130cqw; margin: 0; font-size: 6.4cqw; font-weight: 600; color: var(--beam); }
+
+/* cena B */
+.phonewrap { position: absolute; left: 31cqw; top: 42cqw; width: 38cqw; height: 70cqw; }
+.shaker { position: absolute; inset: 0; transform-origin: 50% 100%; }
+.shaker.on { animation: shake .3s linear infinite; }
+.phone { position: absolute; inset: 0; border: .9cqw solid var(--sky); border-radius: 6cqw; background: #050C1D; overflow: hidden; }
+.lockclock { position: absolute; top: 12cqw; left: 0; right: 0; text-align: center; font-family: var(--font-display); font-weight: 800; font-size: 8cqw; color: color-mix(in srgb, var(--sky) 18%, transparent); }
+.screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3cqw; background: linear-gradient(160deg, #FF6F63, #C53A31); color: #fff; font-weight: 800; font-size: 4.4cqw; text-align: center; padding: 3cqw; }
+.screen .tick { width: 12cqw; height: 12cqw; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+.arcs { position: absolute; left: -12cqw; top: 0; width: 62cqw; height: 70cqw; overflow: visible; fill: none; stroke: var(--sky); stroke-width: .9; stroke-linecap: round; }
+.arcs.on { animation: flick .3s linear infinite; }
+.cap { position: absolute; left: 7cqw; right: 7cqw; top: 124cqw; margin: 0; font-size: 5.6cqw; font-weight: 600; line-height: 1.25; text-wrap: balance; }
+.cap.good { color: var(--ok); }
+
+/* cena C */
+.net { position: absolute; left: 0; top: 42cqw; width: 100cqw; height: 100cqw; overflow: visible; }
+.net text { font-family: var(--font-body); }
+.net .lab { font-size: 3.5px; fill: var(--ink-muted); text-anchor: middle; font-weight: 600; }
+.net .ini { font-size: 5px; fill: var(--ink); text-anchor: middle; font-family: var(--font-display); font-weight: 800; }
+.net .me { font-size: 4.6px; fill: #fff; text-anchor: middle; font-family: var(--font-display); font-weight: 800; }
+.pop { opacity: 0; transform: scale(.6); transform-box: fill-box; transform-origin: center; transition: opacity .45s ease, transform .45s cubic-bezier(.2, 1.4, .4, 1); }
+.pop.on { opacity: 1; transform: none; }
+.ln { stroke: var(--beam); stroke-width: .7; stroke-linecap: round; stroke-dasharray: 40; stroke-dashoffset: 40; transition: stroke-dashoffset .7s ease; }
+.ln.on { stroke-dashoffset: 0; }
+.rip circle { fill: none; stroke: var(--alert); stroke-width: 1; vector-effect: non-scaling-stroke; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.rip.on circle { animation: ripple 2.4s ease-out infinite; }
+.rip.on circle:nth-child(2) { animation-delay: .8s; }
+.rip.on circle:nth-child(3) { animation-delay: 1.6s; }
+.pill { position: absolute; left: 7cqw; top: 146cqw; margin: 0; padding: 2.2cqw 4cqw; border-radius: 99px; background: color-mix(in srgb, var(--ok) 16%, transparent); border: .3cqw solid color-mix(in srgb, var(--ok) 55%, transparent); color: var(--ok); font-size: 4cqw; font-weight: 600; }
+.sub { position: absolute; left: 7cqw; right: 7cqw; top: 158cqw; margin: 0; font-size: 4.2cqw; color: var(--ink-muted); }
+
+/* cena D */
+.dcol { position: absolute; left: 6cqw; right: 6cqw; top: 38cqw; display: grid; gap: 5cqw; }
+.dcap { margin: 0; font-size: 4.8cqw; font-weight: 600; line-height: 1.3; color: var(--sky); text-wrap: balance; }
+.card { padding: 4cqw; border-radius: 5cqw; background: var(--card); color: var(--card-ink); display: grid; gap: 3.4cqw; }
+.c-head { display: flex; align-items: center; gap: 2cqw; font-size: 3.2cqw; font-weight: 800; letter-spacing: .12em; color: #D8362B; }
+.c-head .blink { width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--alert); animation: glow 1.4s ease-out infinite; }
+.c-head time { margin-left: auto; font-weight: 600; letter-spacing: 0; color: var(--card-muted); }
+.c-who { font-family: var(--font-display); font-weight: 800; font-size: 7cqw; line-height: 1; letter-spacing: -.02em; }
+.row { display: grid; gap: 1.6cqw; }
+.audio { display: grid; grid-template-columns: 10cqw 1fr; gap: 3cqw; align-items: center; }
+.playbtn { width: 10cqw; height: 10cqw; border-radius: 50%; background: var(--card-ink); display: grid; place-items: center; }
+.wave { position: relative; height: 9cqw; }
+.wave svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.wave .fill { clip-path: inset(0 calc((1 - var(--p, 0)) * 100%) 0 0); }
+.meta { display: flex; justify-content: space-between; font-size: 3.2cqw; color: var(--card-muted); font-variant-numeric: tabular-nums; }
+.map { position: relative; border-radius: 3cqw; overflow: hidden; border: .3cqw solid var(--card-line); }
+.map svg { display: block; width: 100%; height: auto; }
+.chip { position: absolute; left: 2cqw; bottom: 2cqw; padding: 1cqw 2.4cqw; border-radius: 99px; background: var(--card-ink); color: #fff; font-size: 3cqw; font-weight: 600; }
+.chip.tl { top: 2cqw; bottom: auto; background: #fff; color: var(--card-ink); border: .3cqw solid var(--card-line); }
+.pin-pulse circle { transform-box: fill-box; transform-origin: center; animation: pulse 1.8s ease-out infinite; fill: none; stroke: var(--alert); stroke-width: .8; }
+.batrow { display: flex; align-items: center; gap: 3cqw; font-size: 3.6cqw; font-weight: 600; }
+.bat { position: relative; width: 11cqw; height: 5.4cqw; border: .5cqw solid var(--card-ink); border-radius: 1.2cqw; padding: .5cqw; }
+.bat::after { content: ""; position: absolute; right: -1.5cqw; top: 1.2cqw; width: .9cqw; height: 2cqw; border-radius: 0 .5cqw .5cqw 0; background: var(--card-ink); }
+.bat i { display: block; height: 100%; width: 62%; border-radius: .6cqw; background: var(--ok-ink); }
+.batrow span:last-child { margin-left: auto; color: var(--card-muted); font-weight: 400; }
+
+/* cena E */
+.chat { position: absolute; left: 6cqw; right: 6cqw; top: 42cqw; display: grid; gap: 5cqw; }
+.msg { display: grid; grid-template-columns: 10cqw 1fr; gap: 3cqw; align-items: start; }
+.av { width: 10cqw; height: 10cqw; border-radius: 50%; background: var(--sky); color: var(--night); display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; font-size: 4.6cqw; }
+.who { font-size: 3.3cqw; font-weight: 600; color: var(--ink-muted); margin-bottom: 1cqw; }
+.who time { margin-left: 1.5cqw; font-variant-numeric: tabular-nums; }
+.bub { margin: 0; padding: 2.8cqw 3.6cqw; max-width: 68cqw; border-radius: 4cqw 4cqw 4cqw 1cqw; background: var(--night-2); border: .3cqw solid color-mix(in srgb, var(--sky) 18%, transparent); font-size: 4cqw; line-height: 1.3; }
+.tag { display: inline-block; margin-top: 1.6cqw; padding: .8cqw 2.6cqw; border-radius: 99px; font-size: 3cqw; font-weight: 600; color: var(--ok); border: .3cqw solid color-mix(in srgb, var(--ok) 55%, transparent); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.tag.info { color: var(--info); border-color: color-mix(in srgb, var(--info) 55%, transparent); background: color-mix(in srgb, var(--info) 14%, transparent); }
+.status { position: absolute; left: 6cqw; right: 6cqw; top: 148cqw; display: flex; align-items: center; gap: 3cqw; padding: 3.4cqw 4cqw; border-radius: 4cqw; background: color-mix(in srgb, var(--ok) 15%, transparent); border: .3cqw solid color-mix(in srgb, var(--ok) 55%, transparent); color: var(--ok); font-size: 4.2cqw; font-weight: 600; }
+.status .dot { width: 3cqw; height: 3cqw; border-radius: 50%; background: var(--ok); animation: glow 1.8s ease-out infinite; }
+
+/* cena F */
+.f1 { position: absolute; left: 7cqw; right: 7cqw; top: 80cqw; margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 9cqw; line-height: 1.02; letter-spacing: -.025em; text-wrap: balance; }
+.logo { position: absolute; left: 50%; margin-left: -29cqw; top: 14cqw; width: 58cqw; padding: 2cqw; border-radius: 7cqw; background: #fff; box-shadow: 0 0 10cqw color-mix(in srgb, var(--beam) 32%, transparent); }
+.logo img { display: block; width: 100%; height: auto; border-radius: 5cqw; }
+.cta { position: absolute; left: 7cqw; top: 130cqw; margin: 0; padding: 3.2cqw 6cqw; border-radius: 99px; background: var(--beam); color: var(--night); font-weight: 800; font-size: 4.8cqw; }
+.url { position: absolute; left: 7cqw; top: 148cqw; margin: 0; font-size: 4.6cqw; font-weight: 600; letter-spacing: .02em; color: var(--sky); }
+.legal { position: absolute; left: 7cqw; right: 7cqw; top: 148cqw; margin: 0; font-size: 3cqw; line-height: 1.4; color: var(--ink-muted); }
+
+/* animações */
+@keyframes sweep { 0%, 100% { opacity: .06; } 50% { opacity: 1; } }
+@keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(var(--gl, 255, 194, 71), .7); } 100% { box-shadow: 0 0 0 3cqw rgba(var(--gl, 255, 194, 71), 0); } }
+.c-head .blink { --gl: 255, 90, 78; }
+.status .dot { --gl: 61, 220, 151; }
+@keyframes shake { 0% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-1.6cqw) rotate(-3deg); } 50% { transform: translateX(0) rotate(0); } 75% { transform: translateX(1.6cqw) rotate(3deg); } 100% { transform: translateX(0) rotate(0); } }
+@keyframes flick { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@keyframes ripple { 0% { opacity: .75; transform: scale(1); } 100% { opacity: 0; transform: scale(5); } }
+@keyframes pulse { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(3.4); } }
+
+/* controles */
+.ctl { display: grid; gap: 12px; }
+.row2 { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { font: 600 14px var(--font-body); padding: 10px 18px; border-radius: 99px; border: 1px solid var(--page-line); background: transparent; color: var(--page-fg); cursor: pointer; }
+.btn.primary { background: var(--ctl-bg); color: var(--ctl-fg); border-color: var(--ctl-bg); min-width: 116px; }
+.btn:focus-visible, input[type="range"]:focus-visible { outline: 2px solid var(--page-fg); outline-offset: 3px; }
+.seek { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+input[type="range"] { width: 100%; min-width: 0; accent-color: var(--acc); }
+.time { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--page-muted); }
+.note { margin: 0; font-size: 13px; color: var(--page-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage * { animation: none !important; }
+  .in, .pop, .scene, .ln, .fade { transition-duration: .01s !important; }
+}
+
+/* site: so' o palco, ocupando o quadro todo */
+html, body { margin: 0; padding: 0; background: #0B1B3A; overflow: hidden; }
+body { padding: 0 !important; }
+.wrap { max-width: none !important; margin: 0 !important; display: block !important; }
+.head, .ctl, .note { display: none !important; }
+.stage { border-radius: 0 !important; cursor: pointer; }
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="lh" viewBox="0 0 100 150">
+    <path d="M8 150 Q18 131 50 129 Q82 131 92 150 Z" style="fill:#0E2450"/>
+    <polygon points="36,128 64,128 58,48 42,48" style="fill:var(--sky)"/>
+    <polygon points="37.2,112 62.8,112 61.75,98 38.25,98" style="fill:var(--alert)"/>
+    <polygon points="39.45,82 60.55,82 59.5,68 40.5,68" style="fill:var(--alert)"/>
+    <rect x="37" y="44" width="26" height="4.5" rx="1" style="fill:#0E2450"/>
+    <rect x="42" y="28" width="16" height="16" rx="2" style="fill:var(--beam)"/>
+    <rect x="49" y="28" width="2" height="16" style="fill:#0E2450"/>
+    <polygon points="39.5,28 50,16 60.5,28" style="fill:#0E2450"/>
+    <circle cx="50" cy="14" r="2" style="fill:#0E2450"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="head">
+    <p class="eyebrow">Animação</p>
+    <h1>SOS Farol em 30 segundos</h1>
+    <p class="lede">Um pedido de socorro chega a toda a rede de apoio ao mesmo tempo, com áudio, localização e chat.</p>
+  </header>
+
+  <div class="stage paused" id="stage" role="img" aria-label="Animação do SOS Farol: uma pessoa agita o celular, toda a rede recebe o pedido de socorro ao mesmo tempo com áudio de 20 segundos, localização e bateria, e todos conversam no chat para decidir juntos.">
+    <div class="bar">
+      <div class="mark"><span class="dot"></span>SOS FAROL</div>
+    </div>
+
+    <!-- A: abertura -->
+    <section class="scene" data-start="0" data-end="5">
+      <div class="lh">
+        <svg class="lhsvg" viewBox="0 0 100 150"><use href="#lh"/></svg>
+        <i class="beam bl"></i><i class="beam"></i>
+      </div>
+      <h2 class="a1 in" data-at="0.3">Emergência<br>ou risco?</h2>
+      <p class="a2 in" data-at="2.2">Cada minuto importa.</p>
+    </section>
+
+    <!-- B: agitar -->
+    <section class="scene" data-start="5" data-end="9">
+      <h2 class="hd in" data-at="5.1">Basta agitar.</h2>
+      <div class="phonewrap in" data-at="5.1">
+        <svg class="arcs fade" data-at="5.7" data-until="7" viewBox="0 0 62 70" aria-hidden="true">
+          <path d="M7 22 Q2 35 7 48"/><path d="M3 16 Q-4 35 3 54"/>
+          <path d="M55 22 Q60 35 55 48"/><path d="M59 16 Q66 35 59 54"/>
+        </svg>
+        <div class="shaker" data-at="5.7" data-until="7">
+          <div class="phone">
+            <div class="lockclock">21:47</div>
+            <div class="screen fade" data-at="7">
+              <span class="tick"><svg style="width:7cqw;height:7cqw" viewBox="0 0 24 24" fill="none" stroke="#C53A31" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+              Socorro enviado
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="cap in" data-at="5.7" data-until="7">Funciona com a tela apagada.</p>
+      <p class="cap good in" data-at="7.2">Pronto. Em 30 segundos a rede recebe o alerta.</p>
+    </section>
+
+    <!-- C: rede -->
+    <section class="scene" data-start="9" data-end="15">
+      <h2 class="hd in" data-at="9.1">Todos recebem ao mesmo tempo.</h2>
+      <svg class="net" viewBox="0 0 100 100" aria-hidden="true">
+        <g class="rip" data-at="9.9"><circle cx="50" cy="50" r="9"/><circle cx="50" cy="50" r="9"/><circle cx="50" cy="50" r="9"/></g>
+        <line class="ln" data-at="9.9" x1="50" y1="50" x2="50" y2="17"/>
+        <line class="ln" data-at="9.9" x1="50" y1="50" x2="81.4" y2="39.8"/>
+        <line class="ln" data-at="9.9" x1="50" y1="50" x2="69.4" y2="76.7"/>
+        <line class="ln" data-at="9.9" x1="50" y1="50" x2="30.6" y2="76.7"/>
+        <line class="ln" data-at="9.9" x1="50" y1="50" x2="18.6" y2="39.8"/>
+
+        <g class="pop" data-at="9.3"><circle cx="50" cy="50" r="10" style="fill:var(--alert)"/><text class="me" x="50" y="51.6">Mãe</text></g>
+
+        <g transform="translate(50 17)">
+          <g class="pop" data-at="9.5"><circle r="7.5" style="fill:var(--night-2);stroke:var(--sky);stroke-width:.6"/><text class="ini" y="1.8">F</text></g>
+          <circle class="fade" data-at="10.4" r="8.6" style="fill:none;stroke:var(--beam);stroke-width:1.1"/>
+          <g class="pop" data-at="10.4" transform="translate(5.6 -5.6)"><circle r="2.9" style="fill:var(--ok)"/><path d="M-1.3 .1 L-.3 1.1 L1.5 -1" style="fill:none;stroke:var(--night);stroke-width:.7;stroke-linecap:round;stroke-linejoin:round"/></g>
+          <text class="lab" y="-10.6">Filha</text>
+        </g>
+        <g transform="translate(81.4 39.8)">
+          <g class="pop" data-at="9.5"><circle r="7.5" style="fill:var(--night-2);stroke:var(--sky);stroke-width:.6"/><text class="ini" y="1.8">I</text></g>
+          <circle class="fade" data-at="10.4" r="8.6" style="fill:none;stroke:var(--beam);stroke-width:1.1"/>
+          <g class="pop" data-at="10.4" transform="translate(5.6 -5.6)"><circle r="2.9" style="fill:var(--ok)"/><path d="M-1.3 .1 L-.3 1.1 L1.5 -1" style="fill:none;stroke:var(--night);stroke-width:.7;stroke-linecap:round;stroke-linejoin:round"/></g>
+          <text class="lab" y="13">Irmão</text>
+        </g>
+        <g transform="translate(69.4 76.7)">
+          <g class="pop" data-at="9.5"><circle r="7.5" style="fill:var(--night-2);stroke:var(--sky);stroke-width:.6"/><text class="ini" y="1.8">V</text></g>
+          <circle class="fade" data-at="10.4" r="8.6" style="fill:none;stroke:var(--beam);stroke-width:1.1"/>
+          <g class="pop" data-at="10.4" transform="translate(5.6 -5.6)"><circle r="2.9" style="fill:var(--ok)"/><path d="M-1.3 .1 L-.3 1.1 L1.5 -1" style="fill:none;stroke:var(--night);stroke-width:.7;stroke-linecap:round;stroke-linejoin:round"/></g>
+          <text class="lab" y="13">Vizinha</text>
+        </g>
+        <g transform="translate(30.6 76.7)">
+          <g class="pop" data-at="9.5"><circle r="7.5" style="fill:var(--night-2);stroke:var(--sky);stroke-width:.6"/><text class="ini" y="1.8">A</text></g>
+          <circle class="fade" data-at="10.4" r="8.6" style="fill:none;stroke:var(--beam);stroke-width:1.1"/>
+          <g class="pop" data-at="10.4" transform="translate(5.6 -5.6)"><circle r="2.9" style="fill:var(--ok)"/><path d="M-1.3 .1 L-.3 1.1 L1.5 -1" style="fill:none;stroke:var(--night);stroke-width:.7;stroke-linecap:round;stroke-linejoin:round"/></g>
+          <text class="lab" y="13">Amigo</text>
+        </g>
+        <g transform="translate(18.6 39.8)">
+          <g class="pop" data-at="9.5"><circle r="7.5" style="fill:var(--night-2);stroke:var(--sky);stroke-width:.6"/><text class="ini" y="1.8">N</text></g>
+          <circle class="fade" data-at="10.4" r="8.6" style="fill:none;stroke:var(--beam);stroke-width:1.1"/>
+          <g class="pop" data-at="10.4" transform="translate(5.6 -5.6)"><circle r="2.9" style="fill:var(--ok)"/><path d="M-1.3 .1 L-.3 1.1 L1.5 -1" style="fill:none;stroke:var(--night);stroke-width:.7;stroke-linecap:round;stroke-linejoin:round"/></g>
+          <text class="lab" y="13">Neto</text>
+        </g>
+      </svg>
+      <p class="pill in" data-at="11.4">5 pessoas avisadas no mesmo instante</p>
+      <p class="sub in" data-at="12.6">Ninguém precisa ligar um por um.</p>
+    </section>
+
+    <!-- D: o que a rede recebe -->
+    <section class="scene" data-start="15" data-end="22">
+      <h2 class="hd in" data-at="15.1">Todos veem o que está acontecendo.</h2>
+      <div class="dcol">
+      <div class="card in" data-at="15.5">
+        <div class="c-head"><span class="blink"></span>PEDIDO DE SOCORRO<time>agora</time></div>
+        <div class="c-who">Mãe pediu ajuda</div>
+        <div class="row in" data-at="16.1">
+          <div class="audio">
+            <div class="playbtn"><svg style="width:4cqw;height:4cqw" viewBox="0 0 24 24" fill="#fff"><path d="M7 4.5v15l13-7.5z"/></svg></div>
+            <div class="wave">
+              <svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><g id="wbase" style="fill:#B9C8E8"></g></svg>
+              <svg class="fill" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><g id="wfill" style="fill:#0B1B3A"></g></svg>
+            </div>
+          </div>
+          <div class="meta"><span>Áudio de 20 s</span><span id="audioTime">0:00</span></div>
+        </div>
+        <div class="row in" data-at="17.6">
+          <div class="map">
+            <svg viewBox="0 0 100 38" aria-hidden="true">
+              <rect width="100" height="38" fill="#DDE9FF"/>
+              <rect x="60" y="2" width="30" height="9" rx="2" fill="#C4EAD6"/>
+              <path d="M0 26 H100" stroke="#fff" stroke-width="3"/>
+              <path d="M30 0 V38" stroke="#fff" stroke-width="3"/>
+              <path d="M0 8 L100 20" stroke="#fff" stroke-width="2.2"/>
+              <path d="M78 0 V38" stroke="#fff" stroke-width="1.6"/>
+              <path d="M14 26 H30 V11.6 L68 16" fill="none" stroke="#2F6BFF" stroke-width="1.3" stroke-dasharray="3 2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="14" cy="26" r="2.6" fill="#2F6BFF" stroke="#fff" stroke-width="1"/>
+              <g class="pin-pulse"><circle cx="68" cy="16" r="3"/></g>
+              <circle cx="68" cy="16" r="3" fill="#FF5A4E" stroke="#fff" stroke-width="1"/>
+            </svg>
+            <span class="chip tl">Localização em tempo real</span>
+            <span class="chip">a 4 min de você</span>
+          </div>
+        </div>
+        <div class="batrow in" data-at="19.4"><div class="bat"><i></i></div><span>Bateria do celular</span><span>62%</span></div>
+      </div>
+      <p class="dcap in" data-at="17">A rede recebe um áudio ambiente de 20s de quem pediu ajuda!</p>
+      </div>
+    </section>
+
+    <!-- E: chat -->
+    <section class="scene" data-start="22" data-end="31">
+      <h2 class="hd in" data-at="22.1">E decidem juntos, em tempo real.</h2>
+      <div class="chat">
+        <div class="msg in" data-at="22.9"><span class="av">F</span><div><div class="who">Filha</div><p class="bub">Estou saindo de casa. Chego em 5 minutos.</p><span class="tag">A caminho</span></div></div>
+        <div class="msg in" data-at="25"><span class="av">V</span><div><div class="who">Vizinha</div><p class="bub">Escutei o áudio. Chego aí em 1 minuto.</p><span class="tag">A caminho</span></div></div>
+        <div class="msg in" data-at="27"><span class="av">I</span><div><div class="who">Irmão</div><p class="bub">Vou ligar para o SAMU agora.</p><span class="tag info">SAMU acionado</span></div></div>
+      </div>
+      <div class="status in" data-at="29.2"><span class="dot"></span>2 a caminho · SAMU acionado</div>
+    </section>
+
+    <!-- F: fechamento -->
+    <section class="scene" data-start="31" data-end="39">
+      <div class="logo in" data-at="31.3"><img src="../assets/animacao-logo.webp" loading="lazy" decoding="async" width="720" height="720" alt="Logotipo do SOS Farol: pessoas ao redor de um celular com um coração, e o texto SOS Farol, Rede de Apoio"></div>
+      <h2 class="f1"><span class="in" data-at="31.6" style="display:block">Uma pessoa chama ajuda.</span><span class="in accent" data-at="33" style="display:block">Outra chega rápido!</span></h2>
+      <p class="cta in" data-at="34.6">Testar por 15 dias grátis</p>
+      <p class="legal in" data-at="36">O FAROL é uma ferramenta de rede de apoio e não substitui serviços oficiais de emergência.</p>
+    </section>
+  </div>
+
+  <div class="ctl">
+    <div class="row2">
+      <button class="btn primary" id="play" type="button">Reproduzir</button>
+      <button class="btn" id="restart" type="button">Recomeçar</button>
+    </div>
+    <div class="seek">
+      <input type="range" id="seek" min="0" max="37.5" step="0.1" value="0" aria-label="Posição da animação">
+      <span class="time" id="tlabel">0:00 / 0:38</span>
+    </div>
+  </div>
+  <p class="note">Nomes, horários e distâncias são exemplos para ilustrar o app.</p>
+</div>
+
+<script>
+(function () {
+  var DUR = 39, MAX = 37.5;
+  var stage = document.getElementById('stage');
+  var scenes = [].slice.call(stage.querySelectorAll('.scene'));
+  var timed = [].slice.call(stage.querySelectorAll('[data-at]'));
+  var audioTime = document.getElementById('audioTime');
+  var seek = document.getElementById('seek');
+  var tlabel = document.getElementById('tlabel');
+  var playBtn = document.getElementById('play');
+  var restartBtn = document.getElementById('restart');
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+  var t = reduce ? 36.5 : 0;
+  var playing = !reduce;
+  var last = null;
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  var NS = 'http://www.w3.org/2000/svg';
+  ['wbase', 'wfill'].forEach(function (id) {
+    var g = document.getElementById(id);
+    for (var i = 0; i < 48; i++) {
+      var h = 5 + 27 * Math.abs(Math.sin(i * 0.9) * Math.cos(i * 0.31 + 0.4));
+      var r = document.createElementNS(NS, 'rect');
+      r.setAttribute('x', (i * 4.15 + 0.6).toFixed(2));
+      r.setAttribute('y', ((40 - h) / 2).toFixed(2));
+      r.setAttribute('width', '2.5');
+      r.setAttribute('height', h.toFixed(2));
+      r.setAttribute('rx', '1.2');
+      g.appendChild(r);
+    }
+  });
+
+  function render() {
+    scenes.forEach(function (s) {
+      var on = t >= parseFloat(s.getAttribute('data-start')) && t < parseFloat(s.getAttribute('data-end'));
+      s.classList.toggle('active', on);
+    });
+    timed.forEach(function (el) {
+      var a = parseFloat(el.getAttribute('data-at'));
+      var u = el.getAttribute('data-until');
+      var on = t >= a && (u === null || t < parseFloat(u));
+      el.classList.toggle('on', on);
+    });
+    var p = Math.max(0, Math.min(1, (t - 16.2) / 5.5)) * 0.35;
+    stage.style.setProperty('--p', p.toFixed(3));
+    audioTime.textContent = '0:' + pad(Math.round(p * 20));
+    seek.value = Math.min(t, MAX);
+    var ts = Math.floor(Math.min(t, 38));
+    tlabel.textContent = Math.floor(ts / 60) + ':' + pad(ts % 60) + ' / 0:38';
+  }
+
+  function setPlaying(v) {
+    playing = v;
+    stage.classList.toggle('paused', !v);
+    playBtn.textContent = v ? 'Pausar' : 'Reproduzir';
+  }
+
+  function tick(now) {
+    if (last === null) last = now;
+    var dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    if (playing) {
+      t += dt;
+      if (t >= DUR) t = 0;
+    }
+    render();
+    window.requestAnimationFrame(tick);
+  }
+
+  playBtn.addEventListener('click', function () { setPlaying(!playing); });
+  restartBtn.addEventListener('click', function () { t = 0; setPlaying(true); render(); });
+  seek.addEventListener('input', function () { t = parseFloat(seek.value); render(); });
+
+  setPlaying(playing);
+  render();
+  window.requestAnimationFrame(tick);
+})();
+</script>
+
+
+<script>
+/* site: toca so' quando aparece na tela; toque pausa/continua */
+(function () {
+  var b = document.getElementById('play'), st = document.getElementById('stage');
+  var reduz = false, visivel = false, pausadoPeloUsuario = false;
+  try { reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  function tocando() { return b.textContent === 'Pausar'; }
+  function quer(v) { if (tocando() !== v) b.click(); }
+  function decide() { if (!reduz) quer(visivel && !pausadoPeloUsuario && !document.hidden); }
+  st.addEventListener('click', function () { pausadoPeloUsuario = tocando(); if (reduz) { b.click(); } else { decide(); } });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) { visivel = e[0].isIntersecting; decide(); }, { threshold: 0.3 }).observe(st);
+  } else { visivel = true; }
+  document.addEventListener('visibilitychange', decide);
+  decide();
+})();
+</script>
+</body>
+</html>
