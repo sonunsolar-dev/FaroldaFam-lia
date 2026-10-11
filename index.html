@@ -49,7 +49,7 @@
 })();
 </script>
 
-<link rel="stylesheet" href="vidro.css?v=20261012b">
+<link rel="stylesheet" href="vidro.css?v=20261012c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -168,11 +168,11 @@
   <div class="titulo-sec reveal"><span class="olho">Entenda a Rede</span><h2>Uma pessoa chama ajuda. <b>Outra chega rápido!</b></h2><p>Quando todos recebem o mesmo alerta, cada membro pode assumir uma parte da resposta. O SOS FAROL conecta famílias, condomínios, vizinhanças e grupos de comerciantes em uma rede privada de apoio.</p></div>
   <div class="animacoes reveal">
     <figure class="animacao">
-      <div class="animacao-tela"><iframe src="animacoes/rede-em-30-segundos.html" title="Animação: o SOS Farol em 30 segundos. A pessoa agita o celular e toda a rede recebe o pedido de ajuda ao mesmo tempo." loading="lazy"></iframe></div>
+      <div class="animacao-tela"><iframe data-anim="animacoes/rede-em-30-segundos.html" title="Animação: o SOS Farol em 30 segundos. A pessoa agita o celular e toda a rede recebe o pedido de ajuda ao mesmo tempo." loading="lazy"></iframe></div>
       <figcaption><b>Agitar o celular:</b> a rede inteira é avisada ao mesmo tempo.</figcaption>
     </figure>
     <figure class="animacao">
-      <div class="animacao-tela"><iframe src="animacoes/palavra-codigo.html" title="Animação: a palavra-código. Uma palavra dita em voz alta aciona a rede, com o celular a até 3 metros e a tela apagada." loading="lazy"></iframe></div>
+      <div class="animacao-tela"><iframe data-anim="animacoes/palavra-codigo.html" title="Animação: a palavra-código. Uma palavra dita em voz alta aciona a rede, com o celular a até 3 metros e a tela apagada." loading="lazy"></iframe></div>
       <figcaption><b>Palavra-código:</b> sem tocar no celular, a até 3 metros.</figcaption>
     </figure>
   </div>
@@ -182,9 +182,25 @@
      a outra começa. Celular (uma embaixo da outra): cada uma toca sozinha. */
   (function () {
     var fr = [].slice.call(document.querySelectorAll('.animacao-tela iframe'));
-    if (fr.length !== 2 || !window.matchMedia) return;
+    if (fr.length !== 2 || !window.matchMedia || !window.fetch) return;
     var mq = window.matchMedia('(min-width: 641px)'), atual = 0, visivel = false;
-    function env(i, m) { try { fr[i].contentWindow.postMessage(m, location.origin); } catch (e) {} }
+    /* O Cloudflare proibe abrir paginas do site dentro de quadros
+       (X-Frame-Options: DENY, protecao contra sites falsos). Por isso a
+       pagina busca a animacao e coloca o conteudo no quadro (srcdoc), sem
+       mexer nessa protecao. Carrega so' quando a secao esta' chegando. */
+    var carregado = false;
+    function carrega() {
+      if (carregado) return; carregado = true;
+      fr.forEach(function (f) {
+        fetch(f.getAttribute('data-anim')).then(function (r) { return r.text(); })
+          .then(function (h) { f.srcdoc = h; }).catch(function () {});
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { carrega(); obs.disconnect(); } }, { rootMargin: '400px' });
+      obs.observe(document.querySelector('.animacoes'));
+    } else { carrega(); }
+    function env(i, m) { try { fr[i].contentWindow.postMessage(m, '*'); } catch (e) {} }
     function aplica() {
       var seq = mq.matches;
       fr.forEach(function (f, i) {
@@ -196,7 +212,7 @@
       env(atual, { farol: visivel ? 'tocar' : 'pausar' });
     }
     window.addEventListener('message', function (e) {
-      if (e.origin !== location.origin || !e.data || !e.data.farol) return;
+      if (!e.data || !e.data.farol || !fr.some(function (f) { return f.contentWindow === e.source; })) return;
       var d = e.data;
       if (d.farol === 'pronto') { aplica(); }
       else if (d.farol === 'fim' && mq.matches && d.id === atual) {
