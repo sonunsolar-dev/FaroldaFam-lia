@@ -487,6 +487,9 @@ a.card { text-decoration: none; display: block; }
 @media (min-width: 761px) { .faixa.g3x { grid-template-columns: repeat(3, 1fr); } .faixa.g3x a:nth-child(2) { border-right: 1px solid var(--linha); } .faixa.g3x a { border-bottom: 0 !important; } }
 @media (max-width: 760px) { .faixa.g3x { grid-template-columns: 1fr; } .faixa.g3x a { border-right: 0; border-bottom: 1px solid var(--linha); } .faixa.g3x a:last-child { border-bottom: 0; } }
 .faixa .ico-f { font-size: 22px; line-height: 1; }
+/* cards de disparo sem link (12/10): nao parecem clicaveis */
+.faixa a:not([href]) { cursor: default; }
+.faixa a:not([href]):hover { background: transparent; }
 
 /* alerta de exemplo (vidro) */
 .alerta-demo { border-radius: var(--raio); padding: 22px; max-width: 380px; }
