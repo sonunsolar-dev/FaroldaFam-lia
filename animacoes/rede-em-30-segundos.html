@@ -478,7 +478,7 @@ body { padding: 0 !important; }
     last = now;
     if (playing) {
       t += dt;
-      if (t >= DUR) t = 0;
+      if (t >= DUR) { t = 0; if (window.__aoFim) window.__aoFim(); }
     }
     render();
     window.requestAnimationFrame(tick);
@@ -496,20 +496,40 @@ body { padding: 0 !important; }
 
 
 <script>
-/* site: toca so' quando aparece na tela; toque pausa/continua */
+/* site: sozinha toca quando aparece; controlada, a pagina decide */
 (function () {
-  var b = document.getElementById('play'), st = document.getElementById('stage');
+  var b = document.getElementById('play'), rec = document.getElementById('restart');
+  var st = document.getElementById('stage');
   var reduz = false, visivel = false, pausadoPeloUsuario = false;
+  var dentro = window.parent !== window, controlado = dentro ? null : false, meuId = -1;
   try { reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
   function tocando() { return b.textContent === 'Pausar'; }
-  function quer(v) { if (tocando() !== v) b.click(); }
-  function decide() { if (!reduz) quer(visivel && !pausadoPeloUsuario && !document.hidden); }
-  st.addEventListener('click', function () { pausadoPeloUsuario = tocando(); if (reduz) { b.click(); } else { decide(); } });
+  function quer(v) { if (!reduz && tocando() !== v) b.click(); }
+  function decide() { if (controlado === false) quer(visivel && !pausadoPeloUsuario && !document.hidden); }
+  function avisa(m) { try { window.parent.postMessage(m, location.origin); } catch (e) {} }
+  window.__aoFim = function () { if (controlado) { quer(false); avisa({ farol: 'fim', id: meuId }); } };
+  st.addEventListener('click', function () {
+    if (controlado) { avisa({ farol: 'toque', id: meuId }); return; }
+    pausadoPeloUsuario = tocando(); if (reduz) { b.click(); } else { decide(); }
+  });
+  window.addEventListener('message', function (e) {
+    if (e.origin !== location.origin || !e.data || !e.data.farol) return;
+    var d = e.data;
+    if (d.farol === 'controle') { controlado = !!d.on; meuId = d.id; if (controlado) { quer(false); } else { decide(); } }
+    else if (d.farol === 'tocar') { if (d.doInicio && !reduz) { rec.click(); } else { quer(true); } }
+    else if (d.farol === 'pausar') { quer(false); }
+    else if (d.farol === 'alternar') { quer(!tocando()); }
+  });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (e) { visivel = e[0].isIntersecting; decide(); }, { threshold: 0.3 }).observe(st);
   } else { visivel = true; }
   document.addEventListener('visibilitychange', decide);
-  decide();
+  quer(false);
+  if (dentro) {
+    avisa({ farol: 'pronto' });
+    /* pagina sem controle (aberta solta num iframe qualquer): toca sozinha */
+    setTimeout(function () { if (controlado === null) { controlado = false; decide(); } }, 1200);
+  } else { decide(); }
 })();
 </script>
 </body>
