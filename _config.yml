@@ -1,0 +1,3 @@
+# GitHub Pages: publica a pasta .well-known (security.txt). Sem isto o Jekyll ignora pastas com ponto.
+include:
+  - .well-known
