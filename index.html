@@ -49,7 +49,7 @@
 })();
 </script>
 
-<link rel="stylesheet" href="vidro.css?v=20261012e">
+<link rel="stylesheet" href="vidro.css?v=20261012f">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -181,7 +181,7 @@
   /* Computador (lado a lado): uma animação de cada vez - quando uma acaba,
      a outra começa. Celular (uma embaixo da outra): cada uma toca sozinha. */
   (function () {
-    var fr = [].slice.call(document.querySelectorAll('.animacao-tela iframe'));
+    var fr = [].slice.call(document.querySelectorAll('.animacoes .animacao-tela iframe'));
     if (fr.length !== 2 || !window.matchMedia || !window.fetch) return;
     var mq = window.matchMedia('(min-width: 641px)'), atual = 0, visivel = false;
     /* O Cloudflare proibe abrir paginas do site dentro de quadros
@@ -249,6 +249,40 @@
   <p class="vid-nota">O alerta pode falhar. Em emergência, ligue 192 ou 190.</p>
 </div></section>
 
+<section class="secao" id="modo-discreto"><div class="wrap">
+  <div class="discreto-grade">
+    <div class="discreto-txt reveal">
+      <div class="titulo-sec"><span class="olho">Modo discreto</span><h2>Para quem precisa pedir ajuda <b>sem chamar atenção.</b></h2>
+      <p>Quando alguém pode mexer no seu celular sem você saber, o Modo discreto deixa o SOS Farol com cara de app comum e esconde, no seu celular, os avisos de alerta da rede.</p></div>
+      <ul class="discreto-lista">
+        <li><b>Pedir ajuda continua igual:</b> palavra-código, agitar o celular ou botão.</li>
+        <li><b>Sua rede recebe o pedido normalmente,</b> com a localização e o áudio de 20 segundos.</li>
+        <li><b>A notificação fixa “APP FAROL: Ativo” continua aparecendo.</b> É uma regra do Android.</li>
+        <li><b>No Modo discreto,</b> Detectar Quedas e Compartilhar viagem ficam desligados.</li>
+      </ul>
+      <p class="discreto-obs">Como ligar o Modo discreto e como abrir o app com ele ligado está no manual e dentro do próprio app.</p>
+      <p class="discreto-ajuda">Em perigo agora? <b>Ligue 190.</b> Violência contra a mulher: <b>Ligue 180</b> (grátis, 24 h).</p>
+    </div>
+    <figure class="animacao reveal">
+      <div class="animacao-tela"><iframe data-anim="animacoes/modo-discreto.html" title="Animação: o Modo discreto do SOS Farol. O app fica com cara de app comum, pedir ajuda continua igual e a rede recebe o pedido normalmente." loading="lazy"></iframe></div>
+      <figcaption>Toque na animação para pausar. Nomes e situações são exemplos.</figcaption>
+    </figure>
+  </div>
+  <script>
+  /* Carrega a animação quando a seção está chegando (mesmo motivo da seção
+     Entenda a Rede: o Cloudflare proíbe abrir páginas do site em quadros). */
+  (function () {
+    var f = document.querySelector('#modo-discreto iframe[data-anim]');
+    if (!f || !window.fetch) return;
+    function carrega() { fetch(f.getAttribute('data-anim')).then(function (r) { return r.text(); }).then(function (h) { f.srcdoc = h; }).catch(function () {}); }
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { carrega(); obs.disconnect(); } }, { rootMargin: '400px' });
+      obs.observe(f);
+    } else { carrega(); }
+  })();
+  </script>
+</div></section>
+
 <section class="secao" id="diferenciais"><div class="wrap">
 <div class="porque reveal">
   <div class="titulo-sec"><span class="olho">Por que FAROL?</span><h2>Seis razões <b>inovadoras</b></h2><p>Em uma emergência, cada segundo importa. Veja como o Aplicativo SOS Farol se diferencia de soluções que dependem de botões ou acessórios.</p></div>
@@ -267,7 +301,7 @@
     <h3>O Aplicativo SOS Farol foi pensado para quando você <b>não consegue apertar um botão a tempo.</b></h3>
     <p class="texto" style="margin:0 auto">Sem acessórios obrigatórios. Sem depender de uma única forma de pedir ajuda.</p>
     <div class="pilulas"><span class="pilula vidro">Voz</span><span class="pilula vidro">Movimento</span><span class="pilula vidro">Toque</span><span class="pilula vidro">Rede de apoio</span></div>
-    <p class="texto" style="margin:0 auto">🗒️ Para quem pode ter o celular vigiado: o <strong>Modo discreto</strong> disfarça o app de bloco de notas.</p>
+    <p class="texto" style="margin:0 auto">🗒️ Para quem pode ter o celular vigiado: o <strong>Modo discreto</strong> deixa o app com cara de app comum.</p>
   </div>
 </div>
 </div></section>

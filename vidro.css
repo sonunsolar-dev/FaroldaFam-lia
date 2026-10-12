@@ -292,6 +292,20 @@ a.card { text-decoration: none; display: block; }
 @media (max-width: 640px) {
   .animacoes { grid-template-columns: minmax(0, 340px); }
 }
+
+/* área do Modo discreto: texto + animação */
+.discreto-grade { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: clamp(28px, 5vw, 72px); align-items: center; max-width: 1000px; margin: 0 auto; }
+.discreto-txt .titulo-sec { margin-bottom: 18px; }
+.discreto-lista { margin: 0 0 18px; padding: 0; list-style: none; display: grid; gap: 10px; }
+.discreto-lista li { position: relative; padding-left: 26px; font-size: 15.5px; line-height: 1.5; color: var(--tinta-suave); }
+.discreto-lista li::before { content: ""; position: absolute; left: 4px; top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--laranja-claro); }
+.discreto-lista b { color: var(--tinta); font-weight: 600; }
+.discreto-obs { font-size: 14px; color: var(--tinta-suave); margin: 0 0 14px; }
+.discreto-ajuda { font-size: 15px; margin: 0; padding: 12px 16px; border-radius: var(--raio-p); border: 1px solid var(--linha); background: rgba(255, 255, 255, .35); color: var(--tinta); }
+@media (max-width: 760px) {
+  .discreto-grade { grid-template-columns: 1fr; }
+  .discreto-grade .animacao { width: 100%; max-width: 340px; margin: 0 auto; }
+}
 .videos .yt { width: 260px; }
 
 /* formulário */
