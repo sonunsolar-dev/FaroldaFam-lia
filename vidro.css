@@ -801,3 +801,30 @@ body {
 
 /* 2026-10-06: no menu do celular, "Área do Cliente" em negrito (pedido do usuario) */
 .topo.aberto .menu summary { font-weight: 700; }
+
+/* 2026-10-12: com "Início" no menu, o logo nao pode encolher na faixa 900–1080 */
+.topo .logo { flex-shrink: 0; }
+@media (min-width: 900px) and (max-width: 1080px) and (hover: hover) and (pointer: fine) {
+  .menu a, .menu summary { padding: 8px 6px; font-size: 13.5px; }
+}
+
+/* 2026-10-12 (pedido do usuario): botao flutuante "voltar ao topo" no celular,
+   vidro claro igual ao topo. Aparece depois de rolar; some perto do topo. */
+.ao-topo { display: none; }
+@media (max-width: 1080px) {
+  .ao-topo {
+    position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 90;
+    width: 48px; height: 48px; border-radius: 50%; padding: 0; cursor: pointer;
+    display: grid; place-items: center; color: #00005C;
+    background: rgba(255, 255, 255, .62);
+    -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, .8);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), 0 10px 26px -10px rgba(20, 22, 58, .35);
+    opacity: 0; transform: translateY(12px); pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .ao-topo.visivel { opacity: 1; transform: none; pointer-events: auto; }
+  .ao-topo svg { width: 22px; height: 22px; }
+  .topo.aberto ~ .ao-topo { opacity: 0; pointer-events: none; }
+}
+@media (prefers-reduced-motion: reduce) { .ao-topo { transition: none; } }

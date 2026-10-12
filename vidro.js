@@ -29,6 +29,21 @@
     });
   }
 
+  // ---------- botao flutuante "voltar ao topo" (celular; 2026-10-12) ----------
+  var aoTopo = document.createElement('button');
+  aoTopo.type = 'button';
+  aoTopo.className = 'ao-topo';
+  aoTopo.setAttribute('aria-label', 'Voltar ao início');
+  aoTopo.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>';
+  document.body.appendChild(aoTopo);
+  var mostrarAoTopo = function () { aoTopo.classList.toggle('visivel', window.scrollY > 600); };
+  mostrarAoTopo();
+  window.addEventListener('scroll', mostrarAoTopo, { passive: true });
+  aoTopo.addEventListener('click', function () {
+    var suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: suave ? 'smooth' : 'auto' });
+  });
+
   // ---------- revelacao suave ao rolar ----------
   var revelar = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
