@@ -52,11 +52,11 @@
     <h2>O microfone e a palavra-código</h2>
     <p>Com a proteção ligada, mesmo com o app fechado ou a tela apagada, o app escuta o ambiente para reconhecer a palavra-código. Ele faz o reconhecimento <b>inteiramente dentro do seu celular</b>, sem internet. Esse áudio não é gravado nem enviado a ninguém. Só quando um alerta é disparado é que 20 segundos de áudio são gravados e enviados, como descrito abaixo. O Android mostra uma notificação fixa enquanto a proteção está ligada. Antes de o Android pedir a permissão do microfone, o app explica esse uso e só segue se você concordar.</p>
 
-    <h2>Sensor de movimento (agitar e queda)</h2>
-    <p>Para reconhecer o gesto de agitar e, se você ligar, a detecção de queda, o app usa o sensor de movimento do celular. Essa análise é feita só dentro do aparelho; os dados do sensor não são gravados nem enviados.</p>
+    <h2>Sensor de movimento (agitar)</h2>
+    <p>Para reconhecer o gesto de agitar, o app usa o sensor de movimento do celular. Essa análise é feita só dentro do aparelho; os dados do sensor não são gravados nem enviados.</p>
 
     <h2>O que o app envia quando um alerta é disparado</h2>
-    <p>Ao acionar um alerta (por toque na tela, palavra-código, gesto de agitar ou queda detectada sem resposta), o SOS Farol grava <b>20 segundos de áudio</b> do ambiente e captura a <b>localização do celular (GPS)</b> e o <b>nível de bateria</b>. Essas informações são enviadas para o banco de dados do SOS Farol (hospedado no <b>Supabase</b>) e, de lá, um <b>aviso (notificação push)</b> é enviado para os aparelhos dos demais integrantes da <b>sua rede de apoio</b> — as pessoas que você mesmo convidou para dentro do aplicativo. O áudio gravado é <b>apagado automaticamente 6 horas</b> depois do alerta.</p>
+    <p>Ao acionar um alerta (por toque na tela, palavra-código ou gesto de agitar), o SOS Farol grava <b>20 segundos de áudio</b> do ambiente e captura a <b>localização do celular (GPS)</b> e o <b>nível de bateria</b>. Essas informações são enviadas para o banco de dados do SOS Farol (hospedado no <b>Supabase</b>) e, de lá, um <b>aviso (notificação push)</b> é enviado para os aparelhos dos demais integrantes da <b>sua rede de apoio</b> — as pessoas que você mesmo convidou para dentro do aplicativo. O áudio gravado é <b>apagado automaticamente 6 horas</b> depois do alerta.</p>
 
     <h2>Conversa do alerta</h2>
     <p>Enquanto um alerta está ativo, os integrantes da rede podem responder ("Estou indo", "Ligando já", "Liguei 192/190", "Resolvido") e trocar <b>mensagens de texto</b> para coordenar o apoio. Só os integrantes daquela rede veem essas mensagens. Elas são <b>apagadas automaticamente</b> 24 horas depois que o alerta é resolvido e nunca ficam guardadas por mais de 7 dias.</p>

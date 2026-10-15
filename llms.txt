@@ -6,7 +6,6 @@
 - O pedido de ajuda pode ser feito de três formas: agitando o celular, falando uma palavra-código escolhida pela pessoa, ou tocando no botão PEDIR AJUDA do app.
 - Agitar e a palavra-código funcionam com a tela apagada; o botão precisa da tela acesa.
 - A rede recebe o alerta com a localização e um áudio de 20 segundos do ambiente, e combina quem vai ajudar ("Estou indo", "Ligando já", "Liguei 192/190").
-- Detecção de quedas opcional: o celular pergunta "Você está bem?" e só avisa a rede se não houver resposta.
 - Modo discreto: o app fica com cara de app comum, para quem pode ter o celular vigiado; quem pede ajuda não recebe avisos visíveis.
 - Compartilhar viagem: a pessoa escolhe quem da rede vê onde ela está, por 4 horas, e para quando quiser.
 
