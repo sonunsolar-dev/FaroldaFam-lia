@@ -27,27 +27,15 @@
 <meta content="https://sosfarol.com.br/assets/resposta-em-rede.webp" name="twitter:image"/>
 <link href="assets/logo-sos-farol.webp" rel="icon" type="image/webp"/>
 <link rel="preload" href="assets/fontes/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
-<!-- Google tag (gtag.js) - propriedade GA4 dedicada do SOS Farol -->
+<!-- Google tag (gtag.js) - propriedade GA4 dedicada do SOS Farol (so' com consentimento) -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-Z89YGFG8XW');
-(function () {
-  // 2026-10-03: o Google Analytics so' carrega na 1a interacao (rolar, tocar, clicar, tecla)
-  // ou depois de 8 s - deixa a pagina rapida. Eventos anteriores ficam na fila dataLayer.
-  var carregou = false, evs = ['scroll', 'pointerdown', 'touchstart', 'keydown'];
-  function carregaGA() {
-    if (carregou) return; carregou = true;
-    evs.forEach(function (e) { window.removeEventListener(e, carregaGA, { passive: true }); });
-    var g = document.createElement('script'); g.async = true;
-    g.src = 'https://www.googletagmanager.com/gtag/js?id=G-Z89YGFG8XW';
-    document.head.appendChild(g);
-  }
-  evs.forEach(function (e) { window.addEventListener(e, carregaGA, { passive: true }); });
-  setTimeout(carregaGA, 8000);
-})();
 </script>
+<!-- 15/10/2026: o Google Analytics so' carrega depois do "Aceitar" no aviso de cookies -->
+<script src="cookies.js?v=20261015b" defer></script>
 
 <link rel="stylesheet" href="vidro.css?v=20261012i">
 <script type="application/ld+json">
