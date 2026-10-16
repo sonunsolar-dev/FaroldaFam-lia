@@ -31,6 +31,14 @@
   .btn-reprovar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; margin-left:6px; background:#B93F2E;}
   .btn-cancelar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; background:#B93F2E;}
   .btn-reativar{width:auto; padding:6px 12px; font-size:12px; margin-top:0; background:#0E6E66;}
+  .box.largo{max-width:none;}
+  .msg{border:1px solid #e3e3e3; border-radius:10px; padding:12px 14px; margin-top:12px;}
+  .msg .topo{font-size:12px; color:#666; display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+  .msg .quem{font-weight:700; color:#10262B; font-size:14px; margin-top:4px;}
+  .msg .quem a{color:#0E6E66; font-weight:600; font-size:13px; margin-left:6px;}
+  .msg .texto{white-space:pre-wrap; word-break:break-word; margin-top:8px; font-size:14px; line-height:1.45;}
+  .tag.afiliado{background:#EEE8FB; color:#5B3FA8;}
+  .tag.contato{background:#E6F4F1; color:#0E6E66;}
 </style>
 </head>
 <body>
@@ -63,6 +71,13 @@
           <tbody id="tabelaBody"></tbody>
         </table>
       </div>
+    </div>
+    <!-- 15/10/2026: o Telegram so' avisa "mensagem nova"; o conteudo e' lido aqui
+         (Telegram sem contrato de protecao de dados). Apagadas em 12 meses. -->
+    <div class="box largo">
+      <button onclick="listarMensagens()">Ver mensagens de contato</button>
+      <div class="status" id="statusMsg"></div>
+      <div id="listaMsg"></div>
     </div>
     <button id="logoutBtn" onclick="logout()">Sair</button>
   </div>
@@ -240,6 +255,60 @@ function listar(){
       statusEl.style.color = '#C94F4F';
       statusEl.textContent = 'Erro: ' + res.txt;
     }
+  })
+  .catch(function(err){
+    statusEl.style.color = '#C94F4F';
+    statusEl.textContent = 'Falha de conexão: ' + err;
+  });
+}
+
+var SUPORTE_URL = SUPABASE_URL + "/functions/v1/farol-listar-suporte";
+
+// Monta cada mensagem com textContent (nunca innerHTML): o texto vem de
+// qualquer visitante do site.
+function listarMensagens(){
+  var statusEl = document.getElementById('statusMsg');
+  var lista = document.getElementById('listaMsg');
+  statusEl.style.color = '#888';
+  statusEl.textContent = 'Carregando...';
+  lista.textContent = '';
+  fetch(SUPORTE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify({})
+  })
+  .then(function(r){ return r.text().then(function(txt){ return {ok:r.ok, status:r.status, txt:txt}; }); })
+  .then(function(res){
+    if(!res.ok){
+      statusEl.style.color = '#C94F4F';
+      statusEl.textContent = res.status === 401 ? 'Não autorizado: entre de novo.' : 'Erro: ' + res.txt;
+      return;
+    }
+    var msgs = JSON.parse(res.txt);
+    msgs.forEach(function(m){
+      var afiliado = String(m.mensagem || '').indexOf('[AFILIADOS]') === 0;
+      var card = document.createElement('div'); card.className = 'msg';
+      var topo = document.createElement('div'); topo.className = 'topo';
+      var tag = document.createElement('span'); tag.className = 'tag ' + (afiliado ? 'afiliado' : 'contato');
+      tag.textContent = afiliado ? 'Afiliado' : 'Contato';
+      var quando = document.createElement('span');
+      quando.textContent = m.criado_em ? new Date(m.criado_em).toLocaleString('pt-BR') : '';
+      topo.appendChild(tag); topo.appendChild(quando);
+      var quem = document.createElement('div'); quem.className = 'quem';
+      quem.textContent = m.nome || '(sem nome)';
+      if(m.email){
+        var a = document.createElement('a');
+        a.href = 'mailto:' + encodeURIComponent(m.email).replace(/%40/g, '@');
+        a.textContent = m.email;
+        quem.appendChild(a);
+      }
+      var texto = document.createElement('div'); texto.className = 'texto';
+      texto.textContent = String(m.mensagem || '').replace(/^\[AFILIADOS\]\s*/, '');
+      card.appendChild(topo); card.appendChild(quem); card.appendChild(texto);
+      lista.appendChild(card);
+    });
+    statusEl.style.color = '#0E6E66';
+    statusEl.textContent = '✓ ' + msgs.length + ' mensagem(ns). São apagadas automaticamente depois de 12 meses.';
   })
   .catch(function(err){
     statusEl.style.color = '#C94F4F';
