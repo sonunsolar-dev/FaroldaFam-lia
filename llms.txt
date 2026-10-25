@@ -11,7 +11,7 @@
 - Compartilhar viagem: a pessoa escolhe quem da rede vê onde ela está, por 8 horas, e para quando quiser.
 
 ## Para quem é
-Idosos que moram sozinhos, pessoas vulneráveis, mulheres e adolescentes que se sentem inseguras na rua, e as famílias que cuidam delas, inclusive à distância.
+Adultos (18 anos ou mais): idosos que moram sozinhos, pessoas vulneráveis, mulheres que se sentem inseguras na rua, e as famílias que cuidam delas, inclusive à distância. O app não se destina a menores de 18 anos; quem compra, quem faz o teste e cada integrante da rede declaram ter 18 anos ou mais.
 
 ## Requisitos e acesso
 - Celulares Android 11 ou superior (64 bits). Ainda não há versão para iPhone.

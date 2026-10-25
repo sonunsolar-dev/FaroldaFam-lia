@@ -51,6 +51,9 @@
   .check{display:flex;gap:10px;align-items:flex-start;margin-top:18px;font-size:13px;color:var(--muted)}
   .check input{margin-top:3px}
   .check a{color:var(--navy);font-weight:700;text-decoration:underline}
+  .idade{font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:0 0 26px}
+  .idade h2{font-size:16px;color:var(--navy);margin:0 0 6px}
+  .idade p{margin:6px 0}
 
   .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;border:0;border-radius:999px;padding:15px 20px;font-weight:800;font-size:15px;cursor:pointer;margin-top:20px;font-family:inherit}
   .btn-primary{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 12px 30px rgba(255,122,69,.28)}
@@ -82,6 +85,14 @@
   <p class="sub">Preencha nome, WhatsApp e e-mail — o código de teste sai na hora e libera todos os recursos e o manual completo.</p>
   <div class="highlight"><b>Use os 15 dias para testar de verdade.</b> Dispare cada gatilho — chacoalhar, palavra-código e o botão PEDIR AJUDA (3 toques) — várias vezes, em lugares e horários diferentes, e confirme a cada vez que o alerta chegou no celular de quem vai ajudar.</div>
 
+  <div class="idade" id="idade">
+    <h2>Quem pode utilizar o SOS Farol?</h2>
+    <p>O SOS Farol é um aplicativo de proteção e apoio pessoal destinado exclusivamente a pessoas com <b>18 anos ou mais</b>.</p>
+    <p>A contratação, o cadastro, o teste gratuito e a ativação devem ser realizados por uma pessoa adulta, que será responsável pela utilização do serviço em sua própria conta.</p>
+    <p>O SOS Farol não se destina à utilização por menores de 18 anos.</p>
+    <p>Ao iniciar o cadastro, você declara que tem 18 anos ou mais e concorda com os <a href="termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> do SOS Farol.</p>
+  </div>
+
   <div class="form">
     <label for="nomeInput">Seu nome completo</label>
     <input type="text" id="nomeInput" placeholder="Seu nome completo">
@@ -91,9 +102,9 @@
     <input type="email" id="emailInput" placeholder="voce@exemplo.com">
     <label class="check">
       <input type="checkbox" id="termosCheck">
-      <span>Li e concordo com os <a href="termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+      <span>Declaro que tenho 18 anos ou mais, que as informações fornecidas são verdadeiras e que utilizarei o SOS Farol de acordo com os <a href="termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
     </label>
-    <button class="btn btn-primary" id="gerarBtn" type="button">Gerar código de teste</button>
+    <button class="btn btn-primary" id="gerarBtn" type="button" disabled>Gerar código de teste</button>
     <div class="msg" id="msg"></div>
 
     <div class="result" id="codeResult">
@@ -115,8 +126,21 @@
   var SUPABASE_URL = "https://hfjqnpmkvuclzemuamtv.supabase.co";
   var REGISTRAR_TESTE_URL = SUPABASE_URL + "/functions/v1/farol-registrar-teste";
 
+  // Versoes dos textos aceitos (vao para o registro da declaracao no servidor).
+  // Trocar quando os Termos ou a Politica mudarem.
+  var TERMOS_VERSAO = "2026-10-24";
+  var POLITICA_VERSAO = "2026-10-24";
+
   var msg = document.getElementById('msg');
   function setMsg(t, err){ msg.textContent = t || ''; msg.className = 'msg' + (err ? ' err' : ''); }
+
+  // So' maiores de 18 anos: o botao so' libera com a declaracao marcada
+  // (o servidor confere de novo).
+  var termosCheck = document.getElementById('termosCheck');
+  termosCheck.addEventListener('change', function(){
+    document.getElementById('gerarBtn').disabled = !termosCheck.checked;
+    if (termosCheck.checked) setMsg('');
+  });
 
   document.getElementById('gerarBtn').addEventListener('click', function(){
     var nome = document.getElementById('nomeInput').value.trim() || "Interessado(a)";
@@ -124,13 +148,14 @@
     var email = document.getElementById('emailInput').value.trim();
     if (!whatsapp){ setMsg("Preencha seu WhatsApp antes de gerar o código.", true); return; }
     if (!email){ setMsg("Preencha seu e-mail antes de gerar o código.", true); return; }
-    if (!document.getElementById('termosCheck').checked){ setMsg("Marque que você leu e concorda com os Termos de Uso e a Política de Privacidade.", true); return; }
+    if (!termosCheck.checked){ setMsg("Para fazer o teste grátis é preciso ter 18 anos ou mais e marcar a declaração.", true); return; }
     var btn = document.getElementById('gerarBtn');
     btn.disabled = true; btn.textContent = 'Verificando…'; setMsg('');
     fetch(REGISTRAR_TESTE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email })
+      body: JSON.stringify({ nome:nome, whatsapp:whatsapp, email:email,
+        declara_maioridade: true, termos_versao: TERMOS_VERSAO, politica_versao: POLITICA_VERSAO })
     }).then(function(r){
       return r.text().then(function(txt){ return { ok:r.ok, txt:txt }; });
     }).then(function(res){

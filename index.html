@@ -37,7 +37,7 @@
 <!-- 15/10/2026: o Google Analytics so' carrega depois do "Aceitar" no aviso de cookies -->
 <script src="cookies.js?v=20261016b" defer></script>
 
-<link rel="stylesheet" href="vidro.css?v=20261012i">
+<link rel="stylesheet" href="vidro.css?v=20261024">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -303,7 +303,9 @@
       <div class="valor">12x R$ 19,90 <small>no cartão</small></div>
       <div class="total">ou R$ 189,00 à vista no ano</div>
       <ul class="check"><li><span><b>3 licenças inclusas</b> — você + 2 convidados</span></li><li>Suporte e atualizações incluídos</li><li>Renovação simples, sem reconfigurar o app</li></ul>
-      <a class="btn btn-sol" href="#" id="comprarBtn" target="_blank" rel="noopener" onclick="gtag('event','click_assinar')">Assinar o acesso anual</a>
+      <label class="maioridade"><input type="checkbox" id="maioridadeCheck"> <span>Declaro que tenho 18 anos ou mais, que as informações fornecidas são verdadeiras e que utilizarei o SOS Farol de acordo com os <a href="termos-de-uso.html#idade" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="politica-de-privacidade.html#idade" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
+      <p class="maioridade-msg" id="maioridadeMsg" role="alert"></p>
+      <a class="btn btn-sol" href="#" id="comprarBtn" target="_blank" rel="noopener">Assinar o acesso anual</a>
       <p class="inpi">App SOS Farol com Certificado de Registro de Programa de Computador no INPI</p>
     </div>
   </div>
@@ -388,6 +390,6 @@
   <button class="vid-fechar" type="button" aria-label="Fechar">✕</button>
   <video id="vidPlayer" controls playsinline preload="none"></video>
 </div>
-<script src="vidro.js?v=20261012" defer></script>
+<script src="vidro.js?v=20261024" defer></script>
 </body>
 </html>

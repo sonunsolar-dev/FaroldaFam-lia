@@ -71,4 +71,20 @@
   // ---------- botao de assinatura (Kiwify) ----------
   var comprar = document.getElementById('comprarBtn');
   if (comprar) comprar.href = 'https://pay.kiwify.com.br/eUBIZVh';
+  // So' maiores de 18 anos (24/10/2026): a compra so' abre com a declaracao
+  // marcada. A declaracao e' registrada de novo, no servidor, ao ativar o app.
+  var maior = document.getElementById('maioridadeCheck');
+  var maiorMsg = document.getElementById('maioridadeMsg');
+  if (comprar && maior) {
+    maior.addEventListener('change', function () { if (maior.checked && maiorMsg) maiorMsg.textContent = ''; });
+    comprar.addEventListener('click', function (e) {
+      if (!maior.checked) {
+        e.preventDefault();
+        if (maiorMsg) maiorMsg.textContent = 'Para comprar é preciso ter 18 anos ou mais e marcar a declaração acima.';
+        maior.focus();
+        return;
+      }
+      if (typeof gtag === 'function') gtag('event', 'click_assinar');
+    });
+  }
 })();
