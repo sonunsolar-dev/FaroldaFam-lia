@@ -187,6 +187,9 @@ ul { margin: 0; padding: 0; }
 .titulo-sec h2 { font-size: clamp(30px, 3.6vw, 42px); }
 .titulo-sec p { color: var(--tinta-suave); margin: 14px 0 0; }
 .texto { color: var(--tinta-suave); max-width: 760px; }
+/* Entenda a Rede: as animacoes ficam centralizadas, entao o texto ocupa a
+   largura toda em vez de deixar um vazio do centro para a direita. */
+#resposta-em-rede .titulo-sec, #resposta-em-rede .texto { max-width: none; }
 .texto strong { color: #fff; font-weight: 500; }
 
 .grade { display: grid; gap: 18px; }

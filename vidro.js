@@ -60,12 +60,17 @@
   var player = document.getElementById('vidPlayer');
   if (modal && player) {
     var fechar = function () { player.pause(); player.removeAttribute('src'); player.load(); modal.classList.remove('open'); };
-    document.querySelectorAll('.vid-btn').forEach(function (b) {
+    // So' os botoes com video: os cards dos guias tambem usam .vid-btn, mas
+    // sao links - abriam o player vazio antes de ir ao blog, e ele aparecia
+    // ao voltar (02/11).
+    document.querySelectorAll('.vid-btn[data-video]').forEach(function (b) {
       b.addEventListener('click', function () { player.src = b.getAttribute('data-video'); modal.classList.add('open'); player.play();
         if (typeof gtag === 'function') gtag('event', 'play_video', { video: b.getAttribute('data-video') }); });
     });
     modal.addEventListener('click', function (e) { if (e.target === modal || e.target.closest('.vid-fechar')) fechar(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) fechar(); });
+    // Voltar com o botao do navegador restaura a pagina como estava: fecha o player.
+    window.addEventListener('pageshow', function (e) { if (e.persisted && modal.classList.contains('open')) fechar(); });
   }
 
   // ---------- botao de assinatura (Kiwify) ----------
